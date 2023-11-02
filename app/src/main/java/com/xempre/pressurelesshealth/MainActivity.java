@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -26,6 +27,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
+import com.xempre.pressurelesshealth.views.AddMeasurement;
 
 import java.util.List;
 
@@ -41,18 +43,20 @@ public class MainActivity extends AppCompatActivity {
     int totalSteps = 0;
 
     Button btnReadSteps;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         googleFitApi.createClient(this);
 
+
+
         btnReadSteps = findViewById(R.id.btn_read_steps);
         btnReadSteps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 readStepData(account);
+                startActivity(new Intent(MainActivity.this, AddMeasurement.class));
             }
         });
 
@@ -106,9 +110,12 @@ public class MainActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 account = (GoogleSignInAccount) ((Task<?>) task).getResult(ApiException.class);
+                Toast.makeText(this,"bien", Toast.LENGTH_LONG).show();
                 // Signed in successfully, connect to the Google Fit API
             } catch (ApiException e) {
-                System.out.println(e.getMessage());
+                System.out.println(e);
+                System.out.println("PERRO");
+                Toast.makeText(this,"mal", Toast.LENGTH_LONG).show();
                 // The ApiException status code indicates the detailed failure reason.
             }
         }
