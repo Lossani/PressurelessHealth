@@ -1,20 +1,31 @@
 package com.xempre.pressurelesshealth.views.reports.MeasurementList;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.xempre.pressurelesshealth.R;
+import com.xempre.pressurelesshealth.databinding.ActivityListMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.RecordService;
 import com.xempre.pressurelesshealth.models.Record;
 import com.xempre.pressurelesshealth.views.AddMeasurement;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -23,7 +34,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MeasurementList extends AppCompatActivity {
+public class MeasurementList extends Fragment {
+    private ActivityListMeasurementBinding binding;
     private LineChart lineChart;
 
     private List<String> xValues;
@@ -33,16 +45,38 @@ public class MeasurementList extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private MeasurementAdapter measurementAdapter;
-    private List<Record> listMeasurements = new ArrayList<Record>();
+    private List<Record> listaNombres = new ArrayList<Record>();
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_measurement);
-        recyclerView = findViewById(R.id.recyclerView);
-        measurementAdapter = new MeasurementAdapter(MeasurementList.this, listMeasurements);
-        recyclerView.setLayoutManager(new LinearLayoutManager(MeasurementList.this));
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState
+    ) {
+
+
+//        View view = inflater.inflate(R.layout.measurement_list, container, false);
+
+        binding = ActivityListMeasurementBinding.inflate(inflater, container, false);
+//        lineChart = binding.chart;
+
+
+        recyclerView = binding.recyclerView;
+        measurementAdapter = new MeasurementAdapter(requireContext(), listaNombres);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(measurementAdapter);
+
         callAPI();
+        // Agrega algunos nombres a la lista
+//        listaNombres.add("Juan");
+//        listaNombres.add("María");
+//        listaNombres.add("Luis");
+
+//        Toast.makeText(getContext(), "PERRITO", Toast.LENGTH_SHORT).show();
+
+        //callAPI();
+
+        return binding.getRoot();
+
     }
 
     public void callAPI(){
@@ -60,46 +94,43 @@ public class MeasurementList extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Record>> call, Response<List<Record>> response) {
                 // this method is called when we get response from our api.
-                Toast.makeText(MeasurementList.this, "test", Toast.LENGTH_LONG).show();
-
-
-
-//                // below line is for hiding our progress bar.
-//                loadingPB.setVisibility(View.GONE);
-//
-//                // on below line we are setting empty text
-//                // to our both edit text.
-//                jobEdt.setText("");
-//                nameEdt.setText("");
-//                listaNombres = response.body();
-                // we are getting response from our body
-                // and passing it to our modal class.
-//                int i = 0;
-                List<Record> responseFromAPI = response.body();
-                int i = 0;
-                for (Record element : responseFromAPI){
-                    Record temp = new Record(element);
-                    listMeasurements.add(temp);
-                    Toast.makeText(MeasurementList.this, Integer.toString(temp.getSystolicRecord()), Toast.LENGTH_LONG).show();
-                }
-                measurementAdapter.notifyDataSetChanged();
-//                createChart();
-
-//                // on below line we are getting our data from modal class and adding it to our string.
-                String responseString = "Response Code : " + response.code() + "\nName : "  + "\n" + "Job : ";
-
-//                // below line we are setting our
-//                // string to our text view.
-//                message.setText(responseString);
+                try {
+                    List<Record> responseFromAPI = response.body();
+                    int i = 0;
+                    for (Record element : responseFromAPI) {
+                        Record temp = new Record(element);
+                        listaNombres.add(temp);
+                        Toast.makeText(getContext(), Integer.toString(temp.getSystolicRecord()), Toast.LENGTH_LONG).show();
+                    }
+                    measurementAdapter.notifyDataSetChanged();
+                } catch (Exception ignored){}
             }
 
             @Override
             public void onFailure(Call<List<Record>> call, Throwable t) {
-                Toast.makeText(MeasurementList.this, "Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
                 // setting text to our text view when
                 // we get error response from API.
 //                responseTV.setText("Error found is : " + t.getMessage());
             }
         });
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+//        binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                NavHostFragment.findNavController(MeasurementsList.this)
+//                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+//            }
+//        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

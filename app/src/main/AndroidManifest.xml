@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.xempre.pressurelesshealth">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,6 +16,14 @@
         android:theme="@style/Theme.PressurelessHealth"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".views.MainView"
+            android:exported="false" />
+        <activity
+            android:name=".views.profile.UserProfile"
+            android:exported="false"
+            android:label="@string/title_activity_user_profile"
+            android:theme="@style/Theme.PressurelessHealth" />
         <activity
             android:name=".views.reports.MeasurementList.MeasurementList"
             android:exported="false" />

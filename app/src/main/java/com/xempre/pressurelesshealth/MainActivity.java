@@ -28,6 +28,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.views.AddMeasurement;
+import com.xempre.pressurelesshealth.views.MainView;
+import com.xempre.pressurelesshealth.views.profile.UserProfile;
 
 import java.util.List;
 
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 readStepData(account);
-                startActivity(new Intent(MainActivity.this, AddMeasurement.class));
+                startActivity(new Intent(MainActivity.this, MainView.class));
             }
         });
 

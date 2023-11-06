@@ -1,19 +1,25 @@
 package com.xempre.pressurelesshealth.views;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.xempre.pressurelesshealth.R;
+import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.RecordService;
 import com.xempre.pressurelesshealth.models.Record;
-import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,41 +30,61 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AddMeasurement extends AppCompatActivity {
-    BottomNavigationView bottomNavigationView;
-    Button btnSave;
+public class AddMeasurement extends Fragment {
 
+    private ActivityAddMeasurementBinding binding;
     EditText sys;
     EditText dis;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_measurement);
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.bb_add){
-                int i = 0;
-            } else if (item.getItemId() == R.id.bb_report) {
-                startActivity(new Intent(AddMeasurement.this, MeasurementList.class));
-            }
-            return true;
-        });
+//        sys = getView().findViewById(R.id.etSystolic);
+//        dis = getView().findViewById(R.id.etDiastolic);
+//        message = getView().findViewById(R.id.textView2);
+    }
 
-        sys = findViewById(R.id.etSystolic);
-        dis = findViewById(R.id.etDiastolic);
+    @Override
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState
+    ) {
 
-        btnSave = findViewById(R.id.saveButton);
-        btnSave.setOnClickListener(new View.OnClickListener() {
+        binding = ActivityAddMeasurementBinding.inflate(inflater, container, false);
+        sys = binding.etSystolic;
+        dis = binding.etDiastolic;
+        return binding.getRoot();
+
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+//        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                NavHostFragment.findNavController(FirstFragment.this)
+//                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
+//            }
+//        });
+
+//        binding.reportButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                NavHostFragment.findNavController(FirstFragment.this)
+//                        .navigate(R.id.action_FirstFragment_to_MeasurementList);
+//            }
+//        });
+
+        binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
                     int sr = Integer.parseInt(sys.getText().toString());
                     int dr = Integer.parseInt(dis.getText().toString());
-                    Toast.makeText(AddMeasurement.this, "prueba." + sys.getText(), Toast.LENGTH_SHORT).show();
-
                     saveButton(sr,dr);
                 } catch (Exception ignored){
-                    Toast.makeText(AddMeasurement.this, "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -94,7 +120,7 @@ public class AddMeasurement extends AppCompatActivity {
             @Override
             public void onResponse(Call<Record> call, Response<Record> response) {
                 // this method is called when we get response from our api.
-                Toast.makeText(getApplicationContext(), "Data added to API", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Data added to API", Toast.LENGTH_SHORT).show();
 
 //                // below line is for hiding our progress bar.
 //                loadingPB.setVisibility(View.GONE);
@@ -118,13 +144,19 @@ public class AddMeasurement extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Record> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "ERROR"+t.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "ERROR"+t.toString(), Toast.LENGTH_LONG).show();
 
                 // setting text to our text view when
                 // we get error response from API.
 //                responseTV.setText("Error found is : " + t.getMessage());
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
 }
