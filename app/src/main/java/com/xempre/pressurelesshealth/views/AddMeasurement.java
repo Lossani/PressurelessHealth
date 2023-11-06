@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.xempre.pressurelesshealth.MainActivity;
 import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.api.GoogleFitCallback;
@@ -42,14 +43,14 @@ public class AddMeasurement extends Fragment {
     EditText sys;
     EditText dis;
 
-    MainView mainViewActivity;
+    MainActivity mainViewActivity;
     GoogleFitApi googleFitApi;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mainViewActivity = (MainView)getActivity();
+        mainViewActivity = (MainActivity)getActivity();
         googleFitApi = mainViewActivity.getGoogleFitApi();
 
 //        sys = getView().findViewById(R.id.etSystolic);

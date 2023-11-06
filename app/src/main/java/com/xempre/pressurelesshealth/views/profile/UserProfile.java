@@ -1,55 +1,94 @@
 package com.xempre.pressurelesshealth.views.profile;
 
+import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC;
+import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC;
+
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import androidx.core.view.WindowCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.xempre.pressurelesshealth.databinding.ActivityUserProfileBinding;
-
+import com.xempre.pressurelesshealth.MainActivity;
 import com.xempre.pressurelesshealth.R;
+import com.xempre.pressurelesshealth.api.GoogleFitApi;
+import com.xempre.pressurelesshealth.api.GoogleFitCallback;
+import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
+import com.xempre.pressurelesshealth.databinding.FragmentUserProfileBinding;
+import com.xempre.pressurelesshealth.interfaces.RecordService;
+import com.xempre.pressurelesshealth.models.Record;
 
-public class UserProfile extends AppCompatActivity {
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityUserProfileBinding binding;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class UserProfile extends Fragment {
+
+    private FragmentUserProfileBinding binding;
+    EditText sys;
+    EditText dis;
+
+    MainActivity mainViewActivity;
+    GoogleFitApi googleFitApi;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityUserProfileBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        mainViewActivity = (MainActivity)getActivity();
+        googleFitApi = mainViewActivity.getGoogleFitApi();
 
-        setSupportActionBar(binding.toolbar);
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_user_profile);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
-        });
+//        sys = getView().findViewById(R.id.etSystolic);
+//        dis = getView().findViewById(R.id.etDiastolic);
+//        message = getView().findViewById(R.id.textView2);
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_user_profile);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState
+    ) {
+
+        binding = FragmentUserProfileBinding.inflate(inflater, container, false);
+
+        return binding.getRoot();
+
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+//        binding.saveButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                try {
+//                    int sr = Integer.parseInt(sys.getText().toString());
+//                    int dr = Integer.parseInt(dis.getText().toString());
+//                    saveButton(sr,dr);
+//                } catch (Exception ignored){
+//                    Toast.makeText(getContext(), "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
+//                }
+//
+//
+//            }
+//        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

@@ -19,4 +19,11 @@
         android:icon="@drawable/baseline_analytics_24"
         android:title="Informes"
         android:id="@+id/bb_report" />
+
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="Configurar"
+        android:id="@+id/bb_config" />
 </menu>

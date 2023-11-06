@@ -61,8 +61,8 @@ public class MeasurementList extends Fragment {
 
 
         recyclerView = binding.recyclerView;
-        measurementAdapter = new MeasurementAdapter(requireContext(), listaNombres);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        measurementAdapter = new MeasurementAdapter(getContext(), listaNombres);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(measurementAdapter);
 
         callAPI();
@@ -80,40 +80,43 @@ public class MeasurementList extends Fragment {
     }
 
     public void callAPI(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.3:5000")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RecordService recordService = retrofit.create(RecordService.class);
+        try{
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://192.168.0.3:5000")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            RecordService recordService = retrofit.create(RecordService.class);
 
-        // calling a method to create a post and passing our modal class.
-        Call<List<Record>> call = recordService.getAll();
+            // calling a method to create a post and passing our modal class.
+            Call<List<Record>> call = recordService.getAll();
 
-        // on below line we are executing our method.
-        call.enqueue(new Callback<List<Record>>() {
-            @Override
-            public void onResponse(Call<List<Record>> call, Response<List<Record>> response) {
-                // this method is called when we get response from our api.
-                try {
-                    List<Record> responseFromAPI = response.body();
-                    int i = 0;
-                    for (Record element : responseFromAPI) {
-                        Record temp = new Record(element);
-                        listaNombres.add(temp);
-                        Toast.makeText(getContext(), Integer.toString(temp.getSystolicRecord()), Toast.LENGTH_LONG).show();
-                    }
-                    measurementAdapter.notifyDataSetChanged();
-                } catch (Exception ignored){}
-            }
+            // on below line we are executing our method.
+            call.enqueue(new Callback<List<Record>>() {
+                @Override
+                public void onResponse(Call<List<Record>> call, Response<List<Record>> response) {
+                    // this method is called when we get response from our api.
+                    try {
+                        List<Record> responseFromAPI = response.body();
+                        int i = 0;
+                        for (Record element : responseFromAPI) {
+                            Record temp = new Record(element);
+                            listaNombres.add(temp);
+                            if (getContext()!=null) Toast.makeText(getContext(), Integer.toString(temp.getSystolicRecord()), Toast.LENGTH_LONG).show();
+                        }
+                        measurementAdapter.notifyDataSetChanged();
+                    } catch (Exception ignored){}
+                }
 
-            @Override
-            public void onFailure(Call<List<Record>> call, Throwable t) {
-                Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
-                // setting text to our text view when
-                // we get error response from API.
+                @Override
+                public void onFailure(Call<List<Record>> call, Throwable t) {
+                    if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
+                    // setting text to our text view when
+                    // we get error response from API.
 //                responseTV.setText("Error found is : " + t.getMessage());
-            }
-        });
+                }
+            });
+        } catch (Exception ignore){}
+
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
