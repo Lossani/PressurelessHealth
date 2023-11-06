@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.xempre.pressurelesshealth.R;
+import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.databinding.ActivityMainBinding;
 import com.xempre.pressurelesshealth.databinding.ActivityMainViewBinding;
 import com.xempre.pressurelesshealth.views.profile.FirstFragment;
@@ -24,12 +25,19 @@ public class MainView extends AppCompatActivity {
     ActivityMainViewBinding binding;
     BottomNavigationView bottomNavigationView;
     Button btnSave;
+    private GoogleFitApi googleFitApi;
 
     EditText sys;
     EditText dis;
+
+    public GoogleFitApi getGoogleFitApi() {
+        return googleFitApi;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        googleFitApi = new GoogleFitApi(this);
         binding = ActivityMainViewBinding.inflate(getLayoutInflater());
         bottomNavigationView = binding.bottomNavigationMain;
         setContentView(binding.getRoot());
@@ -49,5 +57,13 @@ public class MainView extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        googleFitApi.onActivityResult(data);
+
     }
 }

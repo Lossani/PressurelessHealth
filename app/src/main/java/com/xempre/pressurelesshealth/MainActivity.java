@@ -1,11 +1,18 @@
 package com.xempre.pressurelesshealth;
 
+import static android.content.ContentValues.TAG;
+import static com.google.android.gms.fitness.data.HealthDataTypes.TYPE_BLOOD_PRESSURE;
+
+import static java.text.DateFormat.getTimeInstance;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,23 +26,36 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptionsExtension;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
+import com.google.android.gms.fitness.request.DataReadRequest;
+import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
+import com.xempre.pressurelesshealth.api.GoogleFitCallback;
 import com.xempre.pressurelesshealth.views.AddMeasurement;
 import com.xempre.pressurelesshealth.views.MainView;
 import com.xempre.pressurelesshealth.views.profile.UserProfile;
 
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Dictionary;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
-    GoogleFitApi googleFitApi = new GoogleFitApi();
+    GoogleFitApi googleFitApi = null;
+
+    Activity mainActivity = this;
     GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .requestProfile()
@@ -49,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        googleFitApi.createClient(this);
-
+        // googleFitApi.createClient(this);
+        googleFitApi = new GoogleFitApi(this);
 
 
         btnReadSteps = findViewById(R.id.btn_read_steps);
@@ -79,27 +99,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void readStepData(GoogleSignInAccount account) {
-        Fitness.getHistoryClient(this, account)
-                .readDailyTotal(DataType.TYPE_STEP_COUNT_DELTA)
-                .addOnSuccessListener(new OnSuccessListener<DataSet>() {
-                    @Override
-                    public void onSuccess(DataSet dataSet) {
-                        for (DataPoint dp : dataSet.getDataPoints()) {
-                            for (Field field : dp.getDataType().getFields()) {
-                                totalSteps += dp.getValue(field).asInt();
-                            }
-                        }
-                        // Update UI with totalSteps
-                        TextView textStepCount = findViewById(R.id.text_step_count);
-                        textStepCount.setText(String.valueOf(totalSteps));
-                    }
+        GoogleFitCallback googleFitCallback = (Map<String, Float> measurements) -> {
+            for (Map.Entry<String, Float> entry : measurements.entrySet()) {
+                String key = entry.getKey();
+                Float val = entry.getValue();
 
-    }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                });
+                Toast.makeText(this, key + " " + val, Toast.LENGTH_LONG).show();
+            }
+        };
+        googleFitApi.readBloodPressureMeasurement(this, googleFitCallback);
     }
 
 
@@ -108,18 +116,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                account = (GoogleSignInAccount) ((Task<?>) task).getResult(ApiException.class);
-                Toast.makeText(this,"bien", Toast.LENGTH_LONG).show();
-                // Signed in successfully, connect to the Google Fit API
-            } catch (ApiException e) {
-                System.out.println(e);
-                System.out.println("PERRO");
-                Toast.makeText(this,"mal", Toast.LENGTH_LONG).show();
-                // The ApiException status code indicates the detailed failure reason.
-            }
-        }
+        googleFitApi.onActivityResult(data);
+
     }
 }

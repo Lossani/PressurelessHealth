@@ -1,5 +1,8 @@
 package com.xempre.pressurelesshealth.views;
 
+import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC;
+import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,12 +20,15 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.xempre.pressurelesshealth.R;
+import com.xempre.pressurelesshealth.api.GoogleFitApi;
+import com.xempre.pressurelesshealth.api.GoogleFitCallback;
 import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.RecordService;
 import com.xempre.pressurelesshealth.models.Record;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,9 +42,16 @@ public class AddMeasurement extends Fragment {
     EditText sys;
     EditText dis;
 
+    MainView mainViewActivity;
+    GoogleFitApi googleFitApi;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mainViewActivity = (MainView)getActivity();
+        googleFitApi = mainViewActivity.getGoogleFitApi();
+
 //        sys = getView().findViewById(R.id.etSystolic);
 //        dis = getView().findViewById(R.id.etDiastolic);
 //        message = getView().findViewById(R.id.textView2);
@@ -53,6 +66,12 @@ public class AddMeasurement extends Fragment {
         binding = ActivityAddMeasurementBinding.inflate(inflater, container, false);
         sys = binding.etSystolic;
         dis = binding.etDiastolic;
+
+        GoogleFitCallback googleFitCallback = (Map<String, Float> measurements) -> {
+            sys.setText(measurements.get(FIELD_BLOOD_PRESSURE_SYSTOLIC.getName()).toString());
+            dis.setText(measurements.get(FIELD_BLOOD_PRESSURE_DIASTOLIC.getName()).toString());
+        };
+        googleFitApi.readBloodPressureMeasurement(mainViewActivity, googleFitCallback);
         return binding.getRoot();
 
     }
