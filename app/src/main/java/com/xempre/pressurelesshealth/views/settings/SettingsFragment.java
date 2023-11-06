@@ -38,6 +38,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     if (googleFitApi == null) {
                         mainActivity.setGoogleFitApi(new GoogleFitApi(mainActivity));
                     }
+                } else {
+                    mainActivity.setGoogleFitApi(null);
                 }
             }
         });
