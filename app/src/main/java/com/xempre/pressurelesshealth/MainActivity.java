@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     BottomNavigationView bottomNavigationView;
     Button btnSave;
-    private GoogleFitApi googleFitApi;
+    private GoogleFitApi googleFitApi = null;
 
     EditText sys;
     EditText dis;
@@ -33,11 +33,12 @@ public class MainActivity extends AppCompatActivity {
     public GoogleFitApi getGoogleFitApi() {
         return googleFitApi;
     }
+    public void setGoogleFitApi(GoogleFitApi googleFitApi) { this.googleFitApi = googleFitApi; }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        googleFitApi = new GoogleFitApi(this);
+        // googleFitApi = new GoogleFitApi(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         bottomNavigationView = binding.bottomNavigationMain;
         setContentView(binding.getRoot());
