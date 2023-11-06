@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.xempre.pressurelesshealth.databinding.ActivityListMeasurementBinding;
-import com.xempre.pressurelesshealth.interfaces.RecordService;
+import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
 
 import java.util.ArrayList;
@@ -77,10 +77,10 @@ public class MeasurementList extends Fragment {
                     .baseUrl("https://health.xempre.com")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            RecordService recordService = retrofit.create(RecordService.class);
+            MeasurementService measurementService = retrofit.create(MeasurementService.class);
 
             // calling a method to create a post and passing our modal class.
-            Call<List<Measurement>> call = recordService.getAll();
+            Call<List<Measurement>> call = measurementService.getAll();
 
             // on below line we are executing our method.
             call.enqueue(new Callback<List<Measurement>>() {

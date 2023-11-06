@@ -10,7 +10,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-public interface RecordService {
+public interface MeasurementService {
     @GET("measurements/{id}")
     public Call<Measurement> find(@Path("id") String id);
 

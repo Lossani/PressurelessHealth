@@ -19,7 +19,7 @@ import com.xempre.pressurelesshealth.MainActivity;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.api.GoogleFitCallback;
 import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
-import com.xempre.pressurelesshealth.interfaces.RecordService;
+import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
 
 import java.text.SimpleDateFormat;
@@ -116,7 +116,7 @@ public class AddMeasurement extends Fragment {
                 // at last we are building our retrofit builder.
                 .build();
         // below line is to create an instance for our retrofit api class.
-        RecordService recordService = retrofit.create(RecordService.class);
+        MeasurementService measurementService = retrofit.create(MeasurementService.class);
 //        Toast.makeText(getContext(), "Data added to API", Toast.LENGTH_SHORT).show();
         // passing data from our text fields to our modal class.
 //        Date date = new Date();
@@ -128,7 +128,7 @@ public class AddMeasurement extends Fragment {
         Measurement measurement = new Measurement(2, sr, dr);
 
         // calling a method to create a post and passing our modal class.
-        Call<Measurement> call = recordService.save(measurement);
+        Call<Measurement> call = measurementService.save(measurement);
 
         // on below line we are executing our method.
         call.enqueue(new Callback<Measurement>() {
