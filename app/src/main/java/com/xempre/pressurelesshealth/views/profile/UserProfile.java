@@ -1,8 +1,5 @@
 package com.xempre.pressurelesshealth.views.profile;
 
-import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC;
-import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,26 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.xempre.pressurelesshealth.MainActivity;
-import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
-import com.xempre.pressurelesshealth.api.GoogleFitCallback;
-import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
 import com.xempre.pressurelesshealth.databinding.FragmentUserProfileBinding;
-import com.xempre.pressurelesshealth.interfaces.RecordService;
-import com.xempre.pressurelesshealth.models.Record;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserProfile extends Fragment {
 

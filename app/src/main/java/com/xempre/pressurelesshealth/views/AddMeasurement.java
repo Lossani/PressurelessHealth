@@ -5,27 +5,22 @@ import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESS
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.xempre.pressurelesshealth.MainActivity;
-import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.api.GoogleFitCallback;
 import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.RecordService;
-import com.xempre.pressurelesshealth.models.Record;
+import com.xempre.pressurelesshealth.models.Measurement;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -100,8 +95,8 @@ public class AddMeasurement extends Fragment {
             @Override
             public void onClick(View view) {
                 try {
-                    int sr = Integer.parseInt(sys.getText().toString());
-                    int dr = Integer.parseInt(dis.getText().toString());
+                    float sr = Float.parseFloat(sys.getText().toString());
+                    float dr = Float.parseFloat(dis.getText().toString());
                     saveButton(sr,dr);
                 } catch (Exception ignored){
                     Toast.makeText(getContext(), "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
@@ -112,9 +107,9 @@ public class AddMeasurement extends Fragment {
         });
     }
 
-    public void saveButton(int sr, int dr){
+    public void saveButton(float sr, float dr){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.3:5000")
+                .baseUrl("https://health.xempre.com")
                 // as we are sending data in json format so
                 // we have to add Gson converter factory
                 .addConverterFactory(GsonConverterFactory.create())
@@ -130,18 +125,18 @@ public class AddMeasurement extends Fragment {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
 
-        Record record = new Record(1, sr, dr,date);
+        Measurement measurement = new Measurement(2, sr, dr);
 
         // calling a method to create a post and passing our modal class.
-        Call<Record> call = recordService.save(record);
+        Call<Measurement> call = recordService.save(measurement);
 
         // on below line we are executing our method.
-        call.enqueue(new Callback<Record>() {
+        call.enqueue(new Callback<Measurement>() {
             @Override
-            public void onResponse(Call<Record> call, Response<Record> response) {
+            public void onResponse(Call<Measurement> call, Response<Measurement> response) {
                 // this method is called when we get response from our api.
-                Toast.makeText(getContext(), "Data added to API", Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(getContext(), response.toString(), Toast.LENGTH_SHORT).show();
+                Log.e("perro",response.toString());
 //                // below line is for hiding our progress bar.
 //                loadingPB.setVisibility(View.GONE);
 //
@@ -152,7 +147,7 @@ public class AddMeasurement extends Fragment {
 
                 // we are getting response from our body
                 // and passing it to our modal class.
-                Record responseFromAPI = response.body();
+                Measurement responseFromAPI = response.body();
 
 //                // on below line we are getting our data from modal class and adding it to our string.
                 String responseString = "Response Code : " + response.code() + "\nName : "  + "\n" + "Job : ";
@@ -163,7 +158,7 @@ public class AddMeasurement extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Record> call, Throwable t) {
+            public void onFailure(Call<Measurement> call, Throwable t) {
                 Toast.makeText(getContext(), "ERROR"+t.toString(), Toast.LENGTH_LONG).show();
 
                 // setting text to our text view when

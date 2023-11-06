@@ -7,18 +7,18 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xempre.pressurelesshealth.R;
-import com.xempre.pressurelesshealth.models.Record;
+import com.xempre.pressurelesshealth.models.Measurement;
 
 import java.util.List;
 
 public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.NombreViewHolder> {
 
     private Context context;
-    private List<Record> listRecords;
+    private List<Measurement> listMeasurements;
 
-    public MeasurementAdapter(Context context, List<Record> listRecords) {
+    public MeasurementAdapter(Context context, List<Measurement> listMeasurements) {
         this.context = context;
-        this.listRecords = listRecords;
+        this.listMeasurements = listMeasurements;
     }
 
     @Override
@@ -29,15 +29,15 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
 
     @Override
     public void onBindViewHolder(NombreViewHolder holder, int position) {
-        Record record = listRecords.get(position);
-        holder.textViewDate.setText(record.getDate());
-        holder.textViewDis.setText(Integer.toString(record.getDiastolicRecord()));
-        holder.textViewSys.setText(Integer.toString(record.getSystolicRecord()));
+        Measurement measurement = listMeasurements.get(position);
+//        holder.textViewDate.setText(measurement.getDate());
+        holder.textViewDis.setText(String.valueOf(measurement.getDiastolicRecord()));
+        holder.textViewSys.setText(String.valueOf(measurement.getSystolicRecord()));
     }
 
     @Override
     public int getItemCount() {
-        return listRecords.size();
+        return listMeasurements.size();
     }
 
     public class NombreViewHolder extends RecyclerView.ViewHolder {
