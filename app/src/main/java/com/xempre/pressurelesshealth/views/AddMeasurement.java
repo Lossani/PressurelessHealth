@@ -38,15 +38,15 @@ public class AddMeasurement extends Fragment {
     EditText sys;
     EditText dis;
 
-    MainActivity mainViewActivity;
+    MainActivity mainActivity;
     GoogleFitApi googleFitApi;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mainViewActivity = (MainActivity)getActivity();
-        googleFitApi = mainViewActivity.getGoogleFitApi();
+        mainActivity = (MainActivity)getActivity();
+        googleFitApi = mainActivity.getGoogleFitApi();
 
 //        sys = getView().findViewById(R.id.etSystolic);
 //        dis = getView().findViewById(R.id.etDiastolic);
@@ -63,13 +63,16 @@ public class AddMeasurement extends Fragment {
         sys = binding.etSystolic;
         dis = binding.etDiastolic;
 
-        GoogleFitCallback googleFitCallback = (Map<String, Float> measurements) -> {
-            sys.setText(measurements.get(FIELD_BLOOD_PRESSURE_SYSTOLIC.getName()).toString());
-            dis.setText(measurements.get(FIELD_BLOOD_PRESSURE_DIASTOLIC.getName()).toString());
-        };
-        googleFitApi.readBloodPressureMeasurement(mainViewActivity, googleFitCallback);
-        return binding.getRoot();
+        if (googleFitApi != null) {
+            GoogleFitCallback googleFitCallback = (Map<String, Float> measurements) -> {
+                sys.setText(measurements.get(FIELD_BLOOD_PRESSURE_SYSTOLIC.getName()).toString());
+                dis.setText(measurements.get(FIELD_BLOOD_PRESSURE_DIASTOLIC.getName()).toString());
+            };
+            googleFitApi.readBloodPressureMeasurement(mainActivity, googleFitCallback);
 
+        }
+
+        return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {

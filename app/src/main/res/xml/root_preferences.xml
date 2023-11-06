@@ -3,7 +3,8 @@
     <PreferenceCategory app:title="@string/sync_header">
 
         <SwitchPreferenceCompat
-            app:key="sync"
+
+            app:key="syncGoogleFit"
             app:title="@string/sync_title" />
 
     </PreferenceCategory>
