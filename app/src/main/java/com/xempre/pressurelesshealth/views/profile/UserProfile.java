@@ -7,35 +7,35 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.xempre.pressurelesshealth.MainActivity;
+import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.databinding.FragmentUserProfileBinding;
-import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.interfaces.UserService;
-import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.models.User;
+import com.xempre.pressurelesshealth.views.profile.goals.GoalList;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserProfile extends Fragment {
 
@@ -43,6 +43,9 @@ public class UserProfile extends Fragment {
     EditText sys;
     EditText dis;
 
+    ImageView imageView;
+
+    private Handler handler = new Handler(Looper.getMainLooper());
     User user;
     MainActivity mainViewActivity;
     GoogleFitApi googleFitApi;
@@ -66,27 +69,43 @@ public class UserProfile extends Fragment {
     ) {
 
         binding = FragmentUserProfileBinding.inflate(inflater, container, false);
-        //binding.imageView.setImageBitmap(getBitmapFromURL("https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"));
+        imageView = binding.imageView;
         loadUserData();
+        replaceFragment(new GoalList());
         return binding.getRoot();
 
     }
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            Log.e("src",src);
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            Log.e("Bitmap","returned");
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("Exception",e.getMessage());
-            return null;
-        }
+    public void getBitmapFromURL(String src) {
+
+        // Ejecutar operaciones de red en un hilo separado usando Runnable
+        final Bitmap[] myBitmap = new Bitmap[1];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Coloca aquí tu código de operaciones de red
+
+                // Ejemplo:
+                // HttpURLConnection connection = ...
+                // Realizar operaciones de red...
+                try{
+                Log.e("src",src);
+                URL url = new URL(src);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                myBitmap[0] = BitmapFactory.decodeStream(input);}
+                catch (Exception e){}
+                // Si necesitas actualizar la interfaz de usuario, usa el Handler
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Actualizar la interfaz de usuario si es necesario
+                        imageView.setImageBitmap(myBitmap[0]);
+                    }
+                });
+            }
+        }).start();
     }
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -105,6 +124,13 @@ public class UserProfile extends Fragment {
 //
 //            }
 //        });
+    }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = this.mainViewActivity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameProfile, fragment);
+        fragmentTransaction.commit();
     }
 
     public void loadUserData(){
@@ -130,6 +156,7 @@ public class UserProfile extends Fragment {
 //                // to our both edit text.
 //                jobEdt.setText("");
 //                nameEdt.setText("");
+                getBitmapFromURL("https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg");
 
                 // we are getting response from our body
                 // and passing it to our modal class.
