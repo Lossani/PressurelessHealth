@@ -100,7 +100,10 @@ public class AddMeasurement extends Fragment {
                 try {
                     float sr = Float.parseFloat(sys.getText().toString());
                     float dr = Float.parseFloat(dis.getText().toString());
-                    saveButton(sr,dr);
+                    String pattern = "yyy-MM-dd'T'HH:mm:ss'Z'";
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                    String date = simpleDateFormat.format(new Date());
+                    saveButton(sr,dr,date);
                 } catch (Exception ignored){
                     Toast.makeText(getContext(), "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
                 }
@@ -110,7 +113,7 @@ public class AddMeasurement extends Fragment {
         });
     }
 
-    public void saveButton(float sr, float dr){
+    public void saveButton(float sr, float dr, String date){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://health.xempre.com")
                 // as we are sending data in json format so
@@ -124,11 +127,9 @@ public class AddMeasurement extends Fragment {
         // passing data from our text fields to our modal class.
 //        Date date = new Date();
 
-        String pattern = "dd-MM-yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String date = simpleDateFormat.format(new Date());
 
-        Measurement measurement = new Measurement(2, sr, dr);
+
+        Measurement measurement = new Measurement(2, sr, dr, date);
 
         // calling a method to create a post and passing our modal class.
         Call<Measurement> call = measurementService.save(measurement);
@@ -138,31 +139,19 @@ public class AddMeasurement extends Fragment {
             @Override
             public void onResponse(Call<Measurement> call, Response<Measurement> response) {
                 // this method is called when we get response from our api.
-                Toast.makeText(getContext(), response.toString(), Toast.LENGTH_SHORT).show();
-                Log.e("perro",response.toString());
-//                // below line is for hiding our progress bar.
-//                loadingPB.setVisibility(View.GONE);
-//
-//                // on below line we are setting empty text
-//                // to our both edit text.
-//                jobEdt.setText("");
-//                nameEdt.setText("");
+                if (response.code() == 201){
+                    Toast.makeText(getContext(), "Medida guardada exitosamente.", Toast.LENGTH_SHORT).show();
+                    sys.setText("");
+                    dis.setText("");
+                } else {
+                    Toast.makeText(getContext(), "Ocurrio un error. Error " + response.code(), Toast.LENGTH_SHORT).show();
+                }
 
-                // we are getting response from our body
-                // and passing it to our modal class.
-                Measurement responseFromAPI = response.body();
-
-//                // on below line we are getting our data from modal class and adding it to our string.
-                String responseString = "Response Code : " + response.code() + "\nName : "  + "\n" + "Job : ";
-
-//                // below line we are setting our
-//                // string to our text view.
-//                message.setText(responseString);
             }
 
             @Override
             public void onFailure(Call<Measurement> call, Throwable t) {
-                Toast.makeText(getContext(), "ERROR"+t.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "ERROR", Toast.LENGTH_LONG).show();
 
                 // setting text to our text view when
                 // we get error response from API.

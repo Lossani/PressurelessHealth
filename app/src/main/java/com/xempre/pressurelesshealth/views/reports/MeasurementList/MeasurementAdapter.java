@@ -1,14 +1,21 @@
 package com.xempre.pressurelesshealth.views.reports.MeasurementList;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.models.Measurement;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.NombreViewHolder> {
@@ -21,6 +28,8 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
         this.listMeasurements = listMeasurements;
     }
 
+
+
     @Override
     public NombreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.measurement_element, parent, false);
@@ -30,7 +39,33 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
     @Override
     public void onBindViewHolder(NombreViewHolder holder, int position) {
         Measurement measurement = listMeasurements.get(position);
-//        holder.textViewDate.setText(measurement.getDate());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
+
+        LocalDateTime fechaHora = LocalDateTime.parse(measurement.getMeasurementDate(), formatter);
+
+        String date = fechaHora.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String hour = fechaHora.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+        // Aquí comparas el valor y estableces el color del fondo según el valor
+        if (measurement.getSystolicRecord() < 120.00 && measurement.getDiastolicRecord() < 80.00) {
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Normal));
+        } else if (measurement.getSystolicRecord() < 140.00 && measurement.getDiastolicRecord() < 90.00) {
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Pre));
+        } else if (measurement.getSystolicRecord() < 160.00 && measurement.getDiastolicRecord() < 100.00) {
+            // Puedes establecer un color predeterminado para otros valores
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Hip1));
+        } else if (measurement.getSystolicRecord() < 180.00 && measurement.getDiastolicRecord() < 110.00) {
+            // Puedes establecer un color predeterminado para otros valores
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Hip2));
+        } else{
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Crisis));
+        }
+
+
+        holder.textViewDate.setText(date);
+        holder.textViewHour.setText(hour);
+
         holder.textViewDis.setText(String.valueOf(measurement.getDiastolicRecord()));
         holder.textViewSys.setText(String.valueOf(measurement.getSystolicRecord()));
     }
@@ -41,16 +76,21 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
     }
 
     public class NombreViewHolder extends RecyclerView.ViewHolder {
+
+        CardView cardView;
         TextView textViewDis;
         TextView textViewSys;
 
         TextView textViewDate;
+        TextView textViewHour;
 
         public NombreViewHolder(View itemView) {
             super(itemView);
-            textViewDis = itemView.findViewById(R.id.textView6);
-            textViewSys = itemView.findViewById(R.id.textView7);
+            cardView = itemView.findViewById(R.id.cvBody);
+            textViewDis = itemView.findViewById(R.id.tvDiastolic);
+            textViewSys = itemView.findViewById(R.id.tvSystolic);
             textViewDate = itemView.findViewById(R.id.tvDate);
+            textViewHour = itemView.findViewById(R.id.tvHour);
         }
     }
 }

@@ -24,11 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
     BottomNavigationView bottomNavigationView;
-    Button btnSave;
     private GoogleFitApi googleFitApi = null;
-
-    EditText sys;
-    EditText dis;
 
     public GoogleFitApi getGoogleFitApi() {
         return googleFitApi;

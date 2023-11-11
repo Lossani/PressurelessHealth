@@ -5,25 +5,29 @@ public class Measurement {
     private float systolicPressure;
     private float diastolicPressure;
 
-//    private String date;
+    private String measurementDate;
 
-    public Measurement(int id, float sr, float dr){
+    public Measurement(int id, float sr, float dr, String measurementDate){
         this.idUser = id;
         this.systolicPressure = sr;
         this.diastolicPressure = dr;
-//        this.date = date;
+        this.measurementDate = measurementDate;
     }
 
     public Measurement(Measurement measurement){
         this.idUser = measurement.getUserId();
         this.systolicPressure = measurement.getSystolicRecord();
         this.diastolicPressure = measurement.getDiastolicRecord();
-//        this.date = measurement.getDate();
+        this.measurementDate = measurement.getMeasurementDate();
     }
 
-//    public String getDate() {
-//        return date;
-//    }
+    public String getMeasurementDate() {
+        return measurementDate;
+    }
+
+    public void setMeasurementDate(String measurementDate) {
+        this.measurementDate = measurementDate;
+    }
 
     public int getUserId() {
         return idUser;

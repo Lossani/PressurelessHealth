@@ -152,7 +152,7 @@ public class UserProfile extends Fragment {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(getContext(), "ERROR"+t.toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), "ERROR"+t.toString(), Toast.LENGTH_LONG).show();
 
                 // setting text to our text view when
                 // we get error response from API.
