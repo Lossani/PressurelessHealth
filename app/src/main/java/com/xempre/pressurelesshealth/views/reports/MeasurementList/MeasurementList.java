@@ -14,11 +14,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.xempre.pressurelesshealth.R;
+import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.databinding.ActivityListMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
@@ -56,6 +58,7 @@ public class MeasurementList extends Fragment {
     private MeasurementAdapter measurementAdapter;
     private List<Measurement> listaNombres = new ArrayList<Measurement>();
     MaterialDatePicker picker;
+    ApiClient apiClient;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -67,7 +70,7 @@ public class MeasurementList extends Fragment {
 
         binding = ActivityListMeasurementBinding.inflate(inflater, container, false);
 //        lineChart = binding.chart;
-
+//        apiClient = new ApiClient();
 
         recyclerView = binding.recyclerView;
         measurementAdapter = new MeasurementAdapter(getContext(), listaNombres);
@@ -121,11 +124,8 @@ public class MeasurementList extends Fragment {
 
     public void callAPI(String startDate, String endDate){
         Log.d("PERRUNO", startDate+" "+endDate);
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://health.xempre.com")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            MeasurementService measurementService = retrofit.create(MeasurementService.class);
+
+            MeasurementService measurementService = ApiClient.createService(MeasurementService.class);
 
             // calling a method to create a post and passing our modal class.
             Call<List<Measurement>> call = measurementService.getAllByDateRange(startDate+"T00:00:00", endDate+"T23:59:59");
@@ -140,12 +140,13 @@ public class MeasurementList extends Fragment {
                         int i = 0;
                         float prom1 = 0;
                         float prom2 = 0;
-                        assert responseFromAPI != null;
+//                        assert responseFromAPI != null;
                         clearRecyclerView();
                         if (responseFromAPI.isEmpty()) {
                             if (getContext()!=null) Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
                         } else {
                             for (Measurement element : responseFromAPI) {
+                                Log.d("PERRUNO", element.toString());
                                 i +=1;
                                 Measurement temp = new Measurement(element);
                                 listaNombres.add(temp);
@@ -158,12 +159,17 @@ public class MeasurementList extends Fragment {
                             measurementAdapter.notifyDataSetChanged();
                         }
 
-                    } catch (Exception ignored){}
+                    } catch (Exception ignored){
+                        if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
+                        onDestroyView();
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<List<Measurement>> call, Throwable t) {
+                    Log.d("ERROR", t.getMessage());
                     if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
+                    onDestroyView();
                     // setting text to our text view when
                     // we get error response from API.
 //                responseTV.setText("Error found is : " + t.getMessage());
@@ -190,9 +196,19 @@ public class MeasurementList extends Fragment {
 //            }
 //        });
     }
-
+    public static void enableDisableViewGroup(ViewGroup viewGroup, boolean enabled) {
+        int childCount = viewGroup.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View view = viewGroup.getChildAt(i);
+            view.setEnabled(enabled);
+            if (view instanceof ViewGroup) {
+                enableDisableViewGroup((ViewGroup) view, enabled);
+            }
+        }
+    }
     @Override
     public void onDestroyView() {
+        if (binding!=null) binding.btnChangeDate.setClickable(false);
         super.onDestroyView();
         binding = null;
     }

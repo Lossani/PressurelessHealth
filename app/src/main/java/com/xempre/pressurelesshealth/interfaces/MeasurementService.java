@@ -12,15 +12,15 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MeasurementService {
-    @GET("measurements/{id}")
+    @GET("health/measurements/{id}")
     public Call<Measurement> find(@Path("id") String id);
 
-    @GET("measurements/all/")
+    @GET("health/measurements/")
     public Call<List<Measurement>> getAll();
 
-    @GET("measurements/all/")
+    @GET("health/measurements/")
     public Call<List<Measurement>> getAllByDateRange(@Query("measurement_date_start") String startDate, @Query("measurement_date_end") String endDate);
-    @POST("measurements/all/")
+    @POST("health/measurements/")
     public Call<Measurement> save(@Body Measurement measurement);
 
 }

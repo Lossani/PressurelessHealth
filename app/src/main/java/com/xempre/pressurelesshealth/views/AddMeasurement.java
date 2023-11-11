@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.xempre.pressurelesshealth.MainActivity;
+import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.api.GoogleFitCallback;
 import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
@@ -114,20 +115,8 @@ public class AddMeasurement extends Fragment {
     }
 
     public void saveButton(float sr, float dr, String date){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://health.xempre.com")
-                // as we are sending data in json format so
-                // we have to add Gson converter factory
-                .addConverterFactory(GsonConverterFactory.create())
-                // at last we are building our retrofit builder.
-                .build();
-        // below line is to create an instance for our retrofit api class.
-        MeasurementService measurementService = retrofit.create(MeasurementService.class);
-//        Toast.makeText(getContext(), "Data added to API", Toast.LENGTH_SHORT).show();
-        // passing data from our text fields to our modal class.
-//        Date date = new Date();
 
-
+        MeasurementService measurementService = ApiClient.createService(MeasurementService.class);
 
         Measurement measurement = new Measurement(2, sr, dr, date);
 

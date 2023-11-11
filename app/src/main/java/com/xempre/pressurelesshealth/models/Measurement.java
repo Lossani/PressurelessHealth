@@ -1,12 +1,22 @@
 package com.xempre.pressurelesshealth.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Measurement {
+    @JsonProperty("user")
     private int idUser;
+    @JsonProperty("systolic_pressure")
     private float systolicPressure;
+    @JsonProperty("diastolic_pressure")
     private float diastolicPressure;
-
+    @JsonProperty("measurement_date")
     private String measurementDate;
-
+    public Measurement() {
+    }
     public Measurement(int id, float sr, float dr, String measurementDate){
         this.idUser = id;
         this.systolicPressure = sr;

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.xempre.pressurelesshealth.MainActivity;
+import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.databinding.FragmentUserProfileBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
@@ -107,15 +108,9 @@ public class UserProfile extends Fragment {
     }
 
     public void loadUserData(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://health.xempre.com")
-                // as we are sending data in json format so
-                // we have to add Gson converter factory
-                .addConverterFactory(GsonConverterFactory.create())
-                // at last we are building our retrofit builder.
-                .build();
+
         // below line is to create an instance for our retrofit api class.
-        UserService userService = retrofit.create(UserService.class);
+            UserService userService = ApiClient.createService(UserService.class);
 //        Toast.makeText(getContext(), "Data added to API", Toast.LENGTH_SHORT).show();
         // passing data from our text fields to our modal class.
 //        Date date = new Date();
@@ -139,6 +134,7 @@ public class UserProfile extends Fragment {
                 // we are getting response from our body
                 // and passing it to our modal class.
                 user = response.body();
+                Log.d("a",response.toString());
                 binding.textView5.setText("Bienvenido " + user.getUsername());
 
 
@@ -153,7 +149,7 @@ public class UserProfile extends Fragment {
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 //Toast.makeText(getContext(), "ERROR"+t.toString(), Toast.LENGTH_LONG).show();
-
+                Log.d("a",t.getMessage());
                 // setting text to our text view when
                 // we get error response from API.
 //                responseTV.setText("Error found is : " + t.getMessage());
