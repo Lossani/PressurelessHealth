@@ -1,6 +1,7 @@
 package com.xempre.pressurelesshealth.interfaces;
 
 import com.xempre.pressurelesshealth.models.Goal;
+import com.xempre.pressurelesshealth.models.GoalHistory;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.models.User;
 
@@ -15,9 +16,10 @@ import retrofit2.http.Path;
 public interface GoalService {
     @GET("gamification/goals/{id}/")
     public Call<Goal> getUserById(@Path("id") int id);
-
     @GET("gamification/goals/")
     public Call<List<Goal>> getAll();
+    @GET("core/goal_history/")
+    public Call<List<GoalHistory>> getAllComplete();
     @POST("gamification/goals/")
     public Call<Goal> save(@Body Measurement measurement);
 }

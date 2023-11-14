@@ -2,10 +2,12 @@ package com.xempre.pressurelesshealth.views.profile;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.xempre.pressurelesshealth.MainActivity;
 import com.xempre.pressurelesshealth.R;
@@ -26,12 +29,14 @@ import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.databinding.FragmentUserProfileBinding;
 import com.xempre.pressurelesshealth.interfaces.UserService;
 import com.xempre.pressurelesshealth.models.User;
-import com.xempre.pressurelesshealth.views.profile.goals.GoalList;
+import com.xempre.pressurelesshealth.views.profile.challenge.ChallengeList;
+import com.xempre.pressurelesshealth.views.profile.goal.GoalList;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,7 +76,28 @@ public class UserProfile extends Fragment {
         binding = FragmentUserProfileBinding.inflate(inflater, container, false);
         imageView = binding.imageView;
         loadUserData();
-        replaceFragment(new GoalList());
+        replaceFragment(new ChallengeList());
+        binding.btnChallenge.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
+        binding.btnLogros.setBackgroundColor(Color.GRAY);
+
+        binding.btnLogros.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                replaceFragment(new GoalList());
+                binding.btnLogros.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
+                binding.btnChallenge.setBackgroundColor(Color.GRAY);
+            }
+        });
+
+        binding.btnChallenge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                replaceFragment(new ChallengeList());
+                binding.btnChallenge.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
+                binding.btnLogros.setBackgroundColor(Color.GRAY);
+            }
+        });
+
         return binding.getRoot();
 
     }
