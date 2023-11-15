@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.fitness.data.Field;
 import com.xempre.pressurelesshealth.MainActivity;
 import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
@@ -24,6 +26,9 @@ import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -66,10 +71,22 @@ public class AddMeasurement extends Fragment {
 
         if (googleFitApi != null) {
             GoogleFitCallback googleFitCallback = (Map<String, Float> measurements) -> {
-                sys.setText(measurements.get(FIELD_BLOOD_PRESSURE_SYSTOLIC.getName()).toString());
-                dis.setText(measurements.get(FIELD_BLOOD_PRESSURE_DIASTOLIC.getName()).toString());
+                Float systolicPressure = measurements.get(FIELD_BLOOD_PRESSURE_SYSTOLIC.getName());
+                Float diastolicPressure = measurements.get(FIELD_BLOOD_PRESSURE_DIASTOLIC.getName());
+                Float heartRate = measurements.get(Field.FIELD_BPM.getName());
+
+                try {
+                    Toast.makeText(mainActivity, heartRate != null ? heartRate.toString() : "No heart rate", Toast.LENGTH_LONG).show();
+                } catch (Exception ignored) {
+
+                }
+                sys.setText(systolicPressure != null ? systolicPressure.toString() : null);
+                dis.setText(diastolicPressure != null ? diastolicPressure.toString() : null);
             };
-            googleFitApi.readBloodPressureMeasurement(mainActivity, googleFitCallback);
+
+            ZonedDateTime endTime = LocalDateTime.now().atZone(ZoneId.systemDefault());
+            ZonedDateTime startTime = endTime.minusHours(12);
+            googleFitApi.readBloodPressureMeasurement(mainActivity, googleFitCallback, startTime, endTime);
 
         }
 

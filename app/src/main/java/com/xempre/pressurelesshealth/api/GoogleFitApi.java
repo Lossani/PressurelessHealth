@@ -30,6 +30,7 @@ import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataSource;
+import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.data.HealthDataTypes;
 import com.google.android.gms.fitness.data.Value;
@@ -104,11 +105,11 @@ public class GoogleFitApi {
                 .build();
     }
 
-    public void readBloodPressureMeasurement(Activity activity, GoogleFitCallback callback) {
+    public void readBloodPressureMeasurement(Activity activity, GoogleFitCallback callback, ZonedDateTime startTime, ZonedDateTime endTime) {
         Map<String, Float> results = new HashMap<String, Float>();
 
         Fitness.getHistoryClient(activity, googleAccount)
-            .readData(createReadRequest()).addOnSuccessListener(
+            .readData(createReadRequest(startTime, endTime)).addOnSuccessListener(
                 new OnSuccessListener<DataReadResponse>() {
                     @Override
                     public void onSuccess(DataReadResponse dataReadResponse) {
@@ -122,8 +123,19 @@ public class GoogleFitApi {
                                 Log.v(TAG, "Start: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
                                 Log.v(TAG, "End: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
 
-                                results.put(FIELD_BLOOD_PRESSURE_SYSTOLIC.getName(), dp.getValue(FIELD_BLOOD_PRESSURE_SYSTOLIC).asFloat());
-                                results.put(FIELD_BLOOD_PRESSURE_DIASTOLIC.getName(), dp.getValue(FIELD_BLOOD_PRESSURE_DIASTOLIC).asFloat());
+                                try {
+                                    results.put(FIELD_BLOOD_PRESSURE_SYSTOLIC.getName(), dp.getValue(FIELD_BLOOD_PRESSURE_SYSTOLIC).asFloat());
+                                    results.put(FIELD_BLOOD_PRESSURE_DIASTOLIC.getName(), dp.getValue(FIELD_BLOOD_PRESSURE_DIASTOLIC).asFloat());
+                                } catch (Exception ignored) {
+
+                                }
+
+                                try {
+                                    results.put(Field.FIELD_BPM.getName(), dp.getValue(Field.FIELD_BPM).asFloat());
+                                } catch (Exception ignored) {
+
+                                }
+
                                 callback.fnCallback(results);
                                 //for (Field field : dp.getDataType().getFields()) {
                                 //    Value val = dp.getValue(field);
@@ -142,21 +154,45 @@ public class GoogleFitApi {
             });
     }
 
-    private DataReadRequest createReadRequest() {
+    private DataReadRequest createReadRequest(ZonedDateTime startTime, ZonedDateTime endTime) {
         // Read the data that's been collected throughout the past week.
-        ZonedDateTime endTime = LocalDateTime.now().atZone(ZoneId.systemDefault());
-        ZonedDateTime startTime = endTime.minusHours(12);
+        // ZonedDateTime endTime = LocalDateTime.now().atZone(ZoneId.systemDefault());
+        // ZonedDateTime startTime = endTime.minusHours(12);
         // Log.i(TAG, "Range Start: " + startTime.getHour());
         // Log.i(TAG, "Range End: $endTime");
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .read(HealthDataTypes.TYPE_BLOOD_PRESSURE)
+                .read(DataType.TYPE_HEART_RATE_BPM)
                 //.aggregate(HealthDataTypes.TYPE_BLOOD_PRESSURE
                 //  , HealthDataTypes.AGGREGATE_BLOOD_PRESSURE_SUMMARY
                 //)
                 // bucketByTime allows for a time span, while bucketBySession allows
                 // bucketing by sessions.
                 //.bucketByTime(1, TimeUnit.DAYS)
+                //.bucketBySession()
+                .setTimeRange(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
+                .enableServerQueries()
+                .build();
+        return readRequest;
+    }
+
+    private DataReadRequest createAggregateReadRequest(ZonedDateTime startTime, ZonedDateTime endTime) {
+        // Read the data that's been collected throughout the past week.
+        // ZonedDateTime endTime = LocalDateTime.now().atZone(ZoneId.systemDefault());
+        // ZonedDateTime startTime = endTime.minusHours(12);
+        // Log.i(TAG, "Range Start: " + startTime.getHour());
+        // Log.i(TAG, "Range End: $endTime");
+
+        DataReadRequest readRequest = new DataReadRequest.Builder()
+                .aggregate(HealthDataTypes.AGGREGATE_BLOOD_PRESSURE_SUMMARY)
+                .aggregate(DataType.AGGREGATE_HEART_RATE_SUMMARY)
+                //.aggregate(HealthDataTypes.TYPE_BLOOD_PRESSURE
+                //  , HealthDataTypes.AGGREGATE_BLOOD_PRESSURE_SUMMARY
+                //)
+                // bucketByTime allows for a time span, while bucketBySession allows
+                // bucketing by sessions.
+                .bucketByTime(1, TimeUnit.DAYS)
                 //.bucketBySession()
                 .setTimeRange(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
                 .enableServerQueries()
