@@ -1,4 +1,4 @@
-package com.xempre.pressurelesshealth.views;
+package com.xempre.pressurelesshealth.views.add;
 
 import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC;
 import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC;
@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,10 +34,8 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AddMeasurement extends Fragment {
+public class AddMeasurementBasic extends Fragment {
 
     private ActivityAddMeasurementBinding binding;
     EditText sys;

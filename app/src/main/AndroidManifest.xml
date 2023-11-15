@@ -28,7 +28,7 @@
             android:name=".views.reports.MeasurementList.MeasurementList"
             android:exported="false" />
         <activity
-            android:name=".views.AddMeasurement"
+            android:name=".views.add.AddMeasurementBasic"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
