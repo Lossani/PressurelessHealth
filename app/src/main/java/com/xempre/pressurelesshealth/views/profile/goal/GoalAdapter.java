@@ -82,7 +82,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
                             Log.d("PERRUNO", element.toString());
                             GoalHistory temp = new GoalHistory(element);
                             //REMPLAZAR CON ID DE USUARIO
-                            if (Objects.equals(temp.getGoalId(), goal.getId())) {
+                            if (Objects.equals(temp.getGoal().getId(), goal.getId())) {
                                 holder.checkBox.setChecked(true);}
                         }
                     }

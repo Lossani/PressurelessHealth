@@ -38,7 +38,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
     public void onBindViewHolder(NombreViewHolder holder, int position) {
         Measurement measurement = listMeasurements.get(position);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
         LocalDateTime fechaHora = LocalDateTime.parse(measurement.getMeasurementDate(), formatter);
 

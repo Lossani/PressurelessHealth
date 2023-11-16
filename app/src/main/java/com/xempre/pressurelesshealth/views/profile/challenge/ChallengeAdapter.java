@@ -38,7 +38,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
 
     @Override
     public ChallengeAdapter.NombreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.goal_element, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.challenge_element, parent, false);
         return new ChallengeAdapter.NombreViewHolder(view);
     }
 
@@ -48,6 +48,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
         Log.d("DATA", challenge.toString());
         holder.textViewDesc.setText(String.valueOf(challenge.getDescription()));
         holder.textViewName.setText(String.valueOf(challenge.getName()));
+        holder.textViewReward.setText(String.valueOf(challenge.getReward()));
 //        holder.textViewReward.setText(String.valueOf(challenge.getTimeLimit()));
         getBitmapFromURL(holder, challenge.getImage());
     }
@@ -68,10 +69,10 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
 
         public NombreViewHolder(View itemView) {
             super(itemView);
-            textViewDesc = itemView.findViewById(R.id.tvDescGoal);
-            textViewName = itemView.findViewById(R.id.tvNameGoal);
-            textViewReward = itemView.findViewById(R.id.tvPoints);
-            imageView = itemView.findViewById(R.id.imageView2);
+            textViewDesc = itemView.findViewById(R.id.tvChallengeDesc);
+            textViewName = itemView.findViewById(R.id.tvChallengeName);
+            textViewReward = itemView.findViewById(R.id.tvChallengePoints);
+            imageView = itemView.findViewById(R.id.imageViewChallenge);
         }
     }
 

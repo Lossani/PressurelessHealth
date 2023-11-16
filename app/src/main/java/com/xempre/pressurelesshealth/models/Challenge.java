@@ -12,6 +12,8 @@ public class Challenge {
 
     String description;
 
+    Integer reward;
+
     String image;
 //    @JsonProperty("time_limit")
 //    Long timeLimit;
@@ -25,6 +27,7 @@ public class Challenge {
         this.id = challenge.getId();
         this.enabled = challenge.getEnabled();
         this.image = challenge.getImage();
+        this.reward = challenge.getReward();
 //        this.timeLimit = challenge.getTimeLimit();
     }
 
@@ -47,6 +50,15 @@ public class Challenge {
     public void setId(Integer id) {
         this.id = id;
     }
+    public void setReward(Integer reward) {
+        this.reward = reward;
+    }
+
+    public Integer getReward() {
+        return reward;
+    }
+
+
 
     public String getName() {
         return name;

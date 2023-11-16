@@ -13,7 +13,7 @@ public class GoalHistory {
     @JsonProperty("user")
     String userId;
     @JsonProperty("goal")
-    Integer goalId;
+    Goal goal;
 
     GoalHistory(){}
 
@@ -21,7 +21,7 @@ public class GoalHistory {
         this.reachedOn = goal.getReachedOn();
         this.userId = goal.getUserId();
         this.id = goal.getId();
-        this.goalId = goal.getGoalId();
+        this.goal = goal.getGoal();
 
     }
 
@@ -33,12 +33,12 @@ public class GoalHistory {
         this.id = id;
     }
 
-    public Integer getGoalId() {
-        return goalId;
+    public Goal getGoal() {
+        return goal;
     }
 
-    public void setGoalId(Integer goalId) {
-        this.goalId = goalId;
+    public void setGoal(Goal goal) {
+        this.goal = goal;
     }
 
     public String getReachedOn() {

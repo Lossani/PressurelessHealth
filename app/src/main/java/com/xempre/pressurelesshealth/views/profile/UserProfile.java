@@ -55,6 +55,9 @@ public class UserProfile extends Fragment {
     MainActivity mainViewActivity;
     GoogleFitApi googleFitApi;
 
+    Fragment challengeList = new ChallengeList();
+    Fragment goalList = new GoalList();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,14 +79,14 @@ public class UserProfile extends Fragment {
         binding = FragmentUserProfileBinding.inflate(inflater, container, false);
         imageView = binding.imageView;
         loadUserData();
-        replaceFragment(new ChallengeList());
+        replaceFragment(challengeList);
         binding.btnChallenge.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
         binding.btnLogros.setBackgroundColor(Color.GRAY);
 
         binding.btnLogros.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragment(new GoalList());
+                replaceFragment(goalList);
                 binding.btnLogros.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
                 binding.btnChallenge.setBackgroundColor(Color.GRAY);
             }
@@ -92,7 +95,7 @@ public class UserProfile extends Fragment {
         binding.btnChallenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragment(new ChallengeList());
+                replaceFragment(challengeList);
                 binding.btnChallenge.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
                 binding.btnLogros.setBackgroundColor(Color.GRAY);
             }
