@@ -50,6 +50,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class GoogleFitApi {
@@ -106,7 +107,7 @@ public class GoogleFitApi {
     }
 
     public void readBloodPressureMeasurement(Activity activity, GoogleFitCallback callback, ZonedDateTime startTime, ZonedDateTime endTime) {
-        Map<String, Float> results = new HashMap<String, Float>();
+        Map<String, Number> results = new HashMap<String, Number>();
 
         Fitness.getHistoryClient(activity, googleAccount)
             .readData(createReadRequest(startTime, endTime)).addOnSuccessListener(
@@ -117,15 +118,20 @@ public class GoogleFitApi {
                         //googleFitApi.printData(dataReadResponse);
                         for (DataSet dataSet : dataReadResponse.getDataSets()) {
                             //GoogleFitApi.dumpDataSet(data);
-                            for (DataPoint dp : dataSet.getDataPoints()) {
-                                Log.v(TAG, "Data Point:");
-                                Log.v(TAG, "Type: " + dataSet.getDataType().getName());
-                                Log.v(TAG, "Start: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
-                                Log.v(TAG, "End: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
-
+//                            for (DataPoint dp : dataSet.getDataPoints()) {
+//                                Log.v(TAG, "Data Point:");
+//                                Log.v(TAG, "Type: " + dataSet.getDataType().getName());
+//                                Log.v(TAG, "Start: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
+//                                Log.v(TAG, "End: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
+                            if(!dataSet.isEmpty()){
+                            DataPoint dp = dataSet.getDataPoints().get(dataSet.getDataPoints().size()-1);
+//
+                                Long timestamp = dp.getTimestamp(TimeUnit.MILLISECONDS);
+//
                                 try {
                                     results.put(FIELD_BLOOD_PRESSURE_SYSTOLIC.getName(), dp.getValue(FIELD_BLOOD_PRESSURE_SYSTOLIC).asFloat());
                                     results.put(FIELD_BLOOD_PRESSURE_DIASTOLIC.getName(), dp.getValue(FIELD_BLOOD_PRESSURE_DIASTOLIC).asFloat());
+                                    results.put("DATE", timestamp);
                                 } catch (Exception ignored) {
 
                                 }
@@ -137,6 +143,7 @@ public class GoogleFitApi {
                                 }
 
                                 callback.fnCallback(results);
+//                                break;
                                 //for (Field field : dp.getDataType().getFields()) {
                                 //    Value val = dp.getValue(field);
                                     //results.put(field.getName(), (float) dp.getValue(field).asInt());

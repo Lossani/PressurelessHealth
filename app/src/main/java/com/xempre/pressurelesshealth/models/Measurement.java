@@ -15,13 +15,16 @@ public class Measurement {
     private float diastolicPressure;
     @JsonProperty("measurement_date")
     private String measurementDate;
+    @JsonProperty("used_recommended_method")
+    private boolean isAdvanced;
     public Measurement() {
     }
-    public Measurement(int id, float sr, float dr, String measurementDate){
+    public Measurement(int id, float sr, float dr, String measurementDate, boolean isAdvanced){
         this.idUser = id;
         this.systolicPressure = sr;
         this.diastolicPressure = dr;
         this.measurementDate = measurementDate;
+        this.isAdvanced = isAdvanced;
     }
 
     public Measurement(Measurement measurement){

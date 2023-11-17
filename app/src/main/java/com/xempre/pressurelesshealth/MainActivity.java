@@ -16,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.databinding.ActivityMainViewBinding;
 import com.xempre.pressurelesshealth.views.add.AddMeasurementBasic;
+import com.xempre.pressurelesshealth.views.add.SelectAddMode;
 import com.xempre.pressurelesshealth.views.profile.UserProfile;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
 import com.xempre.pressurelesshealth.views.settings.SettingsFragment;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         replaceFragment(new UserProfile());
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bb_add){
-                replaceFragment(new AddMeasurementBasic());
+                replaceFragment(new SelectAddMode());
             } else if (item.getItemId() == R.id.bb_report) {
                 replaceFragment(new MeasurementList());
             } else if (item.getItemId() == R.id.bb_profile) {

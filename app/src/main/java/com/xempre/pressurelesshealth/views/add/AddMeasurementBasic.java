@@ -6,6 +6,8 @@ import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESS
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -17,12 +19,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.fitness.data.Field;
 import com.xempre.pressurelesshealth.MainActivity;
+import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.api.GoogleFitCallback;
 import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -67,10 +71,11 @@ public class AddMeasurementBasic extends Fragment {
         dis = binding.etDiastolic;
 
         if (googleFitApi != null) {
-            GoogleFitCallback googleFitCallback = (Map<String, Float> measurements) -> {
-                Float systolicPressure = measurements.get(FIELD_BLOOD_PRESSURE_SYSTOLIC.getName());
-                Float diastolicPressure = measurements.get(FIELD_BLOOD_PRESSURE_DIASTOLIC.getName());
-                Float heartRate = measurements.get(Field.FIELD_BPM.getName());
+            GoogleFitCallback googleFitCallback = (Map<String, Number> measurements) -> {
+                Number systolicPressure = measurements.get(FIELD_BLOOD_PRESSURE_SYSTOLIC.getName());
+                Number diastolicPressure = measurements.get(FIELD_BLOOD_PRESSURE_DIASTOLIC.getName());
+                Number heartRate = measurements.get(Field.FIELD_BPM.getName());
+                Number date = measurements.get("DATE");
 
                 try {
                     Toast.makeText(mainActivity, heartRate != null ? heartRate.toString() : "No heart rate", Toast.LENGTH_LONG).show();
@@ -93,22 +98,6 @@ public class AddMeasurementBasic extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavHostFragment.findNavController(FirstFragment.this)
-//                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
-//            }
-//        });
-
-//        binding.reportButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NavHostFragment.findNavController(FirstFragment.this)
-//                        .navigate(R.id.action_FirstFragment_to_MeasurementList);
-//            }
-//        });
-
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,11 +117,18 @@ public class AddMeasurementBasic extends Fragment {
         });
     }
 
+    private void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
+    }
+
     public void saveButton(float sr, float dr, String date){
 
         MeasurementService measurementService = ApiClient.createService(MeasurementService.class);
 
-        Measurement measurement = new Measurement(2, sr, dr, date);
+        Measurement measurement = new Measurement(2, sr, dr, date, false);
 
         // calling a method to create a post and passing our modal class.
         Call<Measurement> call = measurementService.save(measurement);
@@ -144,8 +140,9 @@ public class AddMeasurementBasic extends Fragment {
                 // this method is called when we get response from our api.
                 if (response.code() == 201){
                     Toast.makeText(getContext(), "Medida guardada exitosamente.", Toast.LENGTH_SHORT).show();
-                    sys.setText("");
-                    dis.setText("");
+                    replaceFragment(new MeasurementList());
+//                    sys.setText("");
+//                    dis.setText("");
                 } else {
                     Toast.makeText(getContext(), "Ocurrio un error. Error " + response.code(), Toast.LENGTH_SHORT).show();
                 }
