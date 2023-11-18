@@ -3,13 +3,18 @@ package com.xempre.pressurelesshealth.views.add.advanced;
 import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC;
 import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC;
 
+import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -55,6 +60,8 @@ public class AddMeasurementAdvanced extends Fragment {
     List<Pair<Number, Number>> measurements;
 
     Number dateOld;
+
+    Dialog dialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,6 +112,44 @@ public class AddMeasurementAdvanced extends Fragment {
             @Override
             public void onClick(View view) {
                 update_data(2);
+            }
+        });
+
+        binding.fabAddAdvanced.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.ok_dialog);
+                dialog.setCancelable(false);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                TextView title;
+                title = dialog.findViewById(R.id.tvTitleOkDialog);
+                title.setText("Medida Avanzada");
+
+                TextView content;
+                content = dialog.findViewById(R.id.tvContentOkDialog);
+                content.setText(Html.fromHtml(
+                        "<Este modo brinda medidas más precisas y confiables para realizar un correcto seguimiento de su presión.<br>\n" +
+                                "Para realizar esta medida correctamente, debe seguir los siguientes pasos:<br>\n" +
+                                "1.- Tomar la medida 1.<br>\n" +
+                                "2.- Esperar al menos 1 minuto.<br>\n" +
+                                "3.- Tomar la medida 2.<br>\n" +
+                                "4.- Esperar al menos 1 minuto.<br>\n" +
+                                "5.- Tomar la medida 3.<br>\n" +
+                                "Una vez realizados estos pasos se le mostrará el resultado que podrá almacenar al presionar el botón <b>Guardar</b>."
+                ));
+
+
+                dialog.findViewById(R.id.btnOkDialog).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
             }
         });
 
@@ -173,7 +218,6 @@ public class AddMeasurementAdvanced extends Fragment {
             ZonedDateTime endTime = LocalDateTime.now().atZone(ZoneId.systemDefault());
             ZonedDateTime startTime = endTime.minusHours(12);
             googleFitApi.readBloodPressureMeasurement(mainActivity, googleFitCallback, startTime, endTime);
-
         }
     }
 

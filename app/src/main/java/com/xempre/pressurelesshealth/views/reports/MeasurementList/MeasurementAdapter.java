@@ -1,8 +1,10 @@
 package com.xempre.pressurelesshealth.views.reports.MeasurementList;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -63,6 +65,8 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
 
         holder.textViewDate.setText(date);
         holder.textViewHour.setText(hour);
+        holder.isAdvanced.setText(measurement.getIsAdvanced()?"Avanzada":"Básica");
+        Log.d("ADVANCES", String.valueOf(measurement.getIsAdvanced()));
 
         holder.textViewDis.setText(String.valueOf(measurement.getDiastolicRecord()));
         holder.textViewSys.setText(String.valueOf(measurement.getSystolicRecord()));
@@ -82,6 +86,8 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
         TextView textViewDate;
         TextView textViewHour;
 
+        Button isAdvanced;
+
         public NombreViewHolder(View itemView) {
             super(itemView);
             cardView = itemView.findViewById(R.id.cvBody);
@@ -89,6 +95,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
             textViewSys = itemView.findViewById(R.id.tvSystolic);
             textViewDate = itemView.findViewById(R.id.tvDate);
             textViewHour = itemView.findViewById(R.id.tvHour);
+            isAdvanced = itemView.findViewById(R.id.btnIsAdvanced);
         }
     }
 }

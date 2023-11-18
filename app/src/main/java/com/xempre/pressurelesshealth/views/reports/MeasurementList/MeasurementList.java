@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +60,8 @@ public class MeasurementList extends Fragment {
     private MeasurementAdapter measurementAdapter;
     private List<Measurement> listaNombres = new ArrayList<Measurement>();
     MaterialDatePicker picker;
+
+    Dialog dialog;
     ApiClient apiClient;
     @Override
     public View onCreateView(
@@ -100,6 +104,43 @@ public class MeasurementList extends Fragment {
                 });
             }
         });
+
+        binding.fabInfoHistorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.ok_dialog);
+                dialog.setCancelable(false);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                TextView title;
+                title = dialog.findViewById(R.id.tvTitleOkDialog);
+                title.setText("Recomendaciones");
+
+                TextView content;
+                content = dialog.findViewById(R.id.tvContentOkDialog);
+                content.setText(Html.fromHtml(
+                                "Para realizar un seguimiento correcto de sus niveles de presión arterial se recomienda:<br>\n" +
+                                "<li>Tómese la presión arterial a la misma hora todos los días, preferiblemente en la mañana antes de tomar sus medicamentos y comer.</li><br>\n" +
+                                "<li>Siéntese cómodamente con la espalda apoyada y el brazo a la altura del corazón.</li><br>\n" +
+                                "<li>Registre estos valores diarios para mostrarlos a su médico.</li><br>\n" +
+                                "<li>Realizar las medidas utilizando el modo <b>Avanzado</b>.</li><br>\n" +
+                                "Realizar el seguimiento siguiendo estas recomendaciones puede ayudar a su médico a identificar y prevenir complicaciones."
+                ));
+
+
+                dialog.findViewById(R.id.btnOkDialog).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
+        });
+
         long millis = Instant.now().toEpochMilli();
         callAPI(convertDateToString(millis), convertDateToString(millis));
         // Agrega algunos nombres a la lista
@@ -149,7 +190,7 @@ public class MeasurementList extends Fragment {
                                 Log.d("PERRUNO", element.toString());
                                 i +=1;
                                 Measurement temp = new Measurement(element);
-                                listaNombres.add(temp);
+                                listaNombres.add(element);
                                 prom1 += element.getDiastolicRecord();
                                 prom2 += element.getSystolicRecord();
                             }

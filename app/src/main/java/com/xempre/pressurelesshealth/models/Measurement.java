@@ -16,15 +16,15 @@ public class Measurement {
     @JsonProperty("measurement_date")
     private String measurementDate;
     @JsonProperty("used_recommended_method")
-    private boolean isAdvanced;
+    private boolean isAdvancedMethod;
     public Measurement() {
     }
-    public Measurement(int id, float sr, float dr, String measurementDate, boolean isAdvanced){
+    public Measurement(int id, float sr, float dr, String measurementDate, boolean isAdvancedMethod){
         this.idUser = id;
         this.systolicPressure = sr;
         this.diastolicPressure = dr;
         this.measurementDate = measurementDate;
-        this.isAdvanced = isAdvanced;
+        this.isAdvancedMethod = isAdvancedMethod;
     }
 
     public Measurement(Measurement measurement){
@@ -32,6 +32,7 @@ public class Measurement {
         this.systolicPressure = measurement.getSystolicRecord();
         this.diastolicPressure = measurement.getDiastolicRecord();
         this.measurementDate = measurement.getMeasurementDate();
+        this.isAdvancedMethod = measurement.getIsAdvanced();
     }
 
     public String getMeasurementDate() {
@@ -44,6 +45,14 @@ public class Measurement {
 
     public int getUserId() {
         return idUser;
+    }
+
+    public boolean getIsAdvanced() {
+        return isAdvancedMethod;
+    }
+
+    public void setIsAdvanced(boolean isAdvancedMethod) {
+        this.isAdvancedMethod = isAdvancedMethod;
     }
 
     public float getDiastolicRecord() {

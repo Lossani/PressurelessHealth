@@ -16,6 +16,7 @@ import static java.text.DateFormat.getTimeInstance;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -149,6 +150,9 @@ public class GoogleFitApi {
                                     //results.put(field.getName(), (float) dp.getValue(field).asInt());
                                     //callback.fnCallback(results);
                                 //}
+                            }else {
+                                if (dataSet.getDataType().getName().equals("com.google.blood_pressure"))
+                                    Toast.makeText(activity, "No se ha detectado ninguna medida reciente.", Toast.LENGTH_LONG).show();
                             }
                         }
                     }
