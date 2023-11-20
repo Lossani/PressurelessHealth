@@ -58,7 +58,7 @@ public class ChallengeList extends Fragment {
 
         ChallengeService challengeService = ApiClient.createService(ChallengeService.class);
 
-        Call<List<Challenge>> call = challengeService.getAll();
+        Call<List<Challenge>> call = challengeService.getAllEnabled();
 
         call.enqueue(new Callback<List<Challenge>>() {
             @Override

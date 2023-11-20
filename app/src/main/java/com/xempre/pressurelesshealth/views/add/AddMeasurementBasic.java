@@ -11,6 +11,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,7 @@ import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
+import com.xempre.pressurelesshealth.views.shared.MinMaxFilter;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -98,12 +102,49 @@ public class AddMeasurementBasic extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.etDiastolic.setFilters(new InputFilter[]{new MinMaxFilter(0.0,250.0)});
+        binding.etSystolic.setFilters(new InputFilter[]{new MinMaxFilter(0.0,250.0)});
+
+        binding.etSystolic.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    if(binding.etSystolic.getText().length() == 1 && binding.etSystolic.getText().toString().trim().equals("0")){
+                        binding.etSystolic.setText("");
+                    }
+                }else {
+                    if(binding.etSystolic.getText().length() == 0){
+                        binding.etSystolic.setText("0");
+                    }
+                }
+            }
+        });
+
+        binding.etDiastolic.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    if(binding.etDiastolic.getText().length() == 1 && binding.etDiastolic.getText().toString().trim().equals("0")){
+                        binding.etDiastolic.setText("");
+                    }
+                }else {
+                    if(binding.etDiastolic.getText().length() == 0){
+                        binding.etDiastolic.setText("0");
+                    }
+                }
+            }
+        });
+
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
                     float sr = Float.parseFloat(sys.getText().toString());
                     float dr = Float.parseFloat(dis.getText().toString());
+                    if (sr<0 || dr<0 || sr > 250 || dr > 150){
+                        Toast.makeText(getContext(), "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     String pattern = "yyy-MM-dd'T'HH:mm:ss'Z'";
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
                     String date = simpleDateFormat.format(new Date());

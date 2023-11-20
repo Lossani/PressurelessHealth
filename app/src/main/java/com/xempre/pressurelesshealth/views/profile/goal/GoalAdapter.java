@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +59,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
         holder.textViewDesc.setText(String.valueOf(goal.getDescription()));
         holder.textViewName.setText(String.valueOf(goal.getName()));
         holder.textViewReward.setText(String.valueOf(goal.getReward()));
+//        holder.progressBar.setProgress(10);
         validateComplete(goal, holder);
         getBitmapFromURL(holder, goal.getImage());
     }
@@ -80,10 +82,15 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
                     } else {
                         for (GoalHistory element : responseFromAPI) {
                             Log.d("PERRUNO", element.toString());
-                            GoalHistory temp = new GoalHistory(element);
+                            GoalHistory goalHistory = new GoalHistory(element);
+                            Log.d("PERRUNO", element.getProgress()+"");
+                            Log.d("PERRUNO", element.getIsSucceeded()+"");
                             //REMPLAZAR CON ID DE USUARIO
-                            if (Objects.equals(temp.getGoal().getId(), goal.getId())) {
-                                holder.checkBox.setChecked(true);}
+                            if (Objects.equals(goalHistory.getGoal().getId(), goal.getId())) {
+
+                                holder.checkBox.setChecked(goalHistory.getIsSucceeded());
+                                holder.progressBar.setProgress((int)goalHistory.getProgress());
+                            }
                         }
                     }
 
@@ -118,6 +125,8 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
 
         CheckBox checkBox;
 
+        ProgressBar progressBar;
+
         public NombreViewHolder(View itemView) {
             super(itemView);
             textViewDesc = itemView.findViewById(R.id.tvDescGoal);
@@ -125,6 +134,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
             textViewReward = itemView.findViewById(R.id.tvPoints);
             imageView = itemView.findViewById(R.id.imageView2);
             checkBox = itemView.findViewById(R.id.cbGoal);
+            progressBar = itemView.findViewById(R.id.pbGoal);
         }
     }
 

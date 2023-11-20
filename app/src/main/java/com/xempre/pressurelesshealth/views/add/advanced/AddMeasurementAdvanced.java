@@ -6,7 +6,10 @@ import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESS
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -32,6 +35,9 @@ import com.xempre.pressurelesshealth.databinding.AdvancedAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
+import com.xempre.pressurelesshealth.views.shared.MinMaxFilter;
+
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -57,7 +63,7 @@ public class AddMeasurementAdvanced extends Fragment {
     EditText sys;
     EditText dis;
 
-    List<Pair<Number, Number>> measurements;
+    Pair<Number, Number>[] measurements;
 
     Number dateOld;
 
@@ -70,8 +76,14 @@ public class AddMeasurementAdvanced extends Fragment {
         mainActivity = (MainActivity)getActivity();
         googleFitApi = mainActivity.getGoogleFitApi();
 
+        measurements = new Pair[3];
 
-        measurements = new ArrayList<>();
+        // Inicializar el arreglo con pares (0,0)
+        for (int i = 0; i < measurements.length; i++) {
+            measurements[i] = new Pair<>(0, 0);
+        }
+
+//        measurements = new ArrayList<>();
         dateOld = null;
     }
 
@@ -90,14 +102,13 @@ public class AddMeasurementAdvanced extends Fragment {
                 } catch (Exception ignored){
                     Toast.makeText(getContext(), "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
         binding.btnUpdate1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 update_data(0);
+                calculateMeasurement();
             }
         });
 
@@ -105,6 +116,7 @@ public class AddMeasurementAdvanced extends Fragment {
             @Override
             public void onClick(View view) {
                 update_data(1);
+                calculateMeasurement();
             }
         });
 
@@ -112,6 +124,7 @@ public class AddMeasurementAdvanced extends Fragment {
             @Override
             public void onClick(View view) {
                 update_data(2);
+                calculateMeasurement();
             }
         });
 
@@ -150,6 +163,194 @@ public class AddMeasurementAdvanced extends Fragment {
                 });
 
                 dialog.show();
+            }
+        });
+
+        binding.etDiastolicAd1.setFilters(new InputFilter[]{new MinMaxFilter("0","250")});
+        binding.etDiastolicAd2.setFilters(new InputFilter[]{new MinMaxFilter("0","250")});
+        binding.etDiastolicAd3.setFilters(new InputFilter[]{new MinMaxFilter("0","250")});
+        binding.etSystolicAd1.setFilters(new InputFilter[]{new MinMaxFilter("0","250")});
+        binding.etSystolicAd2.setFilters(new InputFilter[]{new MinMaxFilter("0","250")});
+        binding.etSystolicAd3.setFilters(new InputFilter[]{new MinMaxFilter("0","250")});
+
+        binding.etDiastolicAd1.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (!s.toString().equals("")) calculateMeasurement();
+
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        binding.etSystolicAd1.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (!s.toString().equals("")) calculateMeasurement();
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        binding.etDiastolicAd2.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (!s.toString().equals("")) calculateMeasurement();
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        binding.etSystolicAd2.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (!s.toString().equals("")) calculateMeasurement();
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        binding.etDiastolicAd3.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (!s.toString().equals("")) calculateMeasurement();
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        binding.etSystolicAd3.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if (!s.toString().equals("")) calculateMeasurement();
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etSystolicAd1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    if(binding.etSystolicAd1.getText().length() == 1 && binding.etSystolicAd1.getText().toString().trim().equals("0")){
+                        binding.etSystolicAd1.setText("");
+                    }
+                }else {
+                    if(binding.etSystolicAd1.getText().length() == 0){
+                        binding.etSystolicAd1.setText("0");
+                    }
+                }
+            }
+        });
+        binding.etSystolicAd2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    if(binding.etSystolicAd2.getText().length() == 1 && binding.etSystolicAd2.getText().toString().trim().equals("0")){
+                        binding.etSystolicAd2.setText("");
+                    }
+                }else {
+                    if(binding.etSystolicAd2.getText().length() == 0){
+                        binding.etSystolicAd2.setText("0");
+                    }
+                }
+            }
+        });
+        binding.etSystolicAd3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    if(binding.etSystolicAd3.getText().length() == 1 && binding.etSystolicAd3.getText().toString().trim().equals("0")){
+                        binding.etSystolicAd3.setText("");
+                    }
+                }else {
+                    if(binding.etSystolicAd3.getText().length() == 0){
+                        binding.etSystolicAd3.setText("0");
+                    }
+                }
+            }
+        });
+        binding.etDiastolicAd1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    if(binding.etDiastolicAd1.getText().length() == 1 && binding.etDiastolicAd1.getText().toString().trim().equals("0")){
+                        binding.etDiastolicAd1.setText("");
+                    }
+                }else {
+                    if(binding.etDiastolicAd1.getText().length() == 0){
+                        binding.etDiastolicAd1.setText("0");
+                    }
+                }
+            }
+        });
+        binding.etDiastolicAd2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    if(binding.etDiastolicAd2.getText().length() == 1 && binding.etDiastolicAd2.getText().toString().trim().equals("0")){
+                        binding.etDiastolicAd2.setText("");
+                    }
+                }else {
+                    if(binding.etDiastolicAd2.getText().length() == 0){
+                        binding.etDiastolicAd2.setText("0");
+                    }
+                }
+            }
+        });
+        binding.etDiastolicAd3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    if(binding.etDiastolicAd3.getText().length() == 1 && binding.etDiastolicAd3.getText().toString().trim().equals("0")){
+                        binding.etDiastolicAd3.setText("");
+                    }
+                }else {
+                    if(binding.etDiastolicAd3.getText().length() == 0){
+                        binding.etDiastolicAd3.setText("0");
+                    }
+                }
             }
         });
 
@@ -197,11 +398,12 @@ public class AddMeasurementAdvanced extends Fragment {
                         sys.setText(systolicPressure != null ? systolicPressure.toString() : null);
                         dis.setText(diastolicPressure != null ? diastolicPressure.toString() : null);
                         dateOld = date;
+                        this.measurements[op] = new Pair<>(systolicPressure, diastolicPressure);
                         Log.d("FECHA22", date.toString()+", "+ dateOld.toString());
-                        if(this.measurements.size()<3) this.measurements.add(new Pair<>(systolicPressure, diastolicPressure));
-                        if (this.measurements.size() == 3){
-                            calculateMeasurement();
-                        }
+//                        if(this.measurements.size()<3) this.measurements.add(new Pair<>(systolicPressure, diastolicPressure));
+//                        if (this.measurements.size() == 3){
+//                            calculateMeasurement();
+//                        }
                     } else {
                         Toast.makeText(getActivity(), "No se ha detectado una nueva medida, vuelva a intentar en unos segundos."+ finalText, Toast.LENGTH_LONG).show();
                     }
@@ -210,8 +412,9 @@ public class AddMeasurementAdvanced extends Fragment {
                     sys.setText(systolicPressure != null ? systolicPressure.toString() : null);
                     dis.setText(diastolicPressure != null ? diastolicPressure.toString() : null);
                     dateOld = date;
-                    this.measurements.add(new Pair<>(systolicPressure, diastolicPressure));
-                    Log.d("FECHA1", date.toString());
+                    this.measurements[0] = new Pair<>(systolicPressure, diastolicPressure);
+//                    this.measurements.add(new Pair<>(systolicPressure, diastolicPressure));
+//                    Log.d("FECHA1", date.toString());
                 }
             };
 
@@ -241,6 +444,10 @@ public class AddMeasurementAdvanced extends Fragment {
 
         MeasurementService measurementService = ApiClient.createService(MeasurementService.class);
         DecimalFormat df = new DecimalFormat("0.00");
+        if (new Float(df.format(res.first))<0 || new Float(df.format(res.second))<0 || new Float(df.format(res.first)) > 250 || new Float(df.format(res.second)) > 150){
+            Toast.makeText(getContext(), "Asegurece de ingresar números validos. Revise las medidas por favor.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Measurement measurement = new Measurement(2, new Float(df.format(res.first)), new Float(df.format(res.second)), date, true);
 
         Call<Measurement> call = measurementService.save(measurement);
@@ -265,14 +472,25 @@ public class AddMeasurementAdvanced extends Fragment {
         });
     }
 
-
     private Pair<Number, Number> calculateMeasurement() {
         Log.d("TAG", "MEDIR");
 
 
-        if (measurements == null || measurements.isEmpty()) {
-            throw new IllegalArgumentException("La lista no puede ser nula o vacía.");
-        }
+//        if (measurements == null) {
+//            throw new IllegalArgumentException("La lista no puede ser nula o vacía.");
+//        }
+
+        if (binding.etSystolicAd1.getText().toString().equals("")) binding.etSystolicAd1.setText("0");
+        if (binding.etSystolicAd2.getText().toString().equals("")) binding.etSystolicAd2.setText("0");
+        if (binding.etSystolicAd3.getText().toString().equals("")) binding.etSystolicAd3.setText("0");
+        if (binding.etDiastolicAd1.getText().toString().equals("")) binding.etDiastolicAd1.setText("0");
+        if (binding.etDiastolicAd2.getText().toString().equals("")) binding.etDiastolicAd2.setText("0");
+        if (binding.etDiastolicAd3.getText().toString().equals("")) binding.etDiastolicAd3.setText("0");
+
+        measurements[0] = new Pair<>(Float.valueOf(binding.etSystolicAd1.getText().toString()), Float.valueOf(binding.etDiastolicAd1.getText().toString()));
+        measurements[1] = new Pair<>(Float.valueOf(binding.etSystolicAd2.getText().toString()), Float.valueOf(binding.etDiastolicAd2.getText().toString()));
+        measurements[2] = new Pair<>(Float.valueOf(binding.etSystolicAd3.getText().toString()), Float.valueOf(binding.etDiastolicAd3.getText().toString()));
+
 
         float sumaDis = 0;
         float sumaSys = 0;

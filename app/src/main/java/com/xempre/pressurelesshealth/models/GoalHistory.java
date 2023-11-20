@@ -15,6 +15,10 @@ public class GoalHistory {
     @JsonProperty("goal")
     Goal goal;
 
+    boolean isSucceeded;
+
+    float progress;
+
     GoalHistory(){}
 
     public GoalHistory(GoalHistory goal){
@@ -22,7 +26,23 @@ public class GoalHistory {
         this.userId = goal.getUserId();
         this.id = goal.getId();
         this.goal = goal.getGoal();
+        this.isSucceeded = goal.getIsSucceeded();
+    }
 
+    public float getProgress() {
+        return progress;
+    }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
+    }
+
+    public void setSucceeded(boolean succeeded) {
+        this.isSucceeded = succeeded;
+    }
+
+    public boolean getIsSucceeded() {
+        return isSucceeded;
     }
 
     public Integer getId() {
