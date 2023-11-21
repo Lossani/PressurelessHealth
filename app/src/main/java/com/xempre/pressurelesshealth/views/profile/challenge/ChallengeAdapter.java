@@ -87,6 +87,13 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
             } catch (Exception ignore){}
         }
 
+        if (challenge.getLatestHistory()[0].getProgress()>=100 || challenge.getLatestHistory()[0].getIsSucceeded()){
+            ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
+            holder.button.setText("Reiniciar");
+            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            holder.button.setLayoutParams(layoutParams);
+        }
+
 
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override

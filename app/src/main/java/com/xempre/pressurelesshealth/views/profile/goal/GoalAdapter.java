@@ -85,11 +85,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
                             GoalHistory goalHistory = new GoalHistory(element);
                             Log.d("PERRUNO", element.getProgress()+"");
                             Log.d("PERRUNO", element.getIsSucceeded()+"");
-                            //REMPLAZAR CON ID DE USUARIO
-                            if (Objects.equals(goalHistory.getGoal().getId(), goal.getId())) {
 
-                                holder.checkBox.setChecked(goalHistory.getIsSucceeded());
-                                holder.progressBar.setProgress((int)goalHistory.getProgress());
+                            //REMPLAZAR CON ID DE USUARIO
+                            if (Objects.equals(goalHistory.getGoal(), goal.getId())) {
+                                holder.checkBox.setChecked(!Objects.equals(goalHistory.getReachedOn(), ""));
+                                holder.date.setVisibility(View.VISIBLE);
+                                holder.date.setText(goalHistory.getReachedOn().substring(0,10));
                             }
                         }
                     }
@@ -125,7 +126,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
 
         CheckBox checkBox;
 
-        ProgressBar progressBar;
+        TextView date;
 
         public NombreViewHolder(View itemView) {
             super(itemView);
@@ -134,7 +135,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
             textViewReward = itemView.findViewById(R.id.tvPoints);
             imageView = itemView.findViewById(R.id.imageView2);
             checkBox = itemView.findViewById(R.id.cbGoal);
-            progressBar = itemView.findViewById(R.id.pbGoal);
+            date = itemView.findViewById(R.id.tvDateReached);
         }
     }
 

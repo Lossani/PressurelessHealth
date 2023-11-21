@@ -13,7 +13,7 @@ public class GoalHistory {
     @JsonProperty("user")
     String userId;
     @JsonProperty("goal")
-    Goal goal;
+    Integer goal;
 
     boolean isSucceeded;
 
@@ -53,11 +53,11 @@ public class GoalHistory {
         this.id = id;
     }
 
-    public Goal getGoal() {
+    public Integer getGoal() {
         return goal;
     }
 
-    public void setGoal(Goal goal) {
+    public void setGoal(Integer goal) {
         this.goal = goal;
     }
 
