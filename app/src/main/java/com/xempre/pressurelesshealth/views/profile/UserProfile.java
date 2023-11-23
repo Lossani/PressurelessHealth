@@ -29,6 +29,7 @@ import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.databinding.FragmentUserProfileBinding;
 import com.xempre.pressurelesshealth.interfaces.UserService;
 import com.xempre.pressurelesshealth.models.User;
+import com.xempre.pressurelesshealth.views.leaderboard.LeaderboardList;
 import com.xempre.pressurelesshealth.views.profile.challenge.ChallengeList;
 import com.xempre.pressurelesshealth.views.profile.goal.GoalList;
 
@@ -57,6 +58,8 @@ public class UserProfile extends Fragment {
 
     Fragment challengeList = new ChallengeList();
     Fragment goalList = new GoalList();
+
+    Fragment leaderboardList = new LeaderboardList();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +92,16 @@ public class UserProfile extends Fragment {
                 replaceFragment(goalList);
                 binding.btnLogros.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
                 binding.btnChallenge.setBackgroundColor(Color.GRAY);
+            }
+        });
+
+        binding.btnLeaderboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame_layout, leaderboardList);
+                fragmentTransaction.commit();
             }
         });
 
@@ -191,7 +204,8 @@ public class UserProfile extends Fragment {
                 // and passing it to our modal class.
                 user = response.body();
                 Log.d("a",response.toString());
-                binding.textView5.setText("Bienvenido " + user.getUsername());
+                binding.textView5.setText("Bienvenido " + user.getFirstName()+" " + user.getLastName());
+                binding.tvUserPoints.setText(user.getPoints().toString());
 
 
 //                // on below line we are getting our data from modal class and adding it to our string.

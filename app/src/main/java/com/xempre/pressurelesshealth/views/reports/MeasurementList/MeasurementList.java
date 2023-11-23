@@ -13,10 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -32,7 +32,6 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -41,8 +40,6 @@ import java.util.TimeZone;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MeasurementList extends Fragment {
     private ActivityListMeasurementBinding binding;
@@ -58,7 +55,7 @@ public class MeasurementList extends Fragment {
 
     private RecyclerView recyclerView;
     private MeasurementAdapter measurementAdapter;
-    private List<Measurement> listaNombres = new ArrayList<Measurement>();
+    private List<Measurement> measurementList = new ArrayList<Measurement>();
     MaterialDatePicker picker;
 
     Dialog dialog;
@@ -77,11 +74,19 @@ public class MeasurementList extends Fragment {
 //        apiClient = new ApiClient();
 
         recyclerView = binding.recyclerView;
-        measurementAdapter = new MeasurementAdapter(getContext(), listaNombres);
+        measurementAdapter = new MeasurementAdapter(getContext(), measurementList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(measurementAdapter);
         promDiastolic = binding.tvDiasProm;
         promSystolic = binding.tvSysProm;
+
+        binding.cbOnlyAdvanced.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterList(isChecked);
+                calcAverage();
+            }
+        });
 
         binding.btnChangeDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +161,44 @@ public class MeasurementList extends Fragment {
 
     }
 
+    public void calcAverage(){
+        int i = 0;
+        float prom1 = 0;
+        float prom2 = 0;
+        for (Measurement element : measurementList) {
+            if(binding.cbOnlyAdvanced.isChecked()){
+                if (element.getIsAdvanced()){
+                    i +=1;
+                    prom1 += element.getDiastolicRecord();
+                    prom2 += element.getSystolicRecord();
+                    DecimalFormat df = new DecimalFormat("0.00");
+                    promDiastolic.setText(df.format(prom2/i)+"");
+                    promSystolic.setText(df.format(prom1/i)+"");
+                }
+            } else {
+                i +=1;
+                prom1 += element.getDiastolicRecord();
+                prom2 += element.getSystolicRecord();
+                DecimalFormat df = new DecimalFormat("0.00");
+                promDiastolic.setText(df.format(prom2/i)+"");
+                promSystolic.setText(df.format(prom1/i)+"");
+            }
+
+        }
+
+    }
+
+    private void filterList(boolean isAdvanced) {
+        List<Measurement> measurementListFilter = new ArrayList<>();
+        for (Measurement measurement : measurementList) {
+            if (measurement.getIsAdvanced()) {
+                measurementListFilter.add(measurement);
+            }
+        }
+        if (isAdvanced) measurementAdapter.updateList(measurementListFilter);
+        else measurementAdapter.updateList(measurementList);
+    }
+
     public String convertDateToString(Long time){
         Calendar utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         utc.setTimeInMillis(time);
@@ -190,7 +233,7 @@ public class MeasurementList extends Fragment {
                                 Log.d("PERRUNO", element.toString());
                                 i +=1;
                                 Measurement temp = new Measurement(element);
-                                listaNombres.add(element);
+                                measurementList.add(element);
                                 prom1 += element.getDiastolicRecord();
                                 prom2 += element.getSystolicRecord();
                             }
@@ -198,6 +241,7 @@ public class MeasurementList extends Fragment {
                             promDiastolic.setText(df.format(prom2/i)+"");
                             promSystolic.setText(df.format(prom1/i)+"");
                             measurementAdapter.notifyDataSetChanged();
+                            filterList(false);
                         }
 
                     } catch (Exception ignored){
@@ -221,8 +265,8 @@ public class MeasurementList extends Fragment {
     public void clearRecyclerView(){
         promDiastolic.setText("0.00");
         promSystolic.setText("0.00");
-        int size = listaNombres.size();
-        listaNombres.clear();
+        int size = measurementList.size();
+        measurementList.clear();
         measurementAdapter.notifyItemRangeRemoved(0,size);
     }
 

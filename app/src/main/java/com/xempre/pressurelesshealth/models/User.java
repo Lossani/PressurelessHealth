@@ -11,6 +11,14 @@ public class User {
     Integer idUser;
     String username;
 
+    @JsonProperty("first_name")
+    String firstName;
+
+    @JsonProperty("last_name")
+    String lastName;
+
+    Integer points;
+
     public Integer getIdUser() {
         return idUser;
     }
@@ -25,5 +33,29 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

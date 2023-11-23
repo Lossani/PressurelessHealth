@@ -17,6 +17,7 @@ import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.databinding.ActivityMainViewBinding;
 import com.xempre.pressurelesshealth.views.add.AddMeasurementBasic;
 import com.xempre.pressurelesshealth.views.add.SelectAddMode;
+import com.xempre.pressurelesshealth.views.medication.MedicationList;
 import com.xempre.pressurelesshealth.views.profile.UserProfile;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
 import com.xempre.pressurelesshealth.views.settings.SettingsFragment;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(new UserProfile());
             } else if (item.getItemId() == R.id.bb_config) {
                 replaceFragment(new SettingsFragment());
+            } else if (item.getItemId() == R.id.bb_medication) {
+                replaceFragment(new MedicationList());
             }
             return true;
         });

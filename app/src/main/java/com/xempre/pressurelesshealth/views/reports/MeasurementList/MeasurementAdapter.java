@@ -16,29 +16,32 @@ import com.xempre.pressurelesshealth.models.Measurement;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.NombreViewHolder> {
+public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.MeasurementItemHolder> {
 
     private Context context;
     private List<Measurement> listMeasurements;
+    private List<Measurement> listMeasurementsFilter;
 
     public MeasurementAdapter(Context context, List<Measurement> listMeasurements) {
         this.context = context;
         this.listMeasurements = listMeasurements;
+        this.listMeasurementsFilter = new ArrayList<>(listMeasurements);
     }
 
 
 
     @Override
-    public NombreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MeasurementItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.measurement_element, parent, false);
-        return new NombreViewHolder(view);
+        return new MeasurementItemHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(NombreViewHolder holder, int position) {
-        Measurement measurement = listMeasurements.get(position);
+    public void onBindViewHolder(MeasurementItemHolder holder, int position) {
+        Measurement measurement = listMeasurementsFilter.get(position);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
@@ -47,16 +50,13 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
         String date = fechaHora.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String hour = fechaHora.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
-        // Aquí comparas el valor y estableces el color del fondo según el valor
         if (measurement.getSystolicRecord() < 120.00 && measurement.getDiastolicRecord() < 80.00) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Normal));
         } else if (measurement.getSystolicRecord() < 140.00 && measurement.getDiastolicRecord() < 90.00) {
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Pre));
         } else if (measurement.getSystolicRecord() < 160.00 && measurement.getDiastolicRecord() < 100.00) {
-            // Puedes establecer un color predeterminado para otros valores
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Hip1));
         } else if (measurement.getSystolicRecord() < 180.00 && measurement.getDiastolicRecord() < 110.00) {
-            // Puedes establecer un color predeterminado para otros valores
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Hip2));
         } else{
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Crisis));
@@ -72,12 +72,18 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
         holder.textViewSys.setText(String.valueOf(measurement.getSystolicRecord()));
     }
 
-    @Override
-    public int getItemCount() {
-        return listMeasurements.size();
+    public void updateList(List<Measurement> measurementList) {
+        listMeasurementsFilter.clear();
+        listMeasurementsFilter.addAll(measurementList);
+        notifyDataSetChanged();
     }
 
-    public class NombreViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemCount() {
+        return listMeasurementsFilter.size();
+    }
+
+    public class MeasurementItemHolder extends RecyclerView.ViewHolder {
 
         CardView cardView;
         TextView textViewDis;
@@ -88,7 +94,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
 
         Button isAdvanced;
 
-        public NombreViewHolder(View itemView) {
+        public MeasurementItemHolder(View itemView) {
             super(itemView);
             cardView = itemView.findViewById(R.id.cvBody);
             textViewDis = itemView.findViewById(R.id.tvDiastolic);
