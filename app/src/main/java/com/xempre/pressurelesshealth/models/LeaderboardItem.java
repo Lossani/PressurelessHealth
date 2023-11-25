@@ -17,6 +17,9 @@ public class LeaderboardItem {
 
     String username;
 
+    @JsonProperty("avatar_url")
+    String avatarURL;
+
     LeaderboardItem(){}
 
     public void setLastName(String lastName) {
@@ -49,5 +52,13 @@ public class LeaderboardItem {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
     }
 }

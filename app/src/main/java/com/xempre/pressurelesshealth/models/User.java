@@ -17,6 +17,9 @@ public class User {
     @JsonProperty("last_name")
     String lastName;
 
+    @JsonProperty("avatar_url")
+    String avatarURL;
+
     Integer points;
 
     public Integer getIdUser() {
@@ -57,5 +60,13 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
     }
 }

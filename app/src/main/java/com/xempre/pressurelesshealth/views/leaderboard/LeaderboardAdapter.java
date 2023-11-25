@@ -52,7 +52,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         else holder.tvName.setText(leaderboardItem.getFirstName()+" "+leaderboardItem.getLastName());
         holder.tvPosition.setText((position+1)+"");
         holder.tvPoints.setText(leaderboardItem.getPoints().toString());
-        GetImageByUrl.getBitmapFromURL(holder, "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg", handler, holder.imageView);
+        GetImageByUrl.getBitmapFromURL(holder, leaderboardItem.getAvatarURL(), handler, holder.imageView);
     }
 
     @Override

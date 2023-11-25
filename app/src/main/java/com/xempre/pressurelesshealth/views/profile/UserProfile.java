@@ -198,12 +198,13 @@ public class UserProfile extends Fragment {
 //                // to our both edit text.
 //                jobEdt.setText("");
 //                nameEdt.setText("");
-                getBitmapFromURL("https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg");
+                //getBitmapFromURL(user.getAvatarURL());
 
                 // we are getting response from our body
                 // and passing it to our modal class.
                 user = response.body();
                 Log.d("a",response.toString());
+                getBitmapFromURL(user.getAvatarURL());
                 binding.textView5.setText("Bienvenido " + user.getFirstName()+" " + user.getLastName());
                 binding.tvUserPoints.setText(user.getPoints().toString());
 
