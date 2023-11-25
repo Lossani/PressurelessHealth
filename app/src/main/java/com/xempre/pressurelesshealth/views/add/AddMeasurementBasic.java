@@ -82,7 +82,7 @@ public class AddMeasurementBasic extends Fragment {
                 Number date = measurements.get("DATE");
 
                 try {
-                    Toast.makeText(mainActivity, heartRate != null ? heartRate.toString() : "No heart rate", Toast.LENGTH_LONG).show();
+                    // Toast.makeText(mainActivity, heartRate != null ? heartRate.toString() : "No heart rate", Toast.LENGTH_LONG).show();
                 } catch (Exception ignored) {
 
                 }
