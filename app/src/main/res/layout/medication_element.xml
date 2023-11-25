@@ -53,11 +53,15 @@
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <Button
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
                             android:id="@+id/btnMedicationElementMore"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Ver más" />
+                            android:clickable="true"
+                            android:src="@drawable/baseline_edit_24"
+                            android:tint="#FFFFFF"
+                            app:backgroundTint="#ff6750a4"
+                            app:elevation="0dp" />
                     </LinearLayout>
 
                 </LinearLayout>

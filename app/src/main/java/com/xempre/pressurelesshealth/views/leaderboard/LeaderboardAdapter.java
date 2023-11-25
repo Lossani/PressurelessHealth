@@ -1,11 +1,14 @@
 package com.xempre.pressurelesshealth.views.leaderboard;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -15,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.models.LeaderboardItem;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.views.shared.GetImageByUrl;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,6 +29,8 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
 
     private Context context;
     private List<LeaderboardItem> leaderboardItemList;
+
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public LeaderboardAdapter(Context context, List<LeaderboardItem> leaderboardItemList) {
         this.context = context;
@@ -46,6 +52,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         else holder.tvName.setText(leaderboardItem.getFirstName()+" "+leaderboardItem.getLastName());
         holder.tvPosition.setText((position+1)+"");
         holder.tvPoints.setText(leaderboardItem.getPoints().toString());
+        GetImageByUrl.getBitmapFromURL(holder, "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg", handler, holder.imageView);
     }
 
     @Override
@@ -58,11 +65,14 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         TextView tvName;
         TextView tvPosition;
         TextView tvPoints;
+
+        ImageView imageView;
         public LeaderboardItemHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvLeaderboardName);
             tvPoints = itemView.findViewById(R.id.tvLeaderboardPoints);
             tvPosition = itemView.findViewById(R.id.tvLeadeboardTop);
+            imageView = itemView.findViewById(R.id.ivLeaderboard);
         }
     }
 }

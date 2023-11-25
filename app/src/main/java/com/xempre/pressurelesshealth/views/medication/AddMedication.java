@@ -75,6 +75,10 @@ public class AddMedication extends Fragment {
 
                         Fragment medicationView = new MedicationList();
                         ChangeFragment.change(getContext(), R.id.frame_layout, medicationView);
+                    } else {
+                        if (getContext()!=null) Toast.makeText(getContext(), "Error al guardar medicamento.", Toast.LENGTH_SHORT).show();
+                        Log.d("Error-Save", response.errorBody().toString());
+                        onDestroyView();
                     }
                 } catch (Exception ignored){
                     if (getContext()!=null) Toast.makeText(getContext(), "Error al guardar medicamento.", Toast.LENGTH_SHORT).show();

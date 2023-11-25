@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.models.LeaderboardItem;
 import com.xempre.pressurelesshealth.models.Medication;
@@ -73,7 +74,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
     public class MedicationAdapterItemHolder extends RecyclerView.ViewHolder {
 
         TextView tvName;
-        Button button;
+        FloatingActionButton button;
 //        TextView tvDescription;
 
 //        FrameLayout frameLayout;
