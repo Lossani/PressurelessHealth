@@ -34,7 +34,10 @@ import com.xempre.pressurelesshealth.api.GoogleFitCallback;
 import com.xempre.pressurelesshealth.databinding.AdvancedAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.views.add.SelectAddMode;
+import com.xempre.pressurelesshealth.views.medication.MedicationList;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
+import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 import com.xempre.pressurelesshealth.views.shared.MinMaxFilter;
 
 import org.w3c.dom.Text;
@@ -125,6 +128,14 @@ public class AddMeasurementAdvanced extends Fragment {
             public void onClick(View view) {
                 update_data(2);
                 calculateMeasurement();
+            }
+        });
+
+        binding.btnBackAddAdvanced.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment selectAddMode = new SelectAddMode();
+                ChangeFragment.change(getContext(), R.id.frame_layout, selectAddMode);
             }
         });
 

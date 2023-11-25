@@ -54,6 +54,14 @@ public class AddMedication extends Fragment {
             }
         });
 
+        binding.btnBackAddMedicina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment medicationList = new MedicationList();
+                ChangeFragment.change(getContext(), R.id.frame_layout, medicationList);
+            }
+        });
+
         return binding.getRoot();
 
     }
@@ -73,8 +81,8 @@ public class AddMedication extends Fragment {
                     if (response.code()==201) {
                         Toast.makeText(getContext(), "Medicamento guardado exitosamente.", Toast.LENGTH_SHORT).show();
 
-                        Fragment medicationView = new MedicationList();
-                        ChangeFragment.change(getContext(), R.id.frame_layout, medicationView);
+                        Fragment medicationList = new MedicationList();
+                        ChangeFragment.change(getContext(), R.id.frame_layout, medicationList);
                     } else {
                         if (getContext()!=null) Toast.makeText(getContext(), "Error al guardar medicamento.", Toast.LENGTH_SHORT).show();
                         Log.d("Error-Save", response.errorBody().toString());

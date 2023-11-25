@@ -67,14 +67,26 @@
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         tools:text="0" />
 
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Guardar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etDiastolic" />
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/etDiastolic">
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:text="Guardar" />
+
+        <Button
+            android:id="@+id/btnBackAddBasic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:text="Volver" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

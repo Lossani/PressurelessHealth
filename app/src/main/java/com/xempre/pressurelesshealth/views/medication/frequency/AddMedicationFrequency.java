@@ -21,7 +21,9 @@ import com.xempre.pressurelesshealth.databinding.MedicationFrequencyAddBinding;
 import com.xempre.pressurelesshealth.interfaces.MedicationService;
 import com.xempre.pressurelesshealth.models.Medication;
 import com.xempre.pressurelesshealth.models.MedicationFrequency;
+import com.xempre.pressurelesshealth.views.add.SelectAddMode;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
+import com.xempre.pressurelesshealth.views.medication.MedicationView;
 import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 
 import java.util.Locale;
@@ -81,6 +83,14 @@ public class AddMedicationFrequency extends Fragment {
             }
         });
 
+        binding.btnBackAddFrequency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment selectAddMode = new MedicationView(medication);
+                ChangeFragment.change(getContext(), R.id.frame_layout, selectAddMode);
+            }
+        });
+
 
         return binding.getRoot();
 
@@ -117,7 +127,7 @@ public class AddMedicationFrequency extends Fragment {
                     if (response.code()==201) {
                         Toast.makeText(getContext(), "Medicamento guardado exitosamente.", Toast.LENGTH_SHORT).show();
 
-                        Fragment fragment = new MedicationFrequencyList(medication);
+                        Fragment fragment = new MedicationView(medication);
                         ChangeFragment.change(getContext(), R.id.frame_layout, fragment);
                     } else {
                         Log.d("Message", response.message());

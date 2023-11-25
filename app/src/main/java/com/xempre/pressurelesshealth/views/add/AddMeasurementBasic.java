@@ -30,6 +30,7 @@ import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
+import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 import com.xempre.pressurelesshealth.views.shared.MinMaxFilter;
 
 import java.text.SimpleDateFormat;
@@ -73,6 +74,14 @@ public class AddMeasurementBasic extends Fragment {
         binding = ActivityAddMeasurementBinding.inflate(inflater, container, false);
         sys = binding.etSystolic;
         dis = binding.etDiastolic;
+
+        binding.btnBackAddBasic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment selectAddMode = new SelectAddMode();
+                ChangeFragment.change(getContext(), R.id.frame_layout, selectAddMode);
+            }
+        });
 
         if (googleFitApi != null) {
             GoogleFitCallback googleFitCallback = (Map<String, Number> measurements) -> {
