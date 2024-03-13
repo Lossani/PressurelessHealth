@@ -1,21 +1,32 @@
 package com.xempre.pressurelesshealth;
 
-import static java.text.DateFormat.getTimeInstance;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
+import android.Manifest;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.databinding.ActivityMainViewBinding;
-import com.xempre.pressurelesshealth.views.add.AddMeasurementBasic;
+import com.xempre.pressurelesshealth.utils.notifications.NotificationGenerator;
 import com.xempre.pressurelesshealth.views.add.SelectAddMode;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
 import com.xempre.pressurelesshealth.views.profile.UserProfile;
@@ -26,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
 
     ActivityMainViewBinding binding;
     BottomNavigationView bottomNavigationView;
+
+    NotificationManager notificationManager;
+
     private GoogleFitApi googleFitApi = null;
 
     public GoogleFitApi getGoogleFitApi() {
@@ -36,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        notificationManager = getSystemService(NotificationManager.class);
+
+        NotificationGenerator notificationGenerator = new NotificationGenerator(notificationManager);
+
+        notificationGenerator.scheduleNotification((AlarmManager) getSystemService(Context.ALARM_SERVICE), this);
+        // notificationGenerator.sendNotification(this.getApplicationContext(), "Test", "Prueba");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         if (sharedPreferences.getBoolean("syncGoogleFit", false)) {
@@ -76,4 +97,5 @@ public class MainActivity extends AppCompatActivity {
         googleFitApi.onActivityResult(data);
 
     }
+
 }
