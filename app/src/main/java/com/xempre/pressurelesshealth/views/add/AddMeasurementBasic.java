@@ -29,6 +29,7 @@ import com.xempre.pressurelesshealth.api.GoogleFitCallback;
 import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
 import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 import com.xempre.pressurelesshealth.views.shared.MinMaxFilter;
@@ -50,14 +51,14 @@ public class AddMeasurementBasic extends Fragment {
     EditText sys;
     EditText dis;
 
-    MainActivity mainActivity;
+    MainActivityView mainActivity;
     GoogleFitApi googleFitApi;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mainActivity = (MainActivity)getActivity();
+        mainActivity = (MainActivityView)getActivity();
         googleFitApi = mainActivity.getGoogleFitApi();
 
 //        sys = getView().findViewById(R.id.etSystolic);
@@ -176,7 +177,7 @@ public class AddMeasurementBasic extends Fragment {
 
     public void saveButton(float sr, float dr, String date){
 
-        MeasurementService measurementService = ApiClient.createService(MeasurementService.class);
+        MeasurementService measurementService = ApiClient.createService(getContext(),MeasurementService.class,1);
 
         Measurement measurement = new Measurement(2, sr, dr, date, false);
 

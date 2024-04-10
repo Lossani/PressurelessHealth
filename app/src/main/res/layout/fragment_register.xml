@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.auth.RegisterFragment" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/labelRegisterName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nombres"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/etRegisterName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Nombre"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/labelRegisterLastname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Apellidos"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/etRegisterLastame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Apellidos"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/labelRegisterUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nombre de usuario"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/etRegisterUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Nombre de usuario"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/labelRegisterPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contraseña"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/etRegisterPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="*****"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/btnRegRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Registrar" />
+
+        <Button
+            android:id="@+id/btnRegBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Volver" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

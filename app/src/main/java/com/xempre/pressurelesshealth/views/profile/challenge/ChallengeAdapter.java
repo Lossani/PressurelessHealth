@@ -99,7 +99,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
             @Override
             public void onClick(View view) {
                 try {
-                    saveButton(holder, challenge);
+                    saveButton(context, holder, challenge);
                 } catch (Exception ignored){
                     Toast.makeText(context, "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
                 }
@@ -201,9 +201,9 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
 //        return validate[0];
 //    };
 
-    public void saveButton(ChallengeAdapter.NombreViewHolder holder, Challenge challenge){
+    public void saveButton(Context context, ChallengeAdapter.NombreViewHolder holder, Challenge challenge){
 
-        ChallengeService challengeService = ApiClient.createService(ChallengeService.class);
+        ChallengeService challengeService = ApiClient.createService(context, ChallengeService.class,1);
         String pattern = "yyy-MM-dd'T'HH:mm:ss'Z'";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());

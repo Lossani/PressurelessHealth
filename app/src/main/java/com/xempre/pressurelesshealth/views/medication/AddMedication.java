@@ -68,7 +68,7 @@ public class AddMedication extends Fragment {
 
     public void callAPI(Medication medication){
 
-        MedicationService medicationService = ApiClient.createService(MedicationService.class);
+        MedicationService medicationService = ApiClient.createService(getContext(), MedicationService.class, 1);
 
         Call<Medication> call = medicationService.saveMedication(medication);
 

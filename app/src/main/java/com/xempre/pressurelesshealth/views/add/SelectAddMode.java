@@ -26,6 +26,7 @@ import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
 import com.xempre.pressurelesshealth.databinding.SelectAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.add.advanced.AddMeasurementAdvanced;
 
 import java.text.SimpleDateFormat;
@@ -43,13 +44,13 @@ public class SelectAddMode extends Fragment {
     private SelectAddMeasurementBinding binding;
 
 
-    MainActivity mainActivity;
+    MainActivityView mainActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mainActivity = (MainActivity) getActivity();
+        mainActivity = (MainActivityView) getActivity();
     }
 
     @Override

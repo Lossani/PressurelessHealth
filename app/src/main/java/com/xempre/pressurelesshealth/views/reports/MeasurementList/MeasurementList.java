@@ -209,7 +209,7 @@ public class MeasurementList extends Fragment {
     public void callAPI(String startDate, String endDate){
         Log.d("PERRUNO", startDate+" "+endDate);
 
-            MeasurementService measurementService = ApiClient.createService(MeasurementService.class);
+            MeasurementService measurementService = ApiClient.createService(getContext(), MeasurementService.class,1);
 
             // calling a method to create a post and passing our modal class.
             Call<List<Measurement>> call = measurementService.getAllByDateRange(startDate+"T00:00:00", endDate+"T23:59:59");

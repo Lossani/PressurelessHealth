@@ -1,5 +1,8 @@
 package com.xempre.pressurelesshealth.views.profile;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -29,6 +32,7 @@ import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.databinding.FragmentUserProfileBinding;
 import com.xempre.pressurelesshealth.interfaces.UserService;
 import com.xempre.pressurelesshealth.models.User;
+import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.leaderboard.LeaderboardList;
 import com.xempre.pressurelesshealth.views.profile.challenge.ChallengeList;
 import com.xempre.pressurelesshealth.views.profile.goal.GoalList;
@@ -53,7 +57,7 @@ public class UserProfile extends Fragment {
 
     private Handler handler = new Handler(Looper.getMainLooper());
     User user;
-    MainActivity mainViewActivity;
+    MainActivityView mainViewActivity;
     GoogleFitApi googleFitApi;
 
     Fragment challengeList = new ChallengeList();
@@ -61,16 +65,15 @@ public class UserProfile extends Fragment {
 
     Fragment leaderboardList = new LeaderboardList();
 
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mainViewActivity = (MainActivity)getActivity();
+        mainViewActivity = (MainActivityView)getActivity();
         googleFitApi = mainViewActivity.getGoogleFitApi();
 
-//        sys = getView().findViewById(R.id.etSystolic);
-//        dis = getView().findViewById(R.id.etDiastolic);
-//        message = getView().findViewById(R.id.textView2);
     }
 
     @Override
@@ -113,6 +116,7 @@ public class UserProfile extends Fragment {
                 binding.btnLogros.setBackgroundColor(Color.GRAY);
             }
         });
+
 
         return binding.getRoot();
 
@@ -177,55 +181,35 @@ public class UserProfile extends Fragment {
 
     public void loadUserData(){
 
-        // below line is to create an instance for our retrofit api class.
-            UserService userService = ApiClient.createService(UserService.class);
-//        Toast.makeText(getContext(), "Data added to API", Toast.LENGTH_SHORT).show();
-        // passing data from our text fields to our modal class.
-//        Date date = new Date();
+        UserService userService = ApiClient.createService(getContext(), UserService.class,1);
 
-        // calling a method to create a post and passing our modal class.
-        Call<User> call = userService.getUserById(2);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MySharedPref",MODE_PRIVATE);
 
-        // on below line we are executing our method.
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                // this method is called when we get response from our api.
-//                // below line is for hiding our progress bar.
-//                loadingPB.setVisibility(View.GONE);
-//
-//                // on below line we are setting empty text
-//                // to our both edit text.
-//                jobEdt.setText("");
-//                nameEdt.setText("");
-                //getBitmapFromURL(user.getAvatarURL());
+        int userId = sharedPreferences.getInt("userId", 0);
 
-                // we are getting response from our body
-                // and passing it to our modal class.
-                user = response.body();
-                Log.d("a",response.toString());
-                getBitmapFromURL(user.getAvatarURL());
-                binding.textView5.setText("Bienvenido " + user.getFirstName()+" " + user.getLastName());
-                binding.tvUserPoints.setText(user.getPoints().toString());
+        if (userId != 0){
+            Call<User> call = userService.getUserById(userId);
+
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    user = response.body();
+                    Log.d("a",response.toString());
+                    getBitmapFromURL(user.getAvatarURL());
+                    binding.textView5.setText("Bienvenido " + user.getFirstName()+" " + user.getLastName());
+                    binding.tvUserPoints.setText(user.getPoints().toString());
+
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    //Toast.makeText(getContext(), "ERROR"+t.toString(), Toast.LENGTH_LONG).show();
+                    Log.d("a",t.getMessage());
+                }
+            });
+        }
 
 
-//                // on below line we are getting our data from modal class and adding it to our string.
-                String responseString = "Response Code : " + response.code() + "\nName : "  + "\n" + "Job : ";
-
-//                // below line we are setting our
-//                // string to our text view.
-//                message.setText(responseString);
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                //Toast.makeText(getContext(), "ERROR"+t.toString(), Toast.LENGTH_LONG).show();
-                Log.d("a",t.getMessage());
-                // setting text to our text view when
-                // we get error response from API.
-//                responseTV.setText("Error found is : " + t.getMessage());
-            }
-        });
     }
 
     @Override

@@ -11,6 +11,8 @@ public class User {
     Integer idUser;
     String username;
 
+    String password;
+
     @JsonProperty("first_name")
     String firstName;
 
@@ -21,6 +23,11 @@ public class User {
     String avatarURL;
 
     Integer points;
+
+//    public User(String username, String password){
+//        this.username = username;
+//        this.password = password;
+//    }
 
     public Integer getIdUser() {
         return idUser;
@@ -48,6 +55,14 @@ public class User {
 
     public Integer getPoints() {
         return points;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
     }
 
     public void setPoints(Integer points) {

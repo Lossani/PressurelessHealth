@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.databinding.GoalListBinding;
@@ -49,6 +50,27 @@ public class ChallengeList extends Fragment {
 
         callAPI();
 
+        binding.swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Aquí puedes realizar la carga de datos nuevamente, por ejemplo, consultando una API
+                // Después de cargar los nuevos datos, asegúrate de llamar a setRefreshing(false) para indicar que la recarga ha terminado.
+                // En este ejemplo, simplemente simulo una recarga con un retardo de 2 segundos
+                callAPI();
+                recyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Agrega aquí tu lógica para recargar los datos
+                        // Por ejemplo, adapter.notifyDataSetChanged();
+
+
+                        // Después de actualizar los datos, asegúrate de llamar a setRefreshing(false)
+                        binding.swiperefresh.setRefreshing(false);
+                    }
+                }, 2000);
+            }
+        });
+
 
         return binding.getRoot();
 
@@ -56,7 +78,7 @@ public class ChallengeList extends Fragment {
 
     public void callAPI(){
 
-        ChallengeService challengeService = ApiClient.createService(ChallengeService.class);
+        ChallengeService challengeService = ApiClient.createService(getContext(), ChallengeService.class,1);
 
         Call<List<Challenge>> call = challengeService.getAllEnabled();
 

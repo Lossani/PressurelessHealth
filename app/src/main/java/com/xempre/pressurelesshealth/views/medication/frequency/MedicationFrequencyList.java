@@ -72,7 +72,7 @@ public class MedicationFrequencyList extends Fragment {
 
     public void callAPI(){
 
-        MedicationService medicationService = ApiClient.createService(MedicationService.class);
+        MedicationService medicationService = ApiClient.createService(getContext(), MedicationService.class,1);
 
         Call<List<MedicationFrequency>> call = medicationService.getAllMedicationFrequencies(medication.getId());
 

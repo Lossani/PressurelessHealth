@@ -17,6 +17,8 @@ public class Measurement {
     private String measurementDate;
     @JsonProperty("used_recommended_method")
     private boolean isAdvancedMethod;
+    @JsonProperty("description")
+    private String description;
     public Measurement() {
     }
     public Measurement(int id, float sr, float dr, String measurementDate, boolean isAdvancedMethod){

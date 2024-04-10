@@ -69,7 +69,7 @@ public class LeaderboardList extends Fragment {
 
     public void callAPI(){
 
-        LeaderboardService leaderboardService = ApiClient.createService(LeaderboardService.class);
+        LeaderboardService leaderboardService = ApiClient.createService(getContext(), LeaderboardService.class, 1);
 
         Call<List<LeaderboardItem>> call = leaderboardService.getAll();
 

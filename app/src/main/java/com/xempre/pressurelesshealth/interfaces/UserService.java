@@ -1,6 +1,7 @@
 package com.xempre.pressurelesshealth.interfaces;
 
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.models.ResponseLogin;
 import com.xempre.pressurelesshealth.models.User;
 
 import java.util.List;
@@ -19,4 +20,11 @@ public interface UserService {
     public Call<List<User>> getAll();
     @POST("core/users/")
     public Call<User> save(@Body Measurement measurement);
+
+    @POST("core/login/")
+    public Call<ResponseLogin> login(@Body User user);
+
+    @POST("core/users/")
+    public Call<ResponseLogin> register(@Body User user);
+
 }

@@ -66,7 +66,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
 
     public boolean validateComplete(Goal goal, NombreViewHolder holder){
         final boolean[] validate = {false};
-        GoalService goalService = ApiClient.createService(GoalService.class);
+        GoalService goalService = ApiClient.createService(context, GoalService.class,1);
 
         Call<List<GoalHistory>> call = goalService.getAllComplete();
 

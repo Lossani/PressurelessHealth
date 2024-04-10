@@ -34,6 +34,7 @@ import com.xempre.pressurelesshealth.api.GoogleFitCallback;
 import com.xempre.pressurelesshealth.databinding.AdvancedAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.add.SelectAddMode;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
@@ -60,7 +61,7 @@ import retrofit2.Response;
 public class AddMeasurementAdvanced extends Fragment {
 
     private AdvancedAddMeasurementBinding binding;
-    MainActivity mainActivity;
+    MainActivityView mainActivity;
     GoogleFitApi googleFitApi;
 
     EditText sys;
@@ -76,7 +77,7 @@ public class AddMeasurementAdvanced extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mainActivity = (MainActivity)getActivity();
+        mainActivity = (MainActivityView)getActivity();
         googleFitApi = mainActivity.getGoogleFitApi();
 
         measurements = new Pair[3];
@@ -453,7 +454,7 @@ public class AddMeasurementAdvanced extends Fragment {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
 
-        MeasurementService measurementService = ApiClient.createService(MeasurementService.class);
+        MeasurementService measurementService = ApiClient.createService(getContext(), MeasurementService.class, 1);
         DecimalFormat df = new DecimalFormat("0.00");
         if (new Float(df.format(res.first))<0 || new Float(df.format(res.second))<0 || new Float(df.format(res.first)) > 250 || new Float(df.format(res.second)) > 150){
             Toast.makeText(getContext(), "Asegurece de ingresar números validos. Revise las medidas por favor.", Toast.LENGTH_SHORT).show();
