@@ -2,6 +2,7 @@ package com.xempre.pressurelesshealth.interfaces;
 
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.models.ResponseLogin;
+import com.xempre.pressurelesshealth.models.RestartPassword;
 import com.xempre.pressurelesshealth.models.User;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface UserService {
@@ -26,5 +28,11 @@ public interface UserService {
 
     @POST("core/users/")
     public Call<ResponseLogin> register(@Body User user);
+
+    @POST("core/password_reset/")
+    public Call<Void> resetPassword(@Body RestartPassword email);
+
+    @PUT("core/password_change/")
+    public Call<Void> resetPasswordValidation(@Body RestartPassword code_password);
 
 }

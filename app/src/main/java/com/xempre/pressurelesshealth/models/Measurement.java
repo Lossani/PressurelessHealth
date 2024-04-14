@@ -19,6 +19,9 @@ public class Measurement {
     private boolean isAdvancedMethod;
     @JsonProperty("description")
     private String description;
+
+    @JsonProperty("comments")
+    private String comments;
     public Measurement() {
     }
     public Measurement(int id, float sr, float dr, String measurementDate, boolean isAdvancedMethod){
@@ -63,5 +66,13 @@ public class Measurement {
 
     public float getSystolicRecord() {
         return systolicPressure;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 }

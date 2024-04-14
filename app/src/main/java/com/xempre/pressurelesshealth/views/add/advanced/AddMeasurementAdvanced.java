@@ -462,6 +462,9 @@ public class AddMeasurementAdvanced extends Fragment {
         }
         Measurement measurement = new Measurement(2, new Float(df.format(res.first)), new Float(df.format(res.second)), date, true);
 
+        if(!binding.emltCommentAdvanced.getText().toString().equals(""))
+            measurement.setComments(binding.emltCommentAdvanced.getText().toString());
+
         Call<Measurement> call = measurementService.save(measurement);
 
         call.enqueue(new Callback<Measurement>() {

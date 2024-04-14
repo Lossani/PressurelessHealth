@@ -112,8 +112,9 @@ public class AddMeasurementBasic extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.etDiastolic.setFilters(new InputFilter[]{new MinMaxFilter(0.0,250.0)});
-        binding.etSystolic.setFilters(new InputFilter[]{new MinMaxFilter(0.0,250.0)});
+        binding.etSystolic.setFilters(new InputFilter[]{new MinMaxFilter(1.0,250.0)});
+        binding.etDiastolic.setFilters(new InputFilter[]{new MinMaxFilter(1.0,200.0)});
+
 
         binding.etSystolic.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -180,6 +181,9 @@ public class AddMeasurementBasic extends Fragment {
         MeasurementService measurementService = ApiClient.createService(getContext(),MeasurementService.class,1);
 
         Measurement measurement = new Measurement(2, sr, dr, date, false);
+
+        if(!binding.mltAddBasic.getText().toString().equals(""))
+            measurement.setComments(binding.mltAddBasic.getText().toString());
 
         // calling a method to create a post and passing our modal class.
         Call<Measurement> call = measurementService.save(measurement);

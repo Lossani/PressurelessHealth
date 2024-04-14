@@ -4,13 +4,17 @@
     <PreferenceCategory app:title="@string/sync_header">
 
         <SwitchPreferenceCompat
-
             app:key="syncGoogleFit"
             app:title="@string/sync_title" />
 
     </PreferenceCategory>
-    <Preference
-        android:key="button_preference"
-        android:title="Cerrar Sesión" />
+    <PreferenceCategory app:title="Contactos">
+    </PreferenceCategory>
+    <PreferenceCategory app:title="Cuenta">
+        <Preference
+            android:key="button_preference"
+            android:title="Cerrar Sesión" />
+    </PreferenceCategory>
+
 
 </PreferenceScreen>

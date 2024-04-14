@@ -21,6 +21,7 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
+                android:id="@+id/linearLayout10"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -40,31 +41,36 @@
                         android:text="TextView" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnMedicationElementMore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:clickable="true"
+                    android:src="@drawable/baseline_edit_24"
+                    android:tint="#FFFFFF"
+                    app:backgroundTint="#ff6750a4"
+                    app:elevation="0dp"
+                    app:fabSize="mini" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginVertical="10dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnMedicationElementMore2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:clickable="true"
+                    android:src="@drawable/baseline_delete_24"
+                    android:tint="#FFFFFF"
+                    app:backgroundTint="#F44336"
+                    app:elevation="0dp"
+                    app:fabSize="mini"
+                    app:maxImageSize="24dp"
+                    app:pressedTranslationZ="1dp" />
 
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/btnMedicationElementMore"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:src="@drawable/baseline_edit_24"
-                            android:tint="#FFFFFF"
-                            app:backgroundTint="#ff6750a4"
-                            app:elevation="0dp" />
-                    </LinearLayout>
-
-                </LinearLayout>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

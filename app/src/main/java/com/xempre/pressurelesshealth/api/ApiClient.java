@@ -16,7 +16,7 @@ public class ApiClient {
     private static final String BASE_URL = "https://health.xempre.com";
 
     private static Retrofit retrofit;
-
+    //0 no token - 1 with token
     public static <T> T createService(Context context, Class<T> serviceClass, Integer option) {
         if (retrofit == null) {
 

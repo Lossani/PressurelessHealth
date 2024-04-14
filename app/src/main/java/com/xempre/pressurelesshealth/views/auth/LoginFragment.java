@@ -54,7 +54,15 @@ public class LoginFragment extends Fragment {
                ChangeFragment.change(getContext(), R.id.PrincipalContainerView, registerFragment);
            }
        }
+        );
 
+        binding.tvRecoverPassword.setOnClickListener(new View.OnClickListener() {
+                                                   @Override
+                                                   public void onClick(View v) {
+                                                       RestartPasswordFragment restartPasswordFragment = new RestartPasswordFragment();
+                                                       ChangeFragment.change(getContext(), R.id.PrincipalContainerView, restartPasswordFragment);
+                                                   }
+                                               }
         );
 
         return binding.getRoot();
@@ -101,7 +109,8 @@ public class LoginFragment extends Fragment {
                         // Si el token no se ha guardado correctamente, mostrar un mensaje de error o tomar alguna otra acción
                         Toast.makeText(getContext(), "Error al guardar el token", Toast.LENGTH_LONG).show();
                     }
-                } else {
+                }
+                else {
                     Toast.makeText(getContext(), "Valide los datos ingresados.", Toast.LENGTH_LONG).show();
                     Gson gson = new Gson();
                     String json = gson.toJson(temp);

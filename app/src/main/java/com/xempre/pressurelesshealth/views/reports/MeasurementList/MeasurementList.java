@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,13 +29,27 @@ import com.xempre.pressurelesshealth.databinding.ActivityListMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -56,6 +72,7 @@ public class MeasurementList extends Fragment {
     private RecyclerView recyclerView;
     private MeasurementAdapter measurementAdapter;
     private List<Measurement> measurementList = new ArrayList<Measurement>();
+    private List<Measurement> measurementListFilter = new ArrayList<Measurement>();
     MaterialDatePicker picker;
 
     Dialog dialog;
@@ -146,6 +163,17 @@ public class MeasurementList extends Fragment {
             }
         });
 
+        binding.tvExportReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<String, String> data = new HashMap<>();
+                data.put("nombre", "Juan");
+                data.put("edad", "30");
+
+                generateReport(getContext(), data);
+            }
+        });
+
         long millis = Instant.now().toEpochMilli();
         callAPI(convertDateToString(millis), convertDateToString(millis));
         // Agrega algunos nombres a la lista
@@ -195,8 +223,12 @@ public class MeasurementList extends Fragment {
                 measurementListFilter.add(measurement);
             }
         }
-        if (isAdvanced) measurementAdapter.updateList(measurementListFilter);
-        else measurementAdapter.updateList(measurementList);
+
+        if (isAdvanced){ measurementAdapter.updateList(measurementListFilter);
+            this.measurementListFilter = measurementListFilter;}
+        else {measurementAdapter.updateList(measurementList);
+        this.measurementListFilter = measurementList;
+        }
     }
 
     public String convertDateToString(Long time){
@@ -289,6 +321,88 @@ public class MeasurementList extends Fragment {
             if (view instanceof ViewGroup) {
                 enableDisableViewGroup((ViewGroup) view, enabled);
             }
+        }
+    }
+
+    public void generateReport(Context context, Map<String, String> data) {
+        try {
+
+            InputStream inputStream = context.getAssets().open("baseReport.xlsx");
+            Workbook workbook = new XSSFWorkbook(inputStream);
+            Sheet sheet = workbook.getSheetAt(0); // Obtener la primera hoja
+
+            int i = 1;
+
+            for (Measurement element : measurementListFilter) {
+                    CellStyle style = workbook.createCellStyle();
+                    style.setBorderBottom(BorderStyle.THIN);
+                    style.setBorderTop(BorderStyle.THIN);
+                    style.setBorderRight(BorderStyle.THIN);
+                    style.setBorderLeft(BorderStyle.THIN);
+
+
+                    Row row = sheet.getRow(i); // Fila 3
+                    if (row == null) {
+                        row = sheet.createRow(i); // Si la fila no existe, créala
+                    }
+                    Cell cell = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Columna B
+                    cell.setCellValue(element.getMeasurementDate()); // Modificar con la edad proporcionada
+                    cell.setCellStyle(style);
+
+                    row = sheet.getRow(i); // Fila 3
+                    if (row == null) {
+                        row = sheet.createRow(i); // Si la fila no existe, créala
+                    }
+                    cell = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Columna B
+                    cell.setCellValue(element.getSystolicRecord()); // Modificar con la edad proporcionada
+                    cell.setCellStyle(style);
+
+                    row = sheet.getRow(i); // Fila 3
+                    if (row == null) {
+                        row = sheet.createRow(i); // Si la fila no existe, créala
+                    }
+                    cell = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Columna B
+                    cell.setCellValue(element.getDiastolicRecord()); // Modificar con la edad proporcionada
+                    cell.setCellStyle(style);
+
+                    row = sheet.getRow(i); // Fila 3
+                    if (row == null) {
+                        row = sheet.createRow(i); // Si la fila no existe, créala
+                    }
+                    cell = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Columna B
+                    cell.setCellValue(element.getIsAdvanced()?"AVANZADA":"BÁSICA"); // Modificar con la edad proporcionada
+                    cell.setCellStyle(style);
+
+                    row = sheet.getRow(i); // Fila 3
+                    if (row == null) {
+                        row = sheet.createRow(i); // Si la fila no existe, créala
+                    }
+                    cell = row.getCell(4, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Columna B
+                    cell.setCellValue(element.getComments()); // Modificar con la edad proporcionada
+                    cell.setCellStyle(style);
+
+                    i +=1;
+
+            }
+
+
+            Log.d("PERRUNO", "PARTE4");
+            // Obtener la ruta de la carpeta de descargas
+            String downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+
+            Log.d("PERRUNO", "PARTE5");
+            // Guardar el archivo modificado en la carpeta de descargas
+            File outputFile = new File(downloadsPath, "Reporte_PressurelessHealth.xlsx");
+            FileOutputStream fileOut = new FileOutputStream(outputFile);
+            workbook.write(fileOut);
+            fileOut.close();
+            workbook.close();
+
+            Toast.makeText(context, "Archivo guardado en Descargas (Reporte_PressurelessHealth.xlsx)", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+            Toast.makeText(context, "Error al guardar el archivo", Toast.LENGTH_SHORT).show();
         }
     }
     @Override

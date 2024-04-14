@@ -30,12 +30,15 @@ import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.databinding.FragmentUserProfileBinding;
+import com.xempre.pressurelesshealth.interfaces.ArticleService;
 import com.xempre.pressurelesshealth.interfaces.UserService;
+import com.xempre.pressurelesshealth.models.Article;
 import com.xempre.pressurelesshealth.models.User;
 import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.leaderboard.LeaderboardList;
 import com.xempre.pressurelesshealth.views.profile.challenge.ChallengeList;
 import com.xempre.pressurelesshealth.views.profile.goal.GoalList;
+import com.xempre.pressurelesshealth.views.shared.CustomDialog;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -117,6 +120,12 @@ public class UserProfile extends Fragment {
             }
         });
 
+        binding.fabProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadArticleData();
+            }
+        });
 
         return binding.getRoot();
 
@@ -209,6 +218,29 @@ public class UserProfile extends Fragment {
             });
         }
 
+
+    }
+
+    public void loadArticleData(){
+        ArticleService articleService = ApiClient.createService(getContext(), ArticleService.class,1);
+
+            Call<Article> call = articleService.getRandomArticle();
+
+            call.enqueue(new Callback<Article>() {
+                @Override
+                public void onResponse(Call<Article> call, Response<Article> response) {
+                    Article data = response.body();
+                    CustomDialog dialog = new CustomDialog();
+                    dialog.create(getActivity(), data.getTitle(), data.getContent());
+
+                }
+
+                @Override
+                public void onFailure(Call<Article> call, Throwable t) {
+                    //Toast.makeText(getContext(), "ERROR"+t.toString(), Toast.LENGTH_LONG).show();
+                    Log.d("a",t.getMessage());
+                }
+            });
 
     }
 

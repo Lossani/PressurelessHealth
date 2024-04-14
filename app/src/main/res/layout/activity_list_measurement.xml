@@ -130,6 +130,31 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linearLayout9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <CheckBox
+            android:id="@+id/cbOnlyAdvanced"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="Ver solo avanzadas" />
+
+        <TextView
+            android:id="@+id/tvExportReport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="Exportar Reporte"
+            android:textColor="#6750A3"
+            android:textStyle="bold" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -138,16 +163,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cbOnlyAdvanced" />
-
-    <CheckBox
-        android:id="@+id/cbOnlyAdvanced"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ver solo avanzadas"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout9" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabInfoHistorial"
@@ -159,6 +175,7 @@
         android:src="@drawable/baseline_info_24"
         android:tint="#FFFFFF"
         app:backgroundTint="#ff6750a4"
+        app:fabSize="mini"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

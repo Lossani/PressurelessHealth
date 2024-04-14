@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Nombre"
+            android:hint="Nombres"
             android:inputType="text" />
 
         <TextView
@@ -61,6 +61,21 @@
             android:inputType="text" />
 
         <TextView
+            android:id="@+id/labelEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Correo electronico"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/etRegisterEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="email@test.com"
+            android:inputType="text" />
+
+        <TextView
             android:id="@+id/labelRegisterPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="*****"
+            android:hint="******"
             android:inputType="text" />
 
         <Button
