@@ -4,7 +4,7 @@
     package="com.xempre.pressurelesshealth">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -20,23 +20,27 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-            <intent-filter>
+            <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
 
-        <activity
-            android:name=".views.MainActivityView"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="https"
+                    android:host="health.xempre.com" />
             </intent-filter>
+
         </activity>
-        <receiver android:name=".utils.notifications.AlarmReceiver"/>
+
+
+        <receiver android:name=".utils.notifications.AlarmReceiver" />
     </application>
 
 </manifest>
