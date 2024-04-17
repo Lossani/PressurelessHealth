@@ -40,7 +40,9 @@ public class MainActivityView extends AppCompatActivity {
     ActivityMainViewBinding binding;
     BottomNavigationView bottomNavigationView;
 
-    NotificationManager notificationManager;
+    public NotificationManager notificationManager;
+
+    public AlarmManager alarmManager;
 
     private GoogleFitApi googleFitApi = null;
 
@@ -54,11 +56,12 @@ public class MainActivityView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        notificationManager = getSystemService(NotificationManager.class);
+        this.notificationManager = getSystemService(NotificationManager.class);
+        this.alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         NotificationGenerator notificationGenerator = new NotificationGenerator(notificationManager);
 
-        notificationGenerator.scheduleNotification((AlarmManager) getSystemService(Context.ALARM_SERVICE), this);
+        // notificationGenerator.scheduleNotification((AlarmManager) getSystemService(Context.ALARM_SERVICE), this);
         // notificationGenerator.sendNotification(this.getApplicationContext(), "Test", "Prueba");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 

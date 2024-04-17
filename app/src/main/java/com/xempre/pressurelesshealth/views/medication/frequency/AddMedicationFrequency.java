@@ -1,6 +1,9 @@
 package com.xempre.pressurelesshealth.views.medication.frequency;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,11 +24,14 @@ import com.xempre.pressurelesshealth.databinding.MedicationFrequencyAddBinding;
 import com.xempre.pressurelesshealth.interfaces.MedicationService;
 import com.xempre.pressurelesshealth.models.Medication;
 import com.xempre.pressurelesshealth.models.MedicationFrequency;
+import com.xempre.pressurelesshealth.utils.notifications.NotificationGenerator;
+import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.add.SelectAddMode;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
 import com.xempre.pressurelesshealth.views.medication.MedicationView;
 import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 
+import java.util.Calendar;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -49,8 +55,6 @@ public class AddMedicationFrequency extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
-
         binding = MedicationFrequencyAddBinding.inflate(inflater, container, false);
 
         binding.btnSaveMedicationFrequency.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +104,17 @@ public class AddMedicationFrequency extends Fragment {
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                MainActivityView mainActivityView = (MainActivityView) getContext();
+                Calendar calendar = Calendar.getInstance();
+
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+
+                NotificationGenerator notificationGenerator = new NotificationGenerator(mainActivityView.notificationManager);
+                notificationGenerator.scheduleNotification(mainActivityView.alarmManager, mainActivityView, calendar);
+                Toast.makeText(getContext(), "AQUI.", Toast.LENGTH_SHORT).show();
                 binding.button4.setText(String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute));
             }
         };
