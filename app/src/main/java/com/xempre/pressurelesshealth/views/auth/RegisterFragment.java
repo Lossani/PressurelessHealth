@@ -14,10 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.databinding.FragmentRegisterBinding;
 import com.xempre.pressurelesshealth.interfaces.UserService;
+import com.xempre.pressurelesshealth.models.ErrorResponse;
 import com.xempre.pressurelesshealth.models.ResponseLogin;
 import com.xempre.pressurelesshealth.models.User;
 import com.xempre.pressurelesshealth.views.MainActivityView;
@@ -51,51 +53,62 @@ public class RegisterFragment extends Fragment {
             }
         });
 
+        binding.btnRegRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (binding.etRegisterPassword.getText().toString().equals("")) {Toast.makeText(getContext(), "La contraseña no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
+                if (binding.etRegisterConfirmPassword.getText().toString().equals("")) {Toast.makeText(getContext(), "La contraseña no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
+                if (binding.etRegisterEmail.getText().toString().equals("")) {Toast.makeText(getContext(), "El correo no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
+                if (binding.etRegisterUsername.getText().toString().equals("")) {Toast.makeText(getContext(), "El nombre de usuario no puede ir en blanco.", Toast.LENGTH_SHORT).show();return;}
+                if (binding.etRegisterName.getText().toString().equals("")) {Toast.makeText(getContext(), "El nombre no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
+                if (binding.etRegisterLastame.getText().toString().equals("")) {Toast.makeText(getContext(), "El apellido no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
+                if (!binding.etRegisterPassword.getText().toString().equals(binding.etRegisterConfirmPassword.getText().toString())){Toast.makeText(getContext(), "La contraseña no coincide.", Toast.LENGTH_SHORT).show(); return;}
+                register();
+
+            }
+        });
+
         return binding.getRoot();
     }
 
-//    public void Register(){
-//
-//        UserService userService = ApiClient.createService(getContext(), UserService.class);
-//        User temp = new User();
-//        temp.setPassword(binding.etRegisterName.getText().toString());
-//        temp.setUsername(binding.etRegisterLastame.getText().toString());
-//        temp.setPassword(binding.etRegisterPassword.getText().toString());
-//        temp.setUsername(binding.etRegisterUsername.getText().toString());
-//
-//        Call<ResponseLogin> call = userService.register(temp);
-//        call.enqueue(new Callback<ResponseLogin>() {
-//            @Override
-//            public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
-//
-//
-//                if (response.isSuccessful()) {
-//
-//                    Log.d("a",response.message());
-//                    Log.d("a",response.body().getToken());
-//
-//                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("MySharedPref", MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    editor.putString("token", response.body().getToken());
-//                    editor.putInt("userId", response.body().getUser().getIdUser());
-//                    editor.apply();
-//
-//                    Toast.makeText(getContext(), "Logueado Correctamente", Toast.LENGTH_LONG).show();
-//                    Intent intent = new Intent(getContext(), MainActivityView.class);
-//                    startActivity(intent);
-//                } else {
-//                    Toast.makeText(getContext(), "Valide los datos ingresados.", Toast.LENGTH_LONG).show();
-//                    Log.d("a",response.message());
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseLogin> call, Throwable t) {
-//                Toast.makeText(getContext(), "ERROR", Toast.LENGTH_LONG).show();
-//                Log.d("a",t.getMessage());
-//            }
-//        });
-//    }
+    public void register(){
+
+        UserService userService = ApiClient.createService(getContext(), UserService.class, 0);
+        User temp = new User();
+        temp.setPassword(binding.etRegisterPassword.getText().toString());
+        temp.setUsername(binding.etRegisterUsername.getText().toString());
+        temp.setFirstName(binding.etRegisterName.getText().toString());
+        temp.setLastName(binding.etRegisterLastame.getText().toString());
+        temp.setEmail(binding.etRegisterEmail.getText().toString());
+
+        Call<User> call = userService.register(temp);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+
+
+                if (response.isSuccessful()) {
+
+                    Toast.makeText(getContext(), "Registrado Correctamente", Toast.LENGTH_SHORT).show();
+                    LoginFragment loginFragment = new LoginFragment();
+                    ChangeFragment.change(getContext(), R.id.PrincipalContainerView, loginFragment);
+
+                } else {
+                    Gson json = new Gson();
+                    String mensaje = json.toJson(response.errorBody());
+
+                    Toast.makeText(getContext(), mensaje, Toast.LENGTH_LONG).show();
+                    Log.d("a", mensaje);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(getContext(), String.valueOf(call.request().body()), Toast.LENGTH_LONG).show();
+                Log.d("b",t.getMessage());
+            }
+        });
+    }
 
 }

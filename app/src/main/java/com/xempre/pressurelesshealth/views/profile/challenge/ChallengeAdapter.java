@@ -65,52 +65,57 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
 
     @Override
     public void onBindViewHolder(ChallengeAdapter.NombreViewHolder holder, int position) {
-        Challenge challenge = listMeasurements.get(position);
-        Log.d("DATA", challenge.toString());
-        holder.textViewDesc.setText(String.valueOf(challenge.getDescription()));
-        holder.textViewName.setText(String.valueOf(challenge.getName()));
-        holder.textViewReward.setText(String.valueOf(challenge.getReward()));
+        try {
+            Challenge challenge = listMeasurements.get(position);
+            Log.d("DATA", challenge.toString());
+            holder.textViewDesc.setText(String.valueOf(challenge.getDescription()));
+            holder.textViewName.setText(String.valueOf(challenge.getName()));
+            holder.textViewReward.setText(String.valueOf(challenge.getReward()));
 
-        if (!challenge.isRepeatable()){
-            ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
-            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            holder.button.setLayoutParams(layoutParams);
-        }
-
-        if (challenge.getLatestHistory().length > 0){
-            ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
-            layoutParams.height = 0;
-            holder.button.setLayoutParams(layoutParams);
-            try {
-                holder.checkBox.setChecked((int) (challenge.getLatestHistory()[0].getProgress()) >= 100);
-                holder.progressBar.setProgress((int) (challenge.getLatestHistory()[0].getProgress()));
-            } catch (Exception ignore){}
-        }
-
-        if (challenge.getLatestHistory()[0].getProgress()>=100 || challenge.getLatestHistory()[0].getIsSucceeded()){
-            ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
-            holder.button.setText("Reiniciar");
-            layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            holder.button.setLayoutParams(layoutParams);
-        }
-
-
-        holder.button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    saveButton(context, holder, challenge);
-                } catch (Exception ignored){
-                    Toast.makeText(context, "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
-                }
-
-
+            if (!challenge.isRepeatable()) {
+                ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                holder.button.setLayoutParams(layoutParams);
             }
-        });
+
+            if (challenge.getLatestHistory().length > 0) {
+                ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
+                layoutParams.height = 0;
+                holder.button.setLayoutParams(layoutParams);
+                try {
+                    holder.checkBox.setChecked((int) (challenge.getLatestHistory()[0].getProgress()) >= 100);
+                    holder.progressBar.setProgress((int) (challenge.getLatestHistory()[0].getProgress()));
+                } catch (Exception ignore) {
+                }
+            }
+
+            if (challenge.getLatestHistory()[0].getProgress() >= 100 || challenge.getLatestHistory()[0].getIsSucceeded()) {
+                ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
+                holder.button.setText("Reiniciar");
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                holder.button.setLayoutParams(layoutParams);
+            }
+
+
+            holder.button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        saveButton(context, holder, challenge);
+                    } catch (Exception ignored) {
+                        Toast.makeText(context, "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+            });
 
 //        holder.textViewReward.setText(String.valueOf(challenge.getTimeLimit()));
 //        validateComplete(challenge, holder);
-        getBitmapFromURL(holder, challenge.getImage());
+            getBitmapFromURL(holder, challenge.getImage());
+        } catch (Exception e){
+
+        }
     }
 
     @Override

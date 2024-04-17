@@ -27,7 +27,7 @@ public interface UserService {
     public Call<ResponseLogin> login(@Body User user);
 
     @POST("core/users/")
-    public Call<ResponseLogin> register(@Body User user);
+    public Call<User> register(@Body User user);
 
     @POST("core/password_reset/")
     public Call<Void> resetPassword(@Body RestartPassword email);

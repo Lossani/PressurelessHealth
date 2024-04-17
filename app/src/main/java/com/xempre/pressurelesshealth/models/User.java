@@ -24,6 +24,8 @@ public class User {
 
     Integer points;
 
+    String email;
+
 //    public User(String username, String password){
 //        this.username = username;
 //        this.password = password;
@@ -83,5 +85,13 @@ public class User {
 
     public void setAvatarURL(String avatarURL) {
         this.avatarURL = avatarURL;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

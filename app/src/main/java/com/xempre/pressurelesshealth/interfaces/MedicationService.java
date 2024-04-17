@@ -9,7 +9,10 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface MedicationService {
@@ -21,6 +24,9 @@ public interface MedicationService {
 
     @POST("health/medications/")
     public Call<Medication> saveMedication(@Body Medication medication);
+
+    @PATCH("health/medications/{id}/")
+    public Call<Medication> deleteMedication(@Path("id") int id, @Body Medication medication);
 
     @POST("health/medication_frequencies/")
     public Call<MedicationFrequency> saveMedicationFrequency(@Body MedicationFrequency medicationFrequency);

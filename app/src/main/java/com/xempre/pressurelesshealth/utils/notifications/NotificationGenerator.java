@@ -94,7 +94,7 @@ public class NotificationGenerator {
     public void scheduleNotification(AlarmManager alarmManager, Activity activity, Calendar calendar) {
         Intent intent = new Intent(activity, AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(activity, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
 }

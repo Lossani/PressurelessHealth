@@ -71,6 +71,7 @@
             android:id="@+id/etRegisterEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autoLink="email"
             android:ems="10"
             android:hint="email@test.com"
             android:inputType="text" />
@@ -88,7 +89,23 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="******"
-            android:inputType="text" />
+            android:inputType="text"
+            android:password="true" />
+
+        <TextView
+            android:id="@+id/labelConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirmar Contraseña"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/etRegisterConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="******"
+            android:inputType="textPassword" />
 
         <Button
             android:id="@+id/btnRegRegister"

@@ -59,4 +59,8 @@ public class Medication {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+    public boolean getDeleted(){
+        return deleted;
+    }
 }
