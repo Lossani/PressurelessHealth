@@ -1,6 +1,9 @@
 package com.xempre.pressurelesshealth.views.profile.challenge;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
@@ -29,8 +32,11 @@ import com.xempre.pressurelesshealth.models.ChallengeHistory;
 import com.xempre.pressurelesshealth.models.Goal;
 import com.xempre.pressurelesshealth.models.GoalHistory;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.views.MainActivityView;
+import com.xempre.pressurelesshealth.views.profile.UserProfile;
 import com.xempre.pressurelesshealth.views.profile.goal.GoalAdapter;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
+import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -65,7 +71,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
 
     @Override
     public void onBindViewHolder(ChallengeAdapter.NombreViewHolder holder, int position) {
-        try {
+
             Challenge challenge = listMeasurements.get(position);
             Log.d("DATA", challenge.toString());
             holder.textViewDesc.setText(String.valueOf(challenge.getDescription()));
@@ -87,15 +93,14 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
                     holder.progressBar.setProgress((int) (challenge.getLatestHistory()[0].getProgress()));
                 } catch (Exception ignore) {
                 }
-            }
 
-            if (challenge.getLatestHistory()[0].getProgress() >= 100 || challenge.getLatestHistory()[0].getIsSucceeded()) {
-                ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
-                holder.button.setText("Reiniciar");
-                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                holder.button.setLayoutParams(layoutParams);
+                if (challenge.getLatestHistory()[0].getProgress() >= 100 || challenge.getLatestHistory()[0].getIsSucceeded()) {
+                    ViewGroup.LayoutParams layoutParams1 = holder.button.getLayoutParams();
+                    holder.button.setText("Reiniciar");
+                    layoutParams1.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    holder.button.setLayoutParams(layoutParams1);
+                }
             }
-
 
             holder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -113,9 +118,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
 //        holder.textViewReward.setText(String.valueOf(challenge.getTimeLimit()));
 //        validateComplete(challenge, holder);
             getBitmapFromURL(holder, challenge.getImage());
-        } catch (Exception e){
 
-        }
     }
 
     @Override
@@ -213,8 +216,11 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
 
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MySharedPref",MODE_PRIVATE);
 
-        ChallengeHistory challengeHistory = new ChallengeHistory(2, challenge.getId(), date);
+        int userId = sharedPreferences.getInt("userId", 0);
+
+        ChallengeHistory challengeHistory = new ChallengeHistory(userId, challenge.getId(), date);
 
         // calling a method to create a post and passing our modal class.
         Call<ChallengeHistory> call = challengeService.startChallenge(challengeHistory);
@@ -229,6 +235,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
                     ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
                     layoutParams.height = 0;
                     holder.button.setLayoutParams(layoutParams);
+                    ChangeFragment.change(context, R.id.frame_layout, new UserProfile());
 //                    sys.setText("");
 //                    dis.setText("");
                 } else {

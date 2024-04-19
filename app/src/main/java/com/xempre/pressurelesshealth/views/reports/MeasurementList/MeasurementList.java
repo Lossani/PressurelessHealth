@@ -28,6 +28,7 @@ import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.databinding.ActivityListMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.views.shared.CustomDialog;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -218,9 +219,18 @@ public class MeasurementList extends Fragment {
 
     private void filterList(boolean isAdvanced) {
         List<Measurement> measurementListFilter = new ArrayList<>();
+        boolean showedMessage = false;
         for (Measurement measurement : measurementList) {
             if (measurement.getIsAdvanced()) {
                 measurementListFilter.add(measurement);
+            }
+            if(!showedMessage && (measurement.categorizeBloodPressure().equals("HYPERTENSION_STAGE_1") ||
+                    measurement.categorizeBloodPressure().equals("HYPERTENSION_STAGE_2") ||
+                    measurement.categorizeBloodPressure().equals("HYPERTENSIVE_CRISIS"))
+            ){
+                showedMessage = true;
+                CustomDialog dialog = new CustomDialog();
+                dialog.create(getActivity(), "ALERTA", "Se ha detectado una medida por encima de Hipertensión en Etapa 1.");
             }
         }
 
@@ -229,10 +239,14 @@ public class MeasurementList extends Fragment {
         else {measurementAdapter.updateList(measurementList);
         this.measurementListFilter = measurementList;
         }
+
+
+
+        Log.d("INFO", "ENTRE");
     }
 
     public String convertDateToString(Long time){
-        Calendar utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        Calendar utc = Calendar.getInstance(TimeZone.getTimeZone("UTC-05"));
         utc.setTimeInMillis(time);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         return format.format(utc.getTime());
@@ -272,9 +286,11 @@ public class MeasurementList extends Fragment {
                             DecimalFormat df = new DecimalFormat("0.00");
                             promDiastolic.setText(df.format(prom2/i)+"");
                             promSystolic.setText(df.format(prom1/i)+"");
-                            measurementAdapter.notifyDataSetChanged();
-                            filterList(false);
+//                            measurementAdapter.notifyDataSetChanged();
+//                            filterList(false);
                         }
+                        measurementAdapter.notifyDataSetChanged();
+                        filterList(false);
 
                     } catch (Exception ignored){
                         if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();

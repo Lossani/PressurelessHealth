@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">PressurelessHealth</string>
+    <string name="app_name">Apulso</string>
     <string name="title_activity_user_profile">UserProfile</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="previous">Volver</string>
+    <string name="save">Guardar</string>
 
     <string-array name="weekday">
         <item>Lunes</item>
@@ -16,6 +17,7 @@
         <item>Sábado</item>
         <item>Domingo</item>
     </string-array>
+
 
 
     <string name="lorem_ipsum">

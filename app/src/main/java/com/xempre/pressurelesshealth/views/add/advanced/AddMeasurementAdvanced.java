@@ -1,9 +1,11 @@
 package com.xempre.pressurelesshealth.views.add.advanced;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC;
 import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -460,7 +462,12 @@ public class AddMeasurementAdvanced extends Fragment {
             Toast.makeText(getContext(), "Asegurece de ingresar números validos. Revise las medidas por favor.", Toast.LENGTH_SHORT).show();
             return;
         }
-        Measurement measurement = new Measurement(2, new Float(df.format(res.first)), new Float(df.format(res.second)), date, true);
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MySharedPref",MODE_PRIVATE);
+
+        int userId = sharedPreferences.getInt("userId", 0);
+
+        Measurement measurement = new Measurement(userId, new Float(df.format(res.first)), new Float(df.format(res.second)), date, true);
 
         if(!binding.emltCommentAdvanced.getText().toString().equals(""))
             measurement.setComments(binding.emltCommentAdvanced.getText().toString());

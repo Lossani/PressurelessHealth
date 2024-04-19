@@ -24,6 +24,12 @@ import com.xempre.pressurelesshealth.models.RestartPassword;
 import com.xempre.pressurelesshealth.models.User;
 import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
+import com.xempre.pressurelesshealth.views.shared.CustomDialog;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -103,7 +109,20 @@ public class RestartPasswordFragment extends Fragment {
                     binding.llNewPassword.setVisibility(View.VISIBLE);
                 }
                 else {
-                    Toast.makeText(getContext(), "Valide los datos ingresados.", Toast.LENGTH_LONG).show();
+
+                    try {
+                        JSONObject errorObject = new JSONObject(response.errorBody().string());
+
+                        String errorMessage = errorObject.getString("response");
+
+                        CustomDialog dialog = new CustomDialog();
+                        dialog.create(getActivity(), "Error", errorMessage);
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+
+                        Toast.makeText(getContext(), "Error processing error message", Toast.LENGTH_SHORT).show();
+                    }
+
                     binding.btnSendCode.setActivated(true);
                 }
 

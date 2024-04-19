@@ -1,9 +1,12 @@
 package com.xempre.pressurelesshealth.views.medication;
+import static android.content.Context.MODE_PRIVATE;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,8 +44,13 @@ public class AddMedication extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!binding.editTextText.getText().toString().equals("") && !binding.editTextText2.getText().toString().equals("") ){
+
+                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("MySharedPref",MODE_PRIVATE);
+
+                    int userId = sharedPreferences.getInt("userId", 0);
+
                     Medication medication = new Medication();
-                    medication.setUserId(2);
+                    medication.setUserId(userId);
                     medication.setDeleted(false);
                     medication.setName(binding.editTextText.getText().toString());
                     medication.setDescription(binding.editTextText2.getText().toString());

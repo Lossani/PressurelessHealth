@@ -16,7 +16,10 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.xempre.pressurelesshealth.MainActivity;
 import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
+import com.xempre.pressurelesshealth.interfaces.ChallengeService;
 import com.xempre.pressurelesshealth.views.MainActivityView;
+import com.xempre.pressurelesshealth.views.settings.contacts.ContactList;
+import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
@@ -48,8 +51,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
-        Preference buttonPreference = findPreference("button_preference");
-        buttonPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Preference buttonCloseSession = findPreference("button_preference_close_session");
+        buttonCloseSession.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 // Realiza alguna acción al hacer clic en el botón
@@ -63,6 +66,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
                 getActivity().finish();
+                return true;
+            }
+        });
+
+        Preference buttonContacts = findPreference("button_preference_contacts");
+        buttonContacts.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                // Realiza alguna acción al hacer clic en el botón
+
+                ChangeFragment.change(getContext(), R.id.frame_layout, new ContactList());
                 return true;
             }
         });

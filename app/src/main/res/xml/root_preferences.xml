@@ -9,10 +9,13 @@
 
     </PreferenceCategory>
     <PreferenceCategory app:title="Contactos">
+        <Preference
+            android:key="button_preference_contacts"
+            android:title="Ver contactos" />
     </PreferenceCategory>
     <PreferenceCategory app:title="Cuenta">
         <Preference
-            android:key="button_preference"
+            android:key="button_preference_close_session"
             android:title="Cerrar Sesión" />
     </PreferenceCategory>
 

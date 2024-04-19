@@ -1,5 +1,6 @@
 package com.xempre.pressurelesshealth.views.add;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC;
 import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC;
 
@@ -10,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -31,7 +33,9 @@ import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
+import com.xempre.pressurelesshealth.views.settings.contacts.ContactList;
 import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
+import com.xempre.pressurelesshealth.views.shared.CustomDialog;
 import com.xempre.pressurelesshealth.views.shared.MinMaxFilter;
 
 import java.text.SimpleDateFormat;
@@ -180,7 +184,11 @@ public class AddMeasurementBasic extends Fragment {
 
         MeasurementService measurementService = ApiClient.createService(getContext(),MeasurementService.class,1);
 
-        Measurement measurement = new Measurement(2, sr, dr, date, false);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MySharedPref",MODE_PRIVATE);
+
+        int userId = sharedPreferences.getInt("userId", 0);
+
+        Measurement measurement = new Measurement(userId, sr, dr, date, false);
 
         if(!binding.mltAddBasic.getText().toString().equals(""))
             measurement.setComments(binding.mltAddBasic.getText().toString());
@@ -195,6 +203,30 @@ public class AddMeasurementBasic extends Fragment {
                 // this method is called when we get response from our api.
                 if (response.code() == 201){
                     Toast.makeText(getContext(), "Medida guardada exitosamente.", Toast.LENGTH_SHORT).show();
+
+                    CustomDialog dialog = new CustomDialog();
+                    switch (measurement.categorizeBloodPressure()){
+                        case "NORMAL":
+                            dialog.create(getActivity(), "PRESIÓN NORMAL", "Tus niveles de presión arterial son normales. ¡Sigue así con hábitos saludables!");
+                            break;
+                        case "ELEVATED":
+                            dialog.create(getActivity(), "PRESIÓN ELEVADA", "Tu presión arterial está elevada, es importante tomar medidas para controlarla.");
+                            break;
+                        case "HYPERTENSION_STAGE_1":
+                            dialog.create(getActivity(), "HIPERTENSIÓN - ETAPA 1", "Estás en la Etapa 1 de hipertensión. Considera realizar cambios en tu estilo de vida.");
+                            break;
+                        case "HYPERTENSION_STAGE_2":
+                            dialog.create(getActivity(), "HIPERTENSIÓN - ETAPA 2", "Estás en la Etapa 2 de hipertensión. Te recomendamos buscar ayuda médica para controlarla.");
+                            break;
+                        case "HYPERTENSIVE_CRISIS":
+                            dialog.create(getActivity(), "CRISIS DE HIPERTENSIÓN", "Tu presión arterial está en crisis. ¡Llama a tu médico de inmediato!");
+                            ChangeFragment.change(getContext(), R.id.frame_layout, new ContactList());
+                            return;
+                        default:
+                            break;
+                    }
+
+
                     replaceFragment(new MeasurementList());
 //                    sys.setText("");
 //                    dis.setText("");

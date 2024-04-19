@@ -87,7 +87,11 @@ public class ChallengeList extends Fragment {
             public void onResponse(Call<List<Challenge>> call, Response<List<Challenge>> response) {
                 try {
                     List<Challenge> responseFromAPI = response.body();
-                    assert responseFromAPI != null;
+                    if (responseFromAPI == null) {
+                        // Manejar el caso en que la respuesta es nula
+                        Log.e("ERROR", "La respuesta del servidor es nula.");
+                        return;
+                    }
                     clearRecyclerView();
                     if (responseFromAPI.isEmpty()) {
                         if (getContext()!=null) Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();

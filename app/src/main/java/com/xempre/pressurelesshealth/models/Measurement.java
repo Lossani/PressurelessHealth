@@ -75,4 +75,20 @@ public class Measurement {
     public void setComments(String comments) {
         this.comments = comments;
     }
+
+    public String categorizeBloodPressure() {
+        if (systolicPressure > 180 || diastolicPressure > 120) {
+            return "HYPERTENSIVE_CRISIS";
+        } else if (systolicPressure >= 140 || diastolicPressure >= 90) {
+            return "HYPERTENSION_STAGE_2";
+        } else if ((systolicPressure >= 130 && systolicPressure <= 139) || (diastolicPressure >= 80 && diastolicPressure <= 89)) {
+            return "HYPERTENSION_STAGE_1";
+        } else if (systolicPressure >= 120 && systolicPressure <= 129 && diastolicPressure < 80) {
+            return "ELEVATED";
+        } else if (systolicPressure < 120 && diastolicPressure < 80) {
+            return "NORMAL";
+        } else {
+            return "Unknown category";
+        }
+    }
 }

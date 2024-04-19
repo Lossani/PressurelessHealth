@@ -18,6 +18,9 @@ import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.models.Measurement;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,21 +51,55 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
+
         LocalDateTime fechaHora = LocalDateTime.parse(measurement.getMeasurementDate(), formatter);
 
-        String date = fechaHora.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String hour = fechaHora.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+// Obtener la zona horaria UTC-05
+        ZoneId zonaHorariaUTCMinus5 = ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-5));
 
-        if (measurement.getSystolicRecord() < 120.00 && measurement.getDiastolicRecord() < 80.00) {
-            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Normal));
-        } else if (measurement.getSystolicRecord() < 140.00 && measurement.getDiastolicRecord() < 90.00) {
-            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Pre));
-        } else if (measurement.getSystolicRecord() < 160.00 && measurement.getDiastolicRecord() < 100.00) {
-            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Hip1));
-        } else if (measurement.getSystolicRecord() < 180.00 && measurement.getDiastolicRecord() < 110.00) {
-            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Hip2));
-        } else{
-            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Crisis));
+// Convertir la fecha y hora a UTC-05
+        ZonedDateTime fechaHoraUTCMinus5 = fechaHora.atZone(zonaHorariaUTCMinus5);
+
+// Obtener la zona horaria local del dispositivo
+        ZoneId zonaHorariaLocal = ZoneId.systemDefault();
+
+// Convertir la fecha y hora de UTC-05 a la zona horaria local del dispositivo
+        ZonedDateTime fechaHoraLocal = fechaHoraUTCMinus5.withZoneSameInstant(zonaHorariaLocal);
+
+
+        String date = fechaHoraLocal.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String hour = fechaHoraLocal.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+//        if (measurement.getSystolicRecord() < 120.00 && measurement.getDiastolicRecord() < 80.00) {
+//
+//        } else if (measurement.getSystolicRecord() < 140.00 && measurement.getDiastolicRecord() < 90.00) {
+//
+//        } else if (measurement.getSystolicRecord() < 160.00 && measurement.getDiastolicRecord() < 100.00) {
+//
+//        } else if (measurement.getSystolicRecord() < 180.00 && measurement.getDiastolicRecord() < 110.00) {
+//
+//        } else{
+//
+//        }
+
+        switch (measurement.categorizeBloodPressure()){
+            case "NORMAL":
+                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Normal));
+                break;
+            case "ELEVATED":
+                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Pre));
+                break;
+            case "HYPERTENSION_STAGE_1":
+                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Hip1));
+                break;
+            case "HYPERTENSION_STAGE_2":
+                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Hip2));
+                break;
+            case "HYPERTENSIVE_CRISIS":
+                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.Crisis));
+                break;
+            default:
+                break;
         }
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +132,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
 
         holder.textViewDis.setText(String.valueOf(measurement.getDiastolicRecord()));
         holder.textViewSys.setText(String.valueOf(measurement.getSystolicRecord()));
+
     }
 
     public void updateList(List<Measurement> measurementList) {
