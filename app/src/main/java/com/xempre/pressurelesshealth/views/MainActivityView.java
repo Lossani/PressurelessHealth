@@ -55,6 +55,7 @@ public class MainActivityView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_PressurelessHealth);
 
         this.notificationManager = getSystemService(NotificationManager.class);
         this.alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
