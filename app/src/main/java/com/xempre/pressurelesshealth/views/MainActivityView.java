@@ -133,6 +133,11 @@ public class MainActivityView extends AppCompatActivity {
             // Crear y mostrar el diálogo
             AlertDialog dialog = builder.create();
             dialog.show();
+        } else if (notificationManager.areNotificationsEnabled()) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("NOTIFICATION_PERMISSION", true);
+            editor.putBoolean("NOTIFICATION_PERMISSION_REJECTED", false);
+            editor.apply();
         }
 
     }
