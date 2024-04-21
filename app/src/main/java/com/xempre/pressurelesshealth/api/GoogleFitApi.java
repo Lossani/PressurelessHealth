@@ -40,6 +40,7 @@ import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.xempre.pressurelesshealth.utils.Constants;
 
 import java.text.DateFormat;
 import java.time.Instant;
@@ -74,18 +75,20 @@ public class GoogleFitApi {
             .build();
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(activity, gso);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(activity, signInIntent, 1, null);
+        startActivityForResult(activity, signInIntent, Constants.GOOGLE_AUTH_REQUEST_CODE, null);
 
 
     }
 
-    public void onActivityResult (Intent data) {
+    public boolean onActivityResult (Intent data) {
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
         try {
             googleAccount = (GoogleSignInAccount) ((Task<?>) task).getResult(ApiException.class);
+            return true;
             // Signed in successfully, connect to the Google Fit API
         } catch (ApiException e) {
             System.out.println(e);
+            return false;
             // The ApiException status code indicates the detailed failure reason.
         }
     }
@@ -215,7 +218,7 @@ public class GoogleFitApi {
         // If the DataReadRequest object specified aggregated data, dataReadResult will be returned
         // as buckets containing DataSets, instead of just DataSets.
         Log.v(TAG, "Number of returned buckets of DataSets is: " + dataReadResult.getBuckets().size());
-        if (dataReadResult.getBuckets().size() > 0) {
+        if (!dataReadResult.getBuckets().isEmpty()) {
 
             for (Bucket bucket : dataReadResult.getBuckets()) {
                 List<DataSet> dataSets = bucket.getDataSets();
@@ -225,7 +228,7 @@ public class GoogleFitApi {
                     dumpDataSet(dataSet);
                 }
             }
-        } else if (dataReadResult.getDataSets().size() > 0) {
+        } else if (!dataReadResult.getDataSets().isEmpty()) {
             System.out.print("Number of returned DataSets is: " + dataReadResult.getDataSets().size());
             for (DataSet dataSet : dataReadResult.getDataSets()) {
                 dumpDataSet(dataSet);

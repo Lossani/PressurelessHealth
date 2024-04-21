@@ -53,7 +53,7 @@
         </activity>
 
 
-        <receiver android:name=".utils.notifications.AlarmReceiver" />
+        <receiver android:name="com.xempre.pressurelesshealth.utils.notifications.AlarmReceiver" />
     </application>
 
 </manifest>

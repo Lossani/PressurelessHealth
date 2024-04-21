@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
@@ -21,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,6 +32,7 @@ import com.xempre.pressurelesshealth.interfaces.ContactService;
 import com.xempre.pressurelesshealth.interfaces.MedicationService;
 import com.xempre.pressurelesshealth.models.Contact;
 import com.xempre.pressurelesshealth.models.Medication;
+import com.xempre.pressurelesshealth.utils.Constants;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
 import com.xempre.pressurelesshealth.views.medication.MedicationView;
 
@@ -66,13 +69,19 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactA
         holder.btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + contact.getPhone()));
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED && !sharedPreferences.getBoolean(Constants.SETTINGS_CALL_PERMISSION_REJECTED, false)) {
                     // Si no tienes permiso, solicítalo
-                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CALL_PHONE}, 1);
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.CALL_PHONE}, Constants.CALLS_PERMISSION_REQUEST_CODE);
+                } else if (sharedPreferences.getBoolean(Constants.SETTINGS_CALL_PERMISSION_REJECTED, false)) {
+                    // Si NO tiene permiso para llamar directamente, solo se mostrará el número.
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" + contact.getPhone()));
+                    context.startActivity(intent);
                 } else {
                     // Si ya se concedió el permiso, realiza la llamada
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:" + contact.getPhone()));
                     context.startActivity(intent);
                 }
             }
