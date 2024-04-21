@@ -102,6 +102,11 @@ public class MainActivityView extends AppCompatActivity {
                                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         .putExtra(Settings.EXTRA_APP_PACKAGE, MainActivityView.this.getPackageName());
                                 MainActivityView.this.startActivity(settingsIntent);
+                            } else if (notificationManager.areNotificationsEnabled()) {
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean("NOTIFICATION_PERMISSION", true);
+                                editor.putBoolean("NOTIFICATION_PERMISSION_REJECTED", false);
+                                editor.apply();
                             }
                             dialog.dismiss();
                         }
