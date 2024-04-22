@@ -1,6 +1,7 @@
 package com.xempre.pressurelesshealth.interfaces;
 
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.models.Reminder;
 import com.xempre.pressurelesshealth.models.ResponseLogin;
 import com.xempre.pressurelesshealth.models.RestartPassword;
 import com.xempre.pressurelesshealth.models.User;
@@ -34,5 +35,8 @@ public interface UserService {
 
     @PUT("core/password_change/")
     public Call<Void> resetPasswordValidation(@Body RestartPassword code_password);
+
+    @GET("core/reminders")
+    public Call<List<Reminder>> getReminders();
 
 }

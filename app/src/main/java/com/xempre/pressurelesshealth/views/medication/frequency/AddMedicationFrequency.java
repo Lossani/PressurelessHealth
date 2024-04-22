@@ -67,6 +67,7 @@ public class AddMedicationFrequency extends Fragment {
                     medicationFrequency.setWeekday(binding.spinnerDias.getSelectedItemPosition()+1);
                     medicationFrequency.setDose(binding.editTextText3.getText().toString());
                     medicationFrequency.setHour(binding.button4.getText().toString());
+                    medicationFrequency.setReminderNotificationEnabled(binding.switchFrequencyNotification.isChecked());
                     Log.d("PERRO", medicationFrequency.getMedicationId()+"");
                     Log.d("PERRO", medicationFrequency.getDose());
                     Log.d("PERRO", medicationFrequency.getHour());
@@ -87,6 +88,7 @@ public class AddMedicationFrequency extends Fragment {
             }
         });
 
+
         binding.btnBackAddFrequency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,17 +106,8 @@ public class AddMedicationFrequency extends Fragment {
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                MainActivityView mainActivityView = (MainActivityView) getContext();
-                Calendar calendar = Calendar.getInstance();
-
-                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                calendar.set(Calendar.MINUTE, minute);
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-
-                NotificationGenerator notificationGenerator = new NotificationGenerator(mainActivityView.notificationManager);
-                notificationGenerator.scheduleNotification(mainActivityView.alarmManager, mainActivityView, calendar);
-                Toast.makeText(getContext(), "AQUI.", Toast.LENGTH_SHORT).show();
+                AddMedicationFrequency.this.hour = hourOfDay;
+                AddMedicationFrequency.this.minute = minute;
                 binding.button4.setText(String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute));
             }
         };
@@ -140,7 +133,21 @@ public class AddMedicationFrequency extends Fragment {
                     MedicationFrequency responseFromAPI = response.body();
 
                     if (response.code()==201) {
-                        Toast.makeText(getContext(), "Medicamento guardado exitosamente.", Toast.LENGTH_SHORT).show();
+                        if (binding.switchFrequencyNotification.isChecked() && responseFromAPI.getReminder() != null) {
+                            MainActivityView mainActivityView = (MainActivityView) getContext();
+                            Calendar calendar = Calendar.getInstance();
+
+                            calendar.set(Calendar.DAY_OF_WEEK, binding.spinnerDias.getSelectedItemPosition() + 1);
+                            calendar.set(Calendar.HOUR_OF_DAY, AddMedicationFrequency.this.hour);
+                            calendar.set(Calendar.MINUTE, AddMedicationFrequency.this.minute);
+                            calendar.set(Calendar.SECOND, 0);
+                            calendar.set(Calendar.MILLISECOND, 0);
+
+                            NotificationGenerator notificationGenerator = new NotificationGenerator(mainActivityView.notificationManager);
+                            notificationGenerator.scheduleNotification(mainActivityView.alarmManager, mainActivityView, calendar, responseFromAPI.getReminder().getId());
+                        }
+
+                        Toast.makeText(getContext(), "Medicamento guardado exitosamente.", Toast.LENGTH_LONG).show();
 
                         Fragment fragment = new MedicationView(medication);
                         ChangeFragment.change(getContext(), R.id.frame_layout, fragment);

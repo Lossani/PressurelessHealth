@@ -15,10 +15,18 @@ public class MedicationFrequency {
 
     String dose;
     boolean deleted;
+
+    @JsonProperty("reminder_notification_enabled")
+    boolean reminderNotificationEnabled;
     @JsonProperty("medication")
     Integer medicationId;
 
-    public MedicationFrequency(){}
+    @JsonProperty("reminder")
+    Reminder reminder;
+
+    public MedicationFrequency(){
+
+    }
 
     public Integer getId() {
         return id;
@@ -44,6 +52,10 @@ public class MedicationFrequency {
         return hour;
     }
 
+    public boolean isReminderNotificationEnabled() { return reminderNotificationEnabled; }
+
+    public Reminder getReminder() { return reminder; }
+
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
@@ -67,4 +79,8 @@ public class MedicationFrequency {
     public void setWeekday(Integer weekday) {
         this.weekday = weekday;
     }
+
+    public void setReminderNotificationEnabled(boolean enabled) { this.reminderNotificationEnabled = enabled; }
+
+    public void setReminder(Reminder reminder) { this.reminder = reminder; }
 }

@@ -2,11 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory app:title="@string/sync_header">
-
         <SwitchPreferenceCompat
-            app:key="syncGoogleFit"
+            app:key="GOOGLE_AUTH_SIGNED_IN"
             app:title="@string/sync_title" />
-
     </PreferenceCategory>
     <PreferenceCategory app:title="Contactos">
         <Preference
@@ -14,6 +12,9 @@
             android:title="Ver contactos" />
     </PreferenceCategory>
     <PreferenceCategory app:title="Cuenta">
+        <SwitchPreferenceCompat
+            app:key="NOTIFICATION_PERMISSION"
+            app:title="Habilitar notificaciones y recordatorios" />
         <Preference
             android:key="button_preference_close_session"
             android:title="Cerrar Sesión" />

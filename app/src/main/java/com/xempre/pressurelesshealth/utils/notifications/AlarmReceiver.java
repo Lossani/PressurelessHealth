@@ -17,6 +17,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         NotificationGenerator notificationGenerator = new NotificationGenerator(context.getSystemService(NotificationManager.class));
 
-        notificationGenerator.sendNotificationWithActionIntent(nextActivity, context, "Alarm", "This is a text");
+        notificationGenerator.sendNotificationWithActionIntent(nextActivity, context, "Alarma", "Es hora de su medicación.");
     }
 }

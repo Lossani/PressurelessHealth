@@ -104,8 +104,8 @@ public class MainActivityView extends AppCompatActivity {
                                 MainActivityView.this.startActivity(settingsIntent);
                             } else if (notificationManager.areNotificationsEnabled()) {
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean("NOTIFICATION_PERMISSION", true);
-                                editor.putBoolean("NOTIFICATION_PERMISSION_REJECTED", false);
+                                editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, true);
+                                editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, false);
                                 editor.apply();
                             }
                             dialog.dismiss();
@@ -124,8 +124,8 @@ public class MainActivityView extends AppCompatActivity {
                                     // If request is cancelled, the result arrays are empty
                                     // Permission denied
                                     // You can handle this situation, e.g., show an explanation to the user
-                                    editor.putBoolean("NOTIFICATION_PERMISSION", false);
-                                    editor.putBoolean("NOTIFICATION_PERMISSION_REJECTED", true);
+                                    editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, false);
+                                    editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, true);
                                     editor.apply(); // or editor.commit();
                                     dialog.dismiss();
                                 }
@@ -140,8 +140,8 @@ public class MainActivityView extends AppCompatActivity {
             dialog.show();
         } else if (notificationManager.areNotificationsEnabled()) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("NOTIFICATION_PERMISSION", true);
-            editor.putBoolean("NOTIFICATION_PERMISSION_REJECTED", false);
+            editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, true);
+            editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, false);
             editor.apply();
         }
 
