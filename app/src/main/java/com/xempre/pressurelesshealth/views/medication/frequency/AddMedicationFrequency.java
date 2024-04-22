@@ -137,7 +137,7 @@ public class AddMedicationFrequency extends Fragment {
                             MainActivityView mainActivityView = (MainActivityView) getContext();
                             Calendar calendar = Calendar.getInstance();
 
-                            calendar.set(Calendar.DAY_OF_WEEK, binding.spinnerDias.getSelectedItemPosition() + 1);
+                            calendar.set(Calendar.DAY_OF_WEEK, binding.spinnerDias.getSelectedItemPosition() + 2);
                             calendar.set(Calendar.HOUR_OF_DAY, AddMedicationFrequency.this.hour);
                             calendar.set(Calendar.MINUTE, AddMedicationFrequency.this.minute);
                             calendar.set(Calendar.SECOND, 0);
