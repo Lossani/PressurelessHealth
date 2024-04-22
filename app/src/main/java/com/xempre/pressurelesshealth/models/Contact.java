@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Contact {
+    Integer id;
     @JsonProperty("first_name")
     String firstName;
     @JsonProperty("last_name")
@@ -14,11 +15,29 @@ public class Contact {
     String email;
     String phone;
     String relationship;
+
+    boolean deleted;
     @JsonProperty("user_id")
     int userId;
 
     public String getEmail() {
         return email;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public boolean getDeleted(){
+        return deleted;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFirstName() {

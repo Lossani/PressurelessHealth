@@ -28,6 +28,10 @@ public interface MedicationService {
     @PATCH("health/medications/{id}/")
     public Call<Medication> deleteMedication(@Path("id") int id, @Body Medication medication);
 
+    @PATCH("health/medication_frequencies/{id}/")
+    public Call<MedicationFrequency> deleteMedicationFrequency(@Path("id") int id, @Body MedicationFrequency medicationFrequency);
+
+
     @POST("health/medication_frequencies/")
     public Call<MedicationFrequency> saveMedicationFrequency(@Body MedicationFrequency medicationFrequency);
 }

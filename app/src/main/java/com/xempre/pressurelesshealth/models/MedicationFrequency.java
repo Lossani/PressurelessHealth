@@ -32,7 +32,7 @@ public class MedicationFrequency {
         return id;
     }
 
-    public boolean isDeleted(){
+    public boolean getDeleted(){
         return deleted;
     }
 

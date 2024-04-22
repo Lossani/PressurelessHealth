@@ -2,6 +2,7 @@ package com.xempre.pressurelesshealth.views.shared;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 import com.xempre.pressurelesshealth.R;
 
 public class CustomDialog {
-    public void create(Activity activity, String title, String content){
+    public void create(Context activity, String title, String content){
         Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.ok_dialog);
         dialog.setCancelable(false);
@@ -22,7 +23,7 @@ public class CustomDialog {
 
         TextView tvContent;
         tvContent = dialog.findViewById(R.id.tvContentOkDialog);
-        tvContent.setText(content);
+        tvContent.setText(Html.fromHtml(content));
 
 
         dialog.findViewById(R.id.btnOkDialog).setOnClickListener(new View.OnClickListener() {

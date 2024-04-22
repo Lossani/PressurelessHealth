@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.views.shared.ChangeDate;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -49,22 +50,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
     public void onBindViewHolder(MeasurementItemHolder holder, int position) {
         Measurement measurement = listMeasurementsFilter.get(position);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-
-
-        LocalDateTime fechaHora = LocalDateTime.parse(measurement.getMeasurementDate(), formatter);
-
-// Obtener la zona horaria UTC-05
-        ZoneId zonaHorariaUTCMinus5 = ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-5));
-
-// Convertir la fecha y hora a UTC-05
-        ZonedDateTime fechaHoraUTCMinus5 = fechaHora.atZone(zonaHorariaUTCMinus5);
-
-// Obtener la zona horaria local del dispositivo
-        ZoneId zonaHorariaLocal = ZoneId.systemDefault();
-
-// Convertir la fecha y hora de UTC-05 a la zona horaria local del dispositivo
-        ZonedDateTime fechaHoraLocal = fechaHoraUTCMinus5.withZoneSameInstant(zonaHorariaLocal);
+        ZonedDateTime fechaHoraLocal = ChangeDate.change(measurement.getMeasurementDate());
 
 
         String date = fechaHoraLocal.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));

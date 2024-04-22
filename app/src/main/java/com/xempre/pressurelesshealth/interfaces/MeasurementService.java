@@ -17,7 +17,8 @@ public interface MeasurementService {
 
     @GET("health/measurements/")
     public Call<List<Measurement>> getAll();
-
+    @GET("health/measurements/latest/")
+    public Call<Measurement> getLatest();
     @GET("health/measurements/")
     public Call<List<Measurement>> getAllByDateRange(@Query("measurement_date_start") String startDate, @Query("measurement_date_end") String endDate);
     @POST("health/measurements/")

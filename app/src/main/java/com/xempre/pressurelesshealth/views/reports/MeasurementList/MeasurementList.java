@@ -28,6 +28,7 @@ import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.databinding.ActivityListMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.views.shared.ChangeDate;
 import com.xempre.pressurelesshealth.views.shared.CustomDialog;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -45,6 +46,8 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -167,11 +170,7 @@ public class MeasurementList extends Fragment {
         binding.tvExportReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String, String> data = new HashMap<>();
-                data.put("nombre", "Juan");
-                data.put("edad", "30");
-
-                generateReport(getContext(), data);
+                generateReport(getContext());
             }
         });
 
@@ -340,7 +339,7 @@ public class MeasurementList extends Fragment {
         }
     }
 
-    public void generateReport(Context context, Map<String, String> data) {
+    public void generateReport(Context context) {
         try {
 
             InputStream inputStream = context.getAssets().open("baseReport.xlsx");
@@ -356,13 +355,18 @@ public class MeasurementList extends Fragment {
                     style.setBorderRight(BorderStyle.THIN);
                     style.setBorderLeft(BorderStyle.THIN);
 
+                    ZonedDateTime fechaHoraLocal = ChangeDate.change(element.getMeasurementDate());
+
+
+                    String date = fechaHoraLocal.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    String hour = fechaHoraLocal.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
                     Row row = sheet.getRow(i); // Fila 3
                     if (row == null) {
                         row = sheet.createRow(i); // Si la fila no existe, créala
                     }
                     Cell cell = row.getCell(0, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Columna B
-                    cell.setCellValue(element.getMeasurementDate()); // Modificar con la edad proporcionada
+                    cell.setCellValue(date); // Modificar con la edad proporcionada
                     cell.setCellStyle(style);
 
                     row = sheet.getRow(i); // Fila 3
@@ -370,7 +374,7 @@ public class MeasurementList extends Fragment {
                         row = sheet.createRow(i); // Si la fila no existe, créala
                     }
                     cell = row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Columna B
-                    cell.setCellValue(element.getSystolicRecord()); // Modificar con la edad proporcionada
+                    cell.setCellValue(hour); // Modificar con la edad proporcionada
                     cell.setCellStyle(style);
 
                     row = sheet.getRow(i); // Fila 3
@@ -378,7 +382,7 @@ public class MeasurementList extends Fragment {
                         row = sheet.createRow(i); // Si la fila no existe, créala
                     }
                     cell = row.getCell(2, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Columna B
-                    cell.setCellValue(element.getDiastolicRecord()); // Modificar con la edad proporcionada
+                    cell.setCellValue(element.categorizeBloodPressure()); // Modificar con la edad proporcionada
                     cell.setCellStyle(style);
 
                     row = sheet.getRow(i); // Fila 3
@@ -386,7 +390,7 @@ public class MeasurementList extends Fragment {
                         row = sheet.createRow(i); // Si la fila no existe, créala
                     }
                     cell = row.getCell(3, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Columna B
-                    cell.setCellValue(element.getIsAdvanced()?"AVANZADA":"BÁSICA"); // Modificar con la edad proporcionada
+                    cell.setCellValue(element.getSystolicRecord()); // Modificar con la edad proporcionada
                     cell.setCellStyle(style);
 
                     row = sheet.getRow(i); // Fila 3
@@ -394,6 +398,22 @@ public class MeasurementList extends Fragment {
                         row = sheet.createRow(i); // Si la fila no existe, créala
                     }
                     cell = row.getCell(4, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Columna B
+                    cell.setCellValue(element.getDiastolicRecord()); // Modificar con la edad proporcionada
+                    cell.setCellStyle(style);
+
+                    row = sheet.getRow(i); // Fila 3
+                    if (row == null) {
+                        row = sheet.createRow(i); // Si la fila no existe, créala
+                    }
+                    cell = row.getCell(5, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Columna B
+                    cell.setCellValue(element.getIsAdvanced()?"AVANZADA":"BÁSICA"); // Modificar con la edad proporcionada
+                    cell.setCellStyle(style);
+
+                    row = sheet.getRow(i); // Fila 3
+                    if (row == null) {
+                        row = sheet.createRow(i); // Si la fila no existe, créala
+                    }
+                    cell = row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Columna B
                     cell.setCellValue(element.getComments()); // Modificar con la edad proporcionada
                     cell.setCellStyle(style);
 

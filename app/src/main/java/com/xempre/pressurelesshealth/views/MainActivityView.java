@@ -16,6 +16,7 @@ import androidx.preference.PreferenceManager;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 
@@ -28,13 +29,24 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Html;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.xempre.pressurelesshealth.R;
+import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.databinding.ActivityMainBinding;
 import com.xempre.pressurelesshealth.databinding.ActivityMainViewBinding;
+import com.xempre.pressurelesshealth.interfaces.MeasurementService;
+import com.xempre.pressurelesshealth.interfaces.UserService;
+import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.models.Medication;
+import com.xempre.pressurelesshealth.models.User;
 import com.xempre.pressurelesshealth.utils.notifications.NotificationGenerator;
 import com.xempre.pressurelesshealth.views.add.SelectAddMode;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
@@ -42,6 +54,15 @@ import com.xempre.pressurelesshealth.views.profile.UserProfile;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
 import com.xempre.pressurelesshealth.views.settings.SettingsFragment;
 import com.xempre.pressurelesshealth.utils.Constants;
+import com.xempre.pressurelesshealth.views.shared.ChangeDate;
+import com.xempre.pressurelesshealth.views.shared.CustomDialog;
+
+import java.time.Duration;
+import java.time.ZonedDateTime;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivityView extends AppCompatActivity {
 
@@ -61,10 +82,13 @@ public class MainActivityView extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
 
+    Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_PressurelessHealth);
+        context = this;
         // NotificationGenerator notificationGenerator = new NotificationGenerator(notificationManager);
         // notificationGenerator.scheduleNotification((AlarmManager) getSystemService(Context.ALARM_SERVICE), this);
         // notificationGenerator.sendNotification(this.getApplicationContext(), "Test", "Prueba");
@@ -77,9 +101,64 @@ public class MainActivityView extends AppCompatActivity {
         if (sharedPreferences.getBoolean("syncGoogleFit", false)) {
             setGoogleFitApi(new GoogleFitApi(this));
         }
+
+        checkLatestMeasurement();
         // googleFitApi = new GoogleFitApi(this);
 
         reloadFragment();
+
+    }
+
+    public void checkLatestMeasurement(){
+        MeasurementService userService = ApiClient.createService(this, MeasurementService.class,1);
+
+        Call<Measurement> call = userService.getLatest();
+
+        call.enqueue(new Callback<Measurement>() {
+            @Override
+            public void onResponse(Call<Measurement> call, Response<Measurement> response) {
+
+                if (response.code() == 200 && response.body()!=null){
+                    Measurement measurement = response.body();
+
+                    // Obtener la fecha y hora actual en formato ZonedDateTime
+                    ZonedDateTime now = ZonedDateTime.now();
+
+                    // Supongamos que tienes la "medition_date" almacenada en otro ZonedDateTime llamado meditionDate
+                    //ZonedDateTime meditionDate = ZonedDateTime.parse(measurement.getMeasurementDate()); // Ejemplo
+
+                    ZonedDateTime meditionDate = ChangeDate.change(measurement.getMeasurementDate());
+
+                    // Calcular la diferencia entre las dos fechas en horas
+                    Duration duration = Duration.between(meditionDate, now);
+                    long hoursDifference = duration.toHours();
+
+                    // Comprobar si la diferencia es igual o mayor a 12 horas
+                    if (hoursDifference >= 12) {
+                        CustomDialog dialog = new CustomDialog();
+                        dialog.create(context, "Recordatorio",
+                                "Se ha detectado que la última medida registrada fue hace mas de 12 horas." +
+                                        "<br>Recuerda que para realizar un seguimiento adecuado es recomendable realizar dos mediciones al día.");
+
+                        Log.d("ERROR HORA","La medición se realizó hace 12 horas o más.");
+                    } else {
+                        Log.d("ERROR HORA","La medición se realizó hace MENOS 12 horas.");
+                    }
+
+
+
+                }
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<Measurement> call, Throwable t) {
+                //Toast.makeText(getContext(), "ERROR"+t.toString(), Toast.LENGTH_LONG).show();
+                Log.d("a",t.getMessage());
+            }
+        });
 
     }
 

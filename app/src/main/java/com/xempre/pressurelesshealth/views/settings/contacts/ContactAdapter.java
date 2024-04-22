@@ -32,9 +32,11 @@ import com.xempre.pressurelesshealth.interfaces.ContactService;
 import com.xempre.pressurelesshealth.interfaces.MedicationService;
 import com.xempre.pressurelesshealth.models.Contact;
 import com.xempre.pressurelesshealth.models.Medication;
+import com.xempre.pressurelesshealth.models.MedicationFrequency;
 import com.xempre.pressurelesshealth.utils.Constants;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
 import com.xempre.pressurelesshealth.views.medication.MedicationView;
+import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 
 import java.util.List;
 
@@ -87,6 +89,58 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactA
             }
         });
 
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("¿Está seguro de eliminar?")
+                        .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Ejecutar la función de eliminación aquí
+                                deleteContact(contact);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Cancelar la eliminación
+                                dialog.dismiss();
+                            }
+                        });
+                // Crear y mostrar el diálogo
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+    }
+
+    public void deleteContact(Contact contact){
+
+        ContactService contactService = ApiClient.createService(context, ContactService.class,1);
+
+        Contact temp = new Contact();
+        temp.setDeleted(true);
+
+        Call<Contact> call = contactService.deleteContact(contact.getId(), temp);
+        Log.d("ERROR", String.valueOf(temp.getDeleted()));
+        call.enqueue(new Callback<Contact>() {
+            @Override
+            public void onResponse(Call<Contact> call, Response<Contact> response) {
+                if(response.isSuccessful()) {
+                    Toast.makeText(context, "Se eliminó el contacto.", Toast.LENGTH_SHORT).show();
+                    ChangeFragment.change(context, R.id.frame_layout, new ContactList());
+                } else {
+                    Toast.makeText(context, "Error al intentar eliminar la frecuencia.", Toast.LENGTH_SHORT).show();
+                    Log.d("ERROR", response.message());
+                    Log.d("ERROR", String.valueOf(response.body()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Contact> call, Throwable t) {
+                Log.d("ERROR", t.getMessage());
+            }
+        });
     }
 
     @Override
@@ -100,11 +154,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactA
         TextView tvPhone;
         FloatingActionButton btnCall;
 
+        FloatingActionButton btnDelete;
+
         public ContactAdapterItemHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvContactName);
             tvPhone = itemView.findViewById(R.id.tvContactNumber);
             btnCall = itemView.findViewById(R.id.btnContactCall);;
+            btnDelete = itemView.findViewById(R.id.btnDeleteContact);
 //            btnMedicationElementMoreDelete = itemView.findViewById(R.id.btnMedicationElementMoreDelete);;
         }
     }

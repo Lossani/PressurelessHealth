@@ -123,7 +123,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
                         fragmentTransaction.replace(R.id.frame_layout, medicationList);
                         fragmentTransaction.commit();
                 } else {
-                    Toast.makeText(context, "Error al obtener eliminar la medicación.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Error al intentar eliminar la medicación.", Toast.LENGTH_SHORT).show();
                     Log.d("ERROR", response.message());
                     Log.d("ERROR", String.valueOf(response.body()));
                 }

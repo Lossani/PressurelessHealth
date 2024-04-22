@@ -10,6 +10,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -19,4 +20,7 @@ public interface ContactService {
 
     @POST("core/contacts/")
     public Call<Contact> save(@Body Contact contact);
+
+    @PATCH("core/contacts/{id}/")
+    public Call<Contact> deleteContact(@Path("id") int id,@Body Contact contact);
 }

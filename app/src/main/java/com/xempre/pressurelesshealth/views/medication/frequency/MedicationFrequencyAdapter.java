@@ -1,17 +1,34 @@
 package com.xempre.pressurelesshealth.views.medication.frequency;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.xempre.pressurelesshealth.R;
+import com.xempre.pressurelesshealth.api.ApiClient;
+import com.xempre.pressurelesshealth.interfaces.MedicationService;
+import com.xempre.pressurelesshealth.models.Medication;
 import com.xempre.pressurelesshealth.models.MedicationFrequency;
+import com.xempre.pressurelesshealth.views.medication.MedicationList;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationFrequencyAdapter.MedicationFrequencyItemHolder> {
 
@@ -36,6 +53,61 @@ public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationF
         holder.tvHour.setText(medicationFrequency.getHour());
         holder.tvDose.setText(medicationFrequency.getDose());
         holder.tvDay.setText(numberToDay(medicationFrequency.getWeekday()));
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("¿Está seguro de eliminar?")
+                        .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Ejecutar la función de eliminación aquí
+                                deleteFrequency(medicationFrequency);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Cancelar la eliminación
+                                dialog.dismiss();
+                            }
+                        });
+                // Crear y mostrar el diálogo
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
+
+    public void deleteFrequency(MedicationFrequency frequency){
+
+        MedicationService medicationService = ApiClient.createService(context, MedicationService.class,1);
+
+        MedicationFrequency temp = new MedicationFrequency();
+        temp.setDeleted(true);
+
+        Call<MedicationFrequency> call = medicationService.deleteMedicationFrequency(frequency.getId(), temp);
+        Log.d("ERROR", String.valueOf(temp.getDeleted()));
+        call.enqueue(new Callback<MedicationFrequency>() {
+            @Override
+            public void onResponse(Call<MedicationFrequency> call, Response<MedicationFrequency> response) {
+                if(response.isSuccessful()) {
+                    Toast.makeText(context, "Se eliminó la frecuencia.", Toast.LENGTH_SHORT).show();
+                    FragmentManager fragmentManager = ((FragmentActivity)context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    Fragment medicationList = new MedicationList();
+                    fragmentTransaction.replace(R.id.frame_layout, medicationList);
+                    fragmentTransaction.commit();
+                } else {
+                    Toast.makeText(context, "Error al intentar eliminar la frecuencia.", Toast.LENGTH_SHORT).show();
+                    Log.d("ERROR", response.message());
+                    Log.d("ERROR", String.valueOf(response.body()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MedicationFrequency> call, Throwable t) {
+                Log.d("ERROR", t.getMessage());
+            }
+        });
     }
 
     public static String numberToDay(int dayNumber) {
@@ -82,11 +154,14 @@ public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationF
         TextView tvHour;
 
         TextView tvDose;
+
+        FloatingActionButton btnDelete;
         public MedicationFrequencyItemHolder(View itemView) {
             super(itemView);
             tvDay = itemView.findViewById(R.id.tvMedicationDay);
             tvDose = itemView.findViewById(R.id.tvMedicationDose);
             tvHour = itemView.findViewById(R.id.tvMedicationHour);
+            btnDelete = itemView.findViewById(R.id.btnDeleteFrequency);
 //            frameLayout = itemView.findViewById(R.id.flMedication);
 //            tvPosition = itemView.findViewById(R.id.tvLeadeboardTop);
         }
