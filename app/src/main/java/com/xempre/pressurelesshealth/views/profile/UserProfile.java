@@ -204,7 +204,13 @@ public class UserProfile extends Fragment {
                 public void onResponse(Call<User> call, Response<User> response) {
                     user = response.body();
                     Log.d("a",response.toString());
-                    getBitmapFromURL(user.getAvatarURL());
+                    if(user.getAvatarURL()!=null) {
+                        Log.d("IMAGEN", user.getAvatarURL());
+                        getBitmapFromURL(user.getAvatarURL());
+                    }
+                    else {
+                        imageView.setImageResource(R.drawable.baseline_person_24);
+                    }
                     binding.textView5.setText("Bienvenido " + user.getFirstName()+" " + user.getLastName());
                     binding.tvUserPoints.setText(user.getPoints().toString());
 
