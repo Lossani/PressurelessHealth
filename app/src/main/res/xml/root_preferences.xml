@@ -11,7 +11,7 @@
             android:key="button_preference_contacts"
             android:title="Ver contactos" />
     </PreferenceCategory>
-    <PreferenceCategory app:title="Cuenta">
+    <PreferenceCategory app:title="Cuenta" app:key="ACCOUNT">
         <SwitchPreferenceCompat
             app:key="NOTIFICATION_PERMISSION"
             app:title="Habilitar notificaciones" />

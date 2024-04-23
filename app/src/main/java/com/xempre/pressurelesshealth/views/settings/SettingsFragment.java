@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
@@ -92,8 +93,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         if (switchAlarmsEnabled != null) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-                PreferenceScreen screen = getPreferenceScreen();
-                screen.removePreference(switchAlarmsEnabled);
+                PreferenceCategory accountCategory = (PreferenceCategory) findPreference("ACCOUNT");
+                if (accountCategory != null) {
+                    accountCategory.removePreference(switchAlarmsEnabled);
+                }
             }
             switchAlarmsEnabled.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
