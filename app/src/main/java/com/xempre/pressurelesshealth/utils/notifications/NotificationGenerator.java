@@ -23,9 +23,11 @@ import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import com.xempre.pressurelesshealth.R;
+import com.xempre.pressurelesshealth.models.IntentExtra;
 import com.xempre.pressurelesshealth.utils.Constants;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class NotificationGenerator {
     private static final String CHANNEL_ID = "777";
@@ -89,24 +91,39 @@ public class NotificationGenerator {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        notificationManagerCompat.notify(777, builder.build());
+        notificationManagerCompat.notify(Integer.parseInt(CHANNEL_ID), builder.build());
     }
 
-    public void scheduleNotification(AlarmManager alarmManager, Activity activity, Calendar calendar, int identifier) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+    public void scheduleNotification(Context context, Calendar scheduledTime, int identifier, String title, String content, IntentExtra[] extras) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        if (sharedPreferences.getBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, false) && ActivityCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(activity, AlarmReceiver.class);
-            pendingIntent = PendingIntent.getBroadcast(activity, identifier, intent, PendingIntent.FLAG_MUTABLE);
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+        if (sharedPreferences.getBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, false) && ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(context, AlarmReceiver.class);
+            intent.putExtra("title", title);
+            intent.putExtra("content", content);
+
+            for (IntentExtra item : extras) {
+                item.setExtraToIntent(intent);
+            }
+
+            pendingIntent = PendingIntent.getBroadcast(context, identifier, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (alarmManager.canScheduleExactAlarms()) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledTime.getTimeInMillis(), pendingIntent);
+                } else {
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, scheduledTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
+                }
+            }
+
         } else {
-            Toast.makeText(activity, "No ha otorgado permisos para notificaciones.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "No ha otorgado permisos para notificaciones.", Toast.LENGTH_LONG).show();
         }
     }
 
     public void disableNotification(AlarmManager alarmManager, Activity activity, int identifier) {
         Intent intent = new Intent(activity, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(activity, identifier, intent, PendingIntent.FLAG_MUTABLE);
+        pendingIntent = PendingIntent.getBroadcast(activity, identifier, intent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
         alarmManager.cancel(pendingIntent);
     }
 

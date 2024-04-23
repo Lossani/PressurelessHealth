@@ -18,8 +18,11 @@ public class MedicationFrequency {
 
     @JsonProperty("reminder_notification_enabled")
     boolean reminderNotificationEnabled;
-    @JsonProperty("medication")
+    @JsonProperty("medication_id")
     Integer medicationId;
+
+    @JsonProperty("medication")
+    Medication medication;
 
     @JsonProperty("reminder")
     Reminder reminder;
@@ -56,6 +59,8 @@ public class MedicationFrequency {
 
     public Reminder getReminder() { return reminder; }
 
+    public Medication getMedication() { return medication; }
+
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
@@ -83,4 +88,6 @@ public class MedicationFrequency {
     public void setReminderNotificationEnabled(boolean enabled) { this.reminderNotificationEnabled = enabled; }
 
     public void setReminder(Reminder reminder) { this.reminder = reminder; }
+
+    public void setMedication(Medication medication) { this.medication = medication; }
 }

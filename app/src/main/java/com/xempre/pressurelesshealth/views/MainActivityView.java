@@ -44,6 +44,7 @@ import com.xempre.pressurelesshealth.databinding.ActivityMainBinding;
 import com.xempre.pressurelesshealth.databinding.ActivityMainViewBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.interfaces.UserService;
+import com.xempre.pressurelesshealth.models.IntentExtra;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.models.Medication;
 import com.xempre.pressurelesshealth.models.User;
@@ -59,6 +60,7 @@ import com.xempre.pressurelesshealth.views.shared.CustomDialog;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -89,12 +91,20 @@ public class MainActivityView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_PressurelessHealth);
         context = this;
-        // NotificationGenerator notificationGenerator = new NotificationGenerator(notificationManager);
-        // notificationGenerator.scheduleNotification((AlarmManager) getSystemService(Context.ALARM_SERVICE), this);
+
+        Calendar test = Calendar.getInstance();
+        test.add(Calendar.SECOND, 30);
+
         // notificationGenerator.sendNotification(this.getApplicationContext(), "Test", "Prueba");
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         notificationManager = getSystemService(NotificationManager.class);
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", 777), new IntentExtra("scheduledTime", test.getTimeInMillis())};
+
+        NotificationGenerator notificationGenerator = new NotificationGenerator(notificationManager);
+        notificationGenerator.scheduleNotification(this, test, 777, "Hora de su medicación", "Enalapril un pastillon", extras);
+
 
         checkNotificationPermissions();
 

@@ -22,6 +22,7 @@ import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.interfaces.ChallengeService;
 import com.xempre.pressurelesshealth.interfaces.MedicationService;
 import com.xempre.pressurelesshealth.interfaces.UserService;
+import com.xempre.pressurelesshealth.models.IntentExtra;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.models.MedicationFrequency;
 import com.xempre.pressurelesshealth.models.Reminder;
@@ -153,12 +154,29 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                 Calendar calendar = Calendar.getInstance();
                                 String[] time = reminder.getMedicationFrequency().getHour().split(":");
 
-                                calendar.set(Calendar.DAY_OF_WEEK, reminder.getMedicationFrequency().getWeekday() + 1);
+                                Integer day = reminder.getMedicationFrequency().getWeekday();
+                                // Calendar Sunday es 1, el API trabaja con lunes = 1 hasta domingo = 7
+                                if (day < 7)
+                                    day += 1;
+                                else
+                                    day = 1;
+
+                                calendar.set(Calendar.DAY_OF_WEEK, day);
                                 calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
                                 calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
                                 calendar.set(Calendar.SECOND, 0);
                                 calendar.set(Calendar.MILLISECOND, 0);
-                                notificationGenerator.scheduleNotification(mainActivity.alarmManager, mainActivity, calendar, reminder.getId());
+
+                                Calendar now = Calendar.getInstance();
+
+                                if (now.compareTo(calendar) > 0)
+                                    calendar.add(Calendar.DAY_OF_YEAR, 7);
+
+
+                                IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", reminder.getId()), new IntentExtra("scheduledTime", calendar.getTimeInMillis())};
+                                String content = reminder.getMedicationFrequency().getMedication().getName() + " " + reminder.getMedicationFrequency().getDose() + " - " + reminder.getMedicationFrequency().getHour();
+
+                                notificationGenerator.scheduleNotification(mainActivity, calendar, reminder.getId(), "Hora de su medicación", content, extras);
                             } else {
                                 notificationGenerator.disableNotification(mainActivity.alarmManager, mainActivity, reminder.getId());
                             }

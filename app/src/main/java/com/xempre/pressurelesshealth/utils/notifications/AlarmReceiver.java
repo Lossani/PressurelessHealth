@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.xempre.pressurelesshealth.models.IntentExtra;
 import com.xempre.pressurelesshealth.views.MainActivityView;
+
+import java.util.Calendar;
 
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
@@ -15,8 +18,28 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         // Toast.makeText(context, "From alarm receiver", Toast.LENGTH_LONG).show();
 
+        String title = intent.getStringExtra("title");
+        String content = intent.getStringExtra("content");
         NotificationGenerator notificationGenerator = new NotificationGenerator(context.getSystemService(NotificationManager.class));
 
-        notificationGenerator.sendNotificationWithActionIntent(nextActivity, context, "Alarma", "Es hora de su medicación.");
+        try {
+            notificationGenerator.sendNotificationWithActionIntent(nextActivity, context, title, content);
+        } catch (Exception ex) {
+            Toast.makeText(context, "Apulso - Hora de medicación: No se pudo enviar la notificación.", Toast.LENGTH_LONG).show();
+        }
+
+        try {
+            Calendar calendar = Calendar.getInstance();
+            Integer identifier = intent.getIntExtra("identifier", 0);
+            Long currentScheduledTime = intent.getLongExtra("scheduledTime", calendar.getTimeInMillis());
+            Long nextScheduledTime = currentScheduledTime + 604800000;
+            calendar.setTimeInMillis(nextScheduledTime); // Siguiente semana.
+
+            IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", identifier), new IntentExtra("scheduledTime", nextScheduledTime)};
+            notificationGenerator.scheduleNotification(context, calendar, identifier, title, content, extras);
+        } catch (Exception ex) {
+            Toast.makeText(context, "Apulso: No se pudo programar la siguiente alarma.", Toast.LENGTH_LONG).show();
+        }
+
     }
 }

@@ -22,6 +22,7 @@ import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.databinding.MedicationAddBinding;
 import com.xempre.pressurelesshealth.databinding.MedicationFrequencyAddBinding;
 import com.xempre.pressurelesshealth.interfaces.MedicationService;
+import com.xempre.pressurelesshealth.models.IntentExtra;
 import com.xempre.pressurelesshealth.models.Medication;
 import com.xempre.pressurelesshealth.models.MedicationFrequency;
 import com.xempre.pressurelesshealth.utils.notifications.NotificationGenerator;
@@ -137,14 +138,28 @@ public class AddMedicationFrequency extends Fragment {
                             MainActivityView mainActivityView = (MainActivityView) getContext();
                             Calendar calendar = Calendar.getInstance();
 
-                            calendar.set(Calendar.DAY_OF_WEEK, binding.spinnerDias.getSelectedItemPosition() + 2);
+                            Integer day = binding.spinnerDias.getSelectedItemPosition();
+                            // Calendar Sunday es 1, el spinner tiene de lunes = 0 hasta domingo = 7
+                            if (day < 6)
+                                day += 2;
+                            else
+                                day = 1;
+
+                            calendar.set(Calendar.DAY_OF_WEEK, day);
                             calendar.set(Calendar.HOUR_OF_DAY, AddMedicationFrequency.this.hour);
                             calendar.set(Calendar.MINUTE, AddMedicationFrequency.this.minute);
                             calendar.set(Calendar.SECOND, 0);
                             calendar.set(Calendar.MILLISECOND, 0);
 
+                            Calendar now = Calendar.getInstance();
+
+                            if (now.compareTo(calendar) > 0)
+                                calendar.add(Calendar.DAY_OF_YEAR, 7);
+
+                            IntentExtra[] extras = new IntentExtra[] { new IntentExtra("identifier", responseFromAPI.getReminder().getId()), new IntentExtra("scheduledTime", calendar.getTimeInMillis())};
                             NotificationGenerator notificationGenerator = new NotificationGenerator(mainActivityView.notificationManager);
-                            notificationGenerator.scheduleNotification(mainActivityView.alarmManager, mainActivityView, calendar, responseFromAPI.getReminder().getId());
+                            String content = responseFromAPI.getMedication().getName() + " " + responseFromAPI.getDose() + " - " + responseFromAPI.getHour();
+                            notificationGenerator.scheduleNotification(mainActivityView, calendar, responseFromAPI.getReminder().getId(), "Hora de su medicación", content, extras);
                         }
 
                         Toast.makeText(getContext(), "Medicamento guardado exitosamente.", Toast.LENGTH_LONG).show();
