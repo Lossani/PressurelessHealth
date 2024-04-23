@@ -101,10 +101,10 @@ public class MainActivityView extends AppCompatActivity {
         notificationManager = getSystemService(NotificationManager.class);
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", 777), new IntentExtra("scheduledTime", test.getTimeInMillis())};
+        // IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", 777), new IntentExtra("scheduledTime", test.getTimeInMillis())};
 
-        NotificationGenerator notificationGenerator = new NotificationGenerator(notificationManager);
-        notificationGenerator.scheduleNotification(this, test, 777, "Hora de su medicación", "Enalapril un pastillon", extras);
+        // NotificationGenerator notificationGenerator = new NotificationGenerator(notificationManager);
+        // notificationGenerator.scheduleNotification(this, test, 777, "Hora de su medicación", "Enalapril un pastillon", extras);
 
 
         checkNotificationPermissions();
