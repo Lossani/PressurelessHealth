@@ -197,6 +197,17 @@ public class MainActivityView extends AppCompatActivity {
                                 editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, false);
                                 editor.apply();
                             }
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                if (!alarmManager.canScheduleExactAlarms()) {
+                                    Toast.makeText(MainActivityView.this, "Active las notificaciones desde la configuración de la app.", Toast.LENGTH_LONG).show();
+                                    Intent settingsIntent = null;
+                                    settingsIntent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                            .putExtra(Settings.EXTRA_APP_PACKAGE, MainActivityView.this.getPackageName());
+                                    MainActivityView.this.startActivity(settingsIntent);
+                                }
+                            }
+
                             dialog.dismiss();
                         }
                     })
