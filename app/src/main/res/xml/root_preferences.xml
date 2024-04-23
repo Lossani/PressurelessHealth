@@ -14,7 +14,10 @@
     <PreferenceCategory app:title="Cuenta">
         <SwitchPreferenceCompat
             app:key="NOTIFICATION_PERMISSION"
-            app:title="Habilitar notificaciones y recordatorios" />
+            app:title="Habilitar notificaciones" />
+        <SwitchPreferenceCompat
+            app:key="ALARM_PERMISSION"
+            app:title="Habilitar alarmas de medicación" />
         <Preference
             android:key="button_preference_close_session"
             android:title="Cerrar Sesión" />

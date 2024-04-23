@@ -48,6 +48,7 @@ import com.xempre.pressurelesshealth.models.IntentExtra;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.models.Medication;
 import com.xempre.pressurelesshealth.models.User;
+import com.xempre.pressurelesshealth.utils.Utils;
 import com.xempre.pressurelesshealth.utils.notifications.NotificationGenerator;
 import com.xempre.pressurelesshealth.views.add.SelectAddMode;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
@@ -180,14 +181,13 @@ public class MainActivityView extends AppCompatActivity {
             builder.setMessage("Utilizamos las notificaciones para mostrarle alertas y recordatorios, por favor, otórgenos el permiso en el sistema.")
                     .setPositiveButton("Continuar", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            if (Build.VERSION.SDK_INT >= 33) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                 if (ContextCompat.checkSelfPermission(MainActivityView.this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                                     ActivityCompat.requestPermissions(MainActivityView.this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, Constants.NOTIFICATIONS_PERMISSION_REQUEST_CODE);
                                 }
                             } else if (!notificationManager.areNotificationsEnabled()) {
                                 Toast.makeText(MainActivityView.this, "Active las notificaciones desde la configuración de la app.", Toast.LENGTH_LONG).show();
-                                Intent settingsIntent = null;
-                                settingsIntent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                                Intent settingsIntent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
                                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                         .putExtra(Settings.EXTRA_APP_PACKAGE, MainActivityView.this.getPackageName());
                                 MainActivityView.this.startActivity(settingsIntent);
@@ -196,18 +196,19 @@ public class MainActivityView extends AppCompatActivity {
                                 editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, true);
                                 editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, false);
                                 editor.apply();
-                            }
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                if (!alarmManager.canScheduleExactAlarms()) {
-                                    Toast.makeText(MainActivityView.this, "Active las notificaciones desde la configuración de la app.", Toast.LENGTH_LONG).show();
-                                    Intent settingsIntent = null;
-                                    settingsIntent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
-                                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                            .putExtra(Settings.EXTRA_APP_PACKAGE, MainActivityView.this.getPackageName());
-                                    MainActivityView.this.startActivity(settingsIntent);
-                                }
-                            }
 
+                                /*
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                    if (!alarmManager.canScheduleExactAlarms()) {
+                                        Toast.makeText(MainActivityView.this, "Active las notificaciones desde la configuración de la app.", Toast.LENGTH_LONG).show();
+                                        Intent settingsIntent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                .putExtra(Settings.EXTRA_APP_PACKAGE, MainActivityView.this.getPackageName());
+                                        MainActivityView.this.startActivity(settingsIntent);
+                                    }
+                                }
+                                */
+                            }
                             dialog.dismiss();
                         }
                     })
@@ -238,13 +239,21 @@ public class MainActivityView extends AppCompatActivity {
             // Crear y mostrar el diálogo
             AlertDialog dialog = builder.create();
             dialog.show();
-        } else if (notificationManager.areNotificationsEnabled()) {
+        } else if (notificationManager.areNotificationsEnabled() && !sharedPreferences.getBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, false)) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, true);
             editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, false);
             editor.apply();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (!alarmManager.canScheduleExactAlarms() && sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION, false) && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false)) {
+                    Utils.requestAlarmPermission(this);
+                } else if (alarmManager.canScheduleExactAlarms() && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, true)) {
+                    editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION, true);
+                    editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false);
+                    editor.apply();
+                }
+            }
         }
-
     }
     private void reloadFragment(){
         binding = ActivityMainViewBinding.inflate(getLayoutInflater());

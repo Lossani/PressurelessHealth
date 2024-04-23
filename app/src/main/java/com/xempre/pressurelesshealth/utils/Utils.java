@@ -1,15 +1,23 @@
 package com.xempre.pressurelesshealth.utils;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.preference.PreferenceManager;
 
 import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.interfaces.UserService;
 import com.xempre.pressurelesshealth.models.IntentExtra;
 import com.xempre.pressurelesshealth.models.Reminder;
 import com.xempre.pressurelesshealth.utils.notifications.NotificationGenerator;
+import com.xempre.pressurelesshealth.views.MainActivityView;
 
 import java.util.Calendar;
 import java.util.List;
@@ -87,5 +95,37 @@ public final class Utils {
                 if (context != null) Toast.makeText(context, "Error al desactivar las notificaciones.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public static void requestAlarmPermission(Context context) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Permiso para notificaciones");
+            builder.setMessage("Utilizamos el sistema de alarmas y recordatorios para notificarle a la hora exacta de sus medicaciones configuradas, para ello necesitamos que nos otorgue el permiso correspondiente.")
+                    .setPositiveButton("Continuar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent settingsIntent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    .putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
+                            context.startActivity(settingsIntent);
+                            dialog.dismiss();
+                        }
+                    })
+                    .setNegativeButton("Rechazar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION, false);
+                            editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, true);
+                            editor.apply();
+                            dialog.dismiss();
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
     }
 }
