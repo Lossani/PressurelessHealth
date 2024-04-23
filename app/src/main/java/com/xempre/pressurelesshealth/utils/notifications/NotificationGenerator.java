@@ -109,11 +109,13 @@ public class NotificationGenerator {
 
             pendingIntent = PendingIntent.getBroadcast(context, identifier, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (alarmManager.canScheduleExactAlarms()) {
+                if (alarmManager.canScheduleExactAlarms() && sharedPreferences.getBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, false) && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false)) {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledTime.getTimeInMillis(), pendingIntent);
                 } else {
                     alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, scheduledTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
                 }
+            } else {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledTime.getTimeInMillis(), pendingIntent);
             }
 
         } else {
