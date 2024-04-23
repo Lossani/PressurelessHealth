@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.widget.Toast;
 
@@ -72,7 +73,9 @@ public class NotificationGenerator {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.mipmap.ic_logo_foreground)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                        R.mipmap.ic_logo_foreground))
                 .setContentTitle(title)
                 .setContentText(content)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)

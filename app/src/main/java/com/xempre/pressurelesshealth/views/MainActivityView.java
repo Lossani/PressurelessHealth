@@ -94,17 +94,17 @@ public class MainActivityView extends AppCompatActivity {
         context = this;
 
         Calendar test = Calendar.getInstance();
-        test.add(Calendar.SECOND, 30);
+        test.add(Calendar.SECOND, 2);
 
         // notificationGenerator.sendNotification(this.getApplicationContext(), "Test", "Prueba");
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         notificationManager = getSystemService(NotificationManager.class);
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        // IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", 777), new IntentExtra("scheduledTime", test.getTimeInMillis())};
+        IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", 777), new IntentExtra("scheduledTime", test.getTimeInMillis())};
 
-        // NotificationGenerator notificationGenerator = new NotificationGenerator(notificationManager);
-        // notificationGenerator.scheduleNotification(this, test, 777, "Hora de su medicación", "Enalapril un pastillon", extras);
+        NotificationGenerator notificationGenerator = new NotificationGenerator(notificationManager);
+        notificationGenerator.scheduleNotification(this, test, 777, "Hora de su medicación", "Enalapril un pastillon", extras);
 
 
         checkNotificationPermissions();
