@@ -121,9 +121,10 @@ public class NotificationGenerator {
         }
     }
 
-    public void disableNotification(AlarmManager alarmManager, Activity activity, int identifier) {
-        Intent intent = new Intent(activity, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(activity, identifier, intent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
+    public void disableNotification(Context context, int identifier) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(context, identifier, intent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
         alarmManager.cancel(pendingIntent);
     }
 

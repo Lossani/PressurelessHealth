@@ -9,6 +9,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -46,6 +47,7 @@
                     android:host="health.xempre.com" />
             </intent-filter>
 
+
         </activity>
 
         <activity
@@ -55,6 +57,14 @@
 
 
         <receiver android:name="com.xempre.pressurelesshealth.utils.notifications.AlarmReceiver" />
+
+        <receiver android:name="com.xempre.pressurelesshealth.utils.BootReceiver"
+            android:enabled="false"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

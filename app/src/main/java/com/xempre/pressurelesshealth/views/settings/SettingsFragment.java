@@ -27,6 +27,7 @@ import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.models.MedicationFrequency;
 import com.xempre.pressurelesshealth.models.Reminder;
 import com.xempre.pressurelesshealth.utils.Constants;
+import com.xempre.pressurelesshealth.utils.Utils;
 import com.xempre.pressurelesshealth.utils.notifications.NotificationGenerator;
 import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.medication.MedicationView;
@@ -78,7 +79,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         switchNotificationsEnabled.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
-                updateMedicationFrequencyNotifications((boolean) newValue);
+                Utils.updateMedicationFrequencyNotifications(mainActivity, (boolean) newValue);
                 return true;
             }
         });
@@ -131,76 +132,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    public void updateMedicationFrequencyNotifications(boolean activate){
 
-        UserService userService = ApiClient.createService(getContext(), UserService.class,1);
-
-        Call<List<Reminder>> call = userService.getReminders();
-
-        call.enqueue(new Callback<List<Reminder>>() {
-            @Override
-            public void onResponse(Call<List<Reminder>> call, Response<List<Reminder>> response) {
-                try {
-                    List<Reminder> responseFromAPI = response.body();
-
-                    if (response.code() == 200) {
-                        for (Reminder reminder : responseFromAPI) {
-                            if (!reminder.isActive()) {
-                                continue;
-                            }
-
-                            NotificationGenerator notificationGenerator = new NotificationGenerator(mainActivity.notificationManager);
-                            if (activate) {
-                                Calendar calendar = Calendar.getInstance();
-                                String[] time = reminder.getMedicationFrequency().getHour().split(":");
-
-                                Integer day = reminder.getMedicationFrequency().getWeekday();
-                                // Calendar Sunday es 1, el API trabaja con lunes = 1 hasta domingo = 7
-                                if (day < 7)
-                                    day += 1;
-                                else
-                                    day = 1;
-
-                                calendar.set(Calendar.DAY_OF_WEEK, day);
-                                calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
-                                calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
-                                calendar.set(Calendar.SECOND, 0);
-                                calendar.set(Calendar.MILLISECOND, 0);
-
-                                Calendar now = Calendar.getInstance();
-
-                                if (now.compareTo(calendar) > 0)
-                                    calendar.add(Calendar.DAY_OF_YEAR, 7);
-
-
-                                IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", reminder.getId()), new IntentExtra("scheduledTime", calendar.getTimeInMillis())};
-                                String content = reminder.getMedicationFrequency().getMedication().getName() + " " + reminder.getMedicationFrequency().getDose() + " - " + reminder.getMedicationFrequency().getHour();
-
-                                notificationGenerator.scheduleNotification(mainActivity, calendar, reminder.getId(), "Hora de su medicación", content, extras);
-                            } else {
-                                notificationGenerator.disableNotification(mainActivity.alarmManager, mainActivity, reminder.getId());
-                            }
-                        }
-
-                        Toast.makeText(getContext(), "Preferencias actualizadas.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Log.d("Message", response.message());
-                    }
-                } catch (Exception ignored){
-                    if (getContext()!=null) Toast.makeText(getContext(), "Error al desactivar las notificaciones.", Toast.LENGTH_SHORT).show();
-                    Log.d("ERROR", ignored.getMessage());
-                    onDestroyView();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Reminder>> call, Throwable t) {
-                Log.d("ERROR", t.getMessage());
-                if (getContext()!=null) Toast.makeText(getContext(), "Error al desactivar las notificaciones.", Toast.LENGTH_SHORT).show();
-                onDestroyView();
-            }
-        });
-    }
 
 
 }
