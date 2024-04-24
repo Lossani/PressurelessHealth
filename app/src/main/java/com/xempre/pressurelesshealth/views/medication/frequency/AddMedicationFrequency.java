@@ -226,10 +226,10 @@ public class AddMedicationFrequency extends Fragment {
         if (now.compareTo(calendar) > 0)
             calendar.add(Calendar.DAY_OF_YEAR, 7);
 
-        IntentExtra[] extras = new IntentExtra[] { new IntentExtra("identifier", responseFromAPI.getReminder().getId()), new IntentExtra("scheduledTime", calendar.getTimeInMillis())};
+        IntentExtra[] extras = new IntentExtra[] { new IntentExtra("identifier", responseFromAPI.getReminder().getId() + "-" + day), new IntentExtra("scheduledTime", calendar.getTimeInMillis())};
         NotificationGenerator notificationGenerator = new NotificationGenerator(mainActivityView.notificationManager);
         String content = responseFromAPI.getMedication().getName() + " " + responseFromAPI.getDose() + " - " + responseFromAPI.getHour();
-        notificationGenerator.scheduleNotification(mainActivityView, calendar, responseFromAPI.getReminder().getId(), "Hora de su medicación", content, extras);
+        notificationGenerator.scheduleNotification(mainActivityView, calendar, responseFromAPI.getReminder().getId() + "-" + day, "Hora de su medicación", content, extras);
 
     }
 
@@ -261,7 +261,7 @@ public class AddMedicationFrequency extends Fragment {
 
                         }
 
-                        Toast.makeText(getContext(), "Medicamento guardado exitosamente.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Medicamento actualizado exitosamente.", Toast.LENGTH_LONG).show();
 
                         Fragment fragment = new MedicationView(medication);
                         ChangeFragment.change(getContext(), R.id.frame_layout, fragment);

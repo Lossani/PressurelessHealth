@@ -106,10 +106,10 @@ public final class Utils {
             calendar.add(Calendar.DAY_OF_YEAR, 7);
 
 
-        IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", reminder.getId()), new IntentExtra("scheduledTime", calendar.getTimeInMillis())};
+        IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", reminder.getId() + "-" + day), new IntentExtra("scheduledTime", calendar.getTimeInMillis())};
         String content = reminder.getMedicationFrequency().getMedication().getName() + " " + reminder.getMedicationFrequency().getDose() + " - " + reminder.getMedicationFrequency().getHour();
 
-        notificationGenerator.scheduleNotification(context, calendar, reminder.getId(), "Hora de su medicación", content, extras);
+        notificationGenerator.scheduleNotification(context, calendar, reminder.getId() + "-" + day, "Hora de su medicación", content, extras);
 
     }
 

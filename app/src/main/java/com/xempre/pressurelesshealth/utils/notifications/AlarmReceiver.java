@@ -30,7 +30,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         try {
             Calendar calendar = Calendar.getInstance();
-            Integer identifier = intent.getIntExtra("identifier", 0);
+            String identifier = intent.getStringExtra("identifier");
             Long currentScheduledTime = intent.getLongExtra("scheduledTime", calendar.getTimeInMillis());
             Long nextScheduledTime = currentScheduledTime + 604800000;
             calendar.setTimeInMillis(nextScheduledTime); // Siguiente semana.

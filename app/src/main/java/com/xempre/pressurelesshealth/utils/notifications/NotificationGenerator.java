@@ -97,7 +97,7 @@ public class NotificationGenerator {
         notificationManagerCompat.notify(Integer.parseInt(CHANNEL_ID), builder.build());
     }
 
-    public void scheduleNotification(Context context, Calendar scheduledTime, int identifier, String title, String content, IntentExtra[] extras) {
+    public void scheduleNotification(Context context, Calendar scheduledTime, String identifier, String title, String content, IntentExtra[] extras) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
@@ -110,7 +110,9 @@ public class NotificationGenerator {
                 item.setExtraToIntent(intent);
             }
 
-            pendingIntent = PendingIntent.getBroadcast(context, identifier, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            int requestCode = identifier.hashCode();
+
+            pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (alarmManager.canScheduleExactAlarms() && sharedPreferences.getBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, false) && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false)) {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledTime.getTimeInMillis(), pendingIntent);
