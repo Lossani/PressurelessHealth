@@ -3,6 +3,7 @@ package com.xempre.pressurelesshealth.views.profile;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -204,12 +205,13 @@ public class UserProfile extends Fragment {
                 public void onResponse(Call<User> call, Response<User> response) {
                     user = response.body();
                     Log.d("a",response.toString());
-                    if(user.getAvatarURL()!=null) {
-                        Log.d("IMAGEN", user.getAvatarURL());
+                    if(!user.getAvatarURL().equals("")) {
+                        Log.d("IMAGEN1", user.getAvatarURL());
                         getBitmapFromURL(user.getAvatarURL());
                     }
                     else {
-                        imageView.setImageResource(R.drawable.baseline_person_24);
+                        Log.d("IMAGEN", "SEGUNDA IMAGEN");
+                        imageView.setImageResource(R.drawable.user);
                     }
                     binding.textView5.setText("Bienvenido " + user.getFirstName()+" " + user.getLastName());
                     binding.tvUserPoints.setText(user.getPoints().toString());

@@ -132,29 +132,33 @@ public class MainActivityView extends AppCompatActivity {
                 if (response.code() == 200 && response.body()!=null){
                     Measurement measurement = response.body();
 
-                    // Obtener la fecha y hora actual en formato ZonedDateTime
-                    ZonedDateTime now = ZonedDateTime.now();
+                    if(measurement.getMeasurementDate()!=null){
+                        // Obtener la fecha y hora actual en formato ZonedDateTime
+                        ZonedDateTime now = ZonedDateTime.now();
 
-                    // Supongamos que tienes la "medition_date" almacenada en otro ZonedDateTime llamado meditionDate
-                    //ZonedDateTime meditionDate = ZonedDateTime.parse(measurement.getMeasurementDate()); // Ejemplo
+                        // Supongamos que tienes la "medition_date" almacenada en otro ZonedDateTime llamado meditionDate
+                        //ZonedDateTime meditionDate = ZonedDateTime.parse(measurement.getMeasurementDate()); // Ejemplo
 
-                    ZonedDateTime meditionDate = ChangeDate.change(measurement.getMeasurementDate());
+                        ZonedDateTime meditionDate = ChangeDate.change(measurement.getMeasurementDate());
 
-                    // Calcular la diferencia entre las dos fechas en horas
-                    Duration duration = Duration.between(meditionDate, now);
-                    long hoursDifference = duration.toHours();
+                        // Calcular la diferencia entre las dos fechas en horas
+                        Duration duration = Duration.between(meditionDate, now);
+                        long hoursDifference = duration.toHours();
 
-                    // Comprobar si la diferencia es igual o mayor a 12 horas
-                    if (hoursDifference >= 12) {
-                        CustomDialog dialog = new CustomDialog();
-                        dialog.create(context, "Recordatorio",
-                                "Se ha detectado que la última medida registrada fue hace mas de 12 horas." +
-                                        "<br>Recuerda que para realizar un seguimiento adecuado es recomendable realizar dos mediciones al día.");
+                        // Comprobar si la diferencia es igual o mayor a 12 horas
+                        if (hoursDifference >= 12) {
+                            CustomDialog dialog = new CustomDialog();
+                            dialog.create(context, "Recordatorio",
+                                    "Se ha detectado que la última medida registrada fue hace mas de 12 horas." +
+                                            "<br>Recuerda que para realizar un seguimiento adecuado es recomendable realizar dos mediciones al día.");
 
-                        Log.d("ERROR HORA","La medición se realizó hace 12 horas o más.");
-                    } else {
-                        Log.d("ERROR HORA","La medición se realizó hace MENOS 12 horas.");
+                            Log.d("ERROR HORA","La medición se realizó hace 12 horas o más.");
+                        } else {
+                            Log.d("ERROR HORA","La medición se realizó hace MENOS 12 horas.");
+                        }
                     }
+
+
 
 
 
