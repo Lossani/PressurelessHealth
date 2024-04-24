@@ -251,7 +251,7 @@ public class MainActivityView extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (!alarmManager.canScheduleExactAlarms() && sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION, false) && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false)) {
                     Utils.requestAlarmPermission(this);
-                } else if (alarmManager.canScheduleExactAlarms() && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, true)) {
+                } else if (alarmManager.canScheduleExactAlarms() && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false)) {
                     editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION, true);
                     editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false);
                     editor.apply();
