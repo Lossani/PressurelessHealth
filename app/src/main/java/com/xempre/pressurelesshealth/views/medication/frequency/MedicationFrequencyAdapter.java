@@ -3,6 +3,8 @@ package com.xempre.pressurelesshealth.views.medication.frequency;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.api.ApiClient;
@@ -52,7 +55,15 @@ public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationF
         MedicationFrequency medicationFrequency = leaderboardItemList.get(position);
         holder.tvHour.setText(medicationFrequency.getHour());
         holder.tvDose.setText(medicationFrequency.getDose());
-        holder.tvDay.setText(numberToDay(medicationFrequency.getWeekday()));
+        if (medicationFrequency.getMonday()) holder.chipLu.setChipBackgroundColorResource(R.color.selected_day);
+        if (medicationFrequency.getTuesday()) holder.chipMa.setChipBackgroundColorResource(R.color.selected_day);
+        if (medicationFrequency.getWednesday()) holder.chipMi.setChipBackgroundColorResource(R.color.selected_day);
+        if (medicationFrequency.getThursday()) holder.chipJu.setChipBackgroundColorResource(R.color.selected_day);
+        if (medicationFrequency.getFriday()) holder.chipVi.setChipBackgroundColorResource(R.color.selected_day);
+        if (medicationFrequency.getSaturday()) holder.chipSa.setChipBackgroundColorResource(R.color.selected_day);
+        if (medicationFrequency.getSunday()) holder.chipDo.setChipBackgroundColorResource(R.color.selected_day);
+
+//        holder.tvDay.setText(numberToDay(medicationFrequency.getWeekday()));
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,13 +166,29 @@ public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationF
 
         TextView tvDose;
 
+        Chip chipLu;
+        Chip chipMa;
+        Chip chipMi;
+        Chip chipJu;
+        Chip chipVi;
+        Chip chipSa;
+        Chip chipDo;
+
         FloatingActionButton btnDelete;
         public MedicationFrequencyItemHolder(View itemView) {
             super(itemView);
-            tvDay = itemView.findViewById(R.id.tvMedicationDay);
+//            tvDay = itemView.findViewById(R.id.tvMedicationDay);
             tvDose = itemView.findViewById(R.id.tvMedicationDose);
             tvHour = itemView.findViewById(R.id.tvMedicationHour);
+            chipLu = itemView.findViewById(R.id.chipLu);
+            chipMa = itemView.findViewById(R.id.chipMa);
+            chipMi = itemView.findViewById(R.id.chipMi);
+            chipJu = itemView.findViewById(R.id.chipJu);
+            chipVi = itemView.findViewById(R.id.chipVi);
+            chipSa = itemView.findViewById(R.id.chipSa);
+            chipDo = itemView.findViewById(R.id.chipDo);
             btnDelete = itemView.findViewById(R.id.btnDeleteFrequency);
+
 //            frameLayout = itemView.findViewById(R.id.flMedication);
 //            tvPosition = itemView.findViewById(R.id.tvLeadeboardTop);
         }

@@ -11,5 +11,6 @@
     <color name="Hip2">#FE552D</color>
     <color name="Crisis">#FF2B3A</color>
     <color name="mi_color_de_texto_oscuro">#FFFFFF</color>
+    <color name="selected_day">#FFC107</color>
 
 </resources>

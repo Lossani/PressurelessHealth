@@ -9,12 +9,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class MedicationFrequency {
     Integer id;
 
-    Integer weekday;
+//    Integer weekday;
 
     String hour;
 
     String dose;
     boolean deleted;
+
+    boolean monday;
+    boolean tuesday;
+    boolean wednesday;
+    boolean thursday;
+    boolean friday;
+    boolean saturday;
+    boolean sunday;
 
     @JsonProperty("reminder_notification_enabled")
     boolean reminderNotificationEnabled;
@@ -28,7 +36,62 @@ public class MedicationFrequency {
     Reminder reminder;
 
     public MedicationFrequency(){
+    }
 
+    public boolean getMonday() {
+        return monday;
+    }
+
+    public boolean getTuesday() {
+        return tuesday;
+    }
+
+    public boolean getWednesday() {
+        return wednesday;
+    }
+
+    public boolean getThursday() {
+        return thursday;
+    }
+
+    public boolean getFriday() {
+        return friday;
+    }
+
+    public boolean getSaturday() {
+        return saturday;
+    }
+
+    public boolean getSunday() {
+        return sunday;
+    }
+
+    public void setFriday(boolean friday) {
+        this.friday = friday;
+    }
+
+    public void setMonday(boolean monday) {
+        this.monday = monday;
+    }
+
+    public void setSaturday(boolean saturday) {
+        this.saturday = saturday;
+    }
+
+    public void setSunday(boolean sunday) {
+        this.sunday = sunday;
+    }
+
+    public void setThursday(boolean thursday) {
+        this.thursday = thursday;
+    }
+
+    public void setTuesday(boolean tuesday) {
+        this.tuesday = tuesday;
+    }
+
+    public void setWednesday(boolean wednesday) {
+        this.wednesday = wednesday;
     }
 
     public Integer getId() {
@@ -43,9 +106,10 @@ public class MedicationFrequency {
         return medicationId;
     }
 
-    public Integer getWeekday() {
-        return weekday;
-    }
+//    public Integer getWeekday() {
+//
+//        return weekday;
+//    }
 
     public String getDose() {
         return dose;
@@ -81,13 +145,17 @@ public class MedicationFrequency {
         this.hour = hour;
     }
 
-    public void setWeekday(Integer weekday) {
-        this.weekday = weekday;
-    }
+//    public void setWeekday(Integer weekday) {
+//        this.weekday = weekday;
+//    }
 
     public void setReminderNotificationEnabled(boolean enabled) { this.reminderNotificationEnabled = enabled; }
 
     public void setReminder(Reminder reminder) { this.reminder = reminder; }
 
     public void setMedication(Medication medication) { this.medication = medication; }
+
+    public boolean[] getDaysArray(){
+        return new boolean[]{getSunday(), getTuesday(), getWednesday(), getThursday(), getFriday(), getSaturday(), getSunday()};
+    }
 }

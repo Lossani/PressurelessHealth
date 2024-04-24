@@ -15,9 +15,11 @@ import androidx.preference.PreferenceManager;
 import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.interfaces.UserService;
 import com.xempre.pressurelesshealth.models.IntentExtra;
+import com.xempre.pressurelesshealth.models.MedicationFrequency;
 import com.xempre.pressurelesshealth.models.Reminder;
 import com.xempre.pressurelesshealth.utils.notifications.NotificationGenerator;
 import com.xempre.pressurelesshealth.views.MainActivityView;
+import com.xempre.pressurelesshealth.views.medication.frequency.AddMedicationFrequency;
 
 import java.util.Calendar;
 import java.util.List;
@@ -48,32 +50,17 @@ public final class Utils {
 
                             NotificationGenerator notificationGenerator = new NotificationGenerator(context.getSystemService(NotificationManager.class));
                             if (activate) {
-                                Calendar calendar = Calendar.getInstance();
-                                String[] time = reminder.getMedicationFrequency().getHour().split(":");
 
-                                Integer day = reminder.getMedicationFrequency().getWeekday();
+
+                                boolean[] checkedItems = reminder.getMedicationFrequency().getDaysArray();
+
+                                for (int i = 0; i < checkedItems.length; i++){
+                                    if (checkedItems[i]) generateAlert(i, reminder, notificationGenerator, context);
+                                }
+                                // Integer day = reminder.getMedicationFrequency().getWeekday();
                                 // Calendar Sunday es 1, el API trabaja con lunes = 1 hasta domingo = 7
-                                if (day < 7)
-                                    day += 1;
-                                else
-                                    day = 1;
-
-                                calendar.set(Calendar.DAY_OF_WEEK, day);
-                                calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
-                                calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
-                                calendar.set(Calendar.SECOND, 0);
-                                calendar.set(Calendar.MILLISECOND, 0);
-
-                                Calendar now = Calendar.getInstance();
-
-                                if (now.compareTo(calendar) > 0)
-                                    calendar.add(Calendar.DAY_OF_YEAR, 7);
 
 
-                                IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", reminder.getId()), new IntentExtra("scheduledTime", calendar.getTimeInMillis())};
-                                String content = reminder.getMedicationFrequency().getMedication().getName() + " " + reminder.getMedicationFrequency().getDose() + " - " + reminder.getMedicationFrequency().getHour();
-
-                                notificationGenerator.scheduleNotification(context, calendar, reminder.getId(), "Hora de su medicación", content, extras);
                             } else {
                                 notificationGenerator.disableNotification(context, reminder.getId());
                             }
@@ -95,6 +82,35 @@ public final class Utils {
                 if (context != null) Toast.makeText(context, "Error al desactivar las notificaciones.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public static void generateAlert(Integer day, Reminder reminder, NotificationGenerator notificationGenerator, Context context){
+        Calendar calendar = Calendar.getInstance();
+        String[] time = reminder.getMedicationFrequency().getHour().split(":");
+
+
+        if (day < 7)
+            day += 1;
+        else
+            day = 1;
+
+        calendar.set(Calendar.DAY_OF_WEEK, day);
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        Calendar now = Calendar.getInstance();
+
+        if (now.compareTo(calendar) > 0)
+            calendar.add(Calendar.DAY_OF_YEAR, 7);
+
+
+        IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", reminder.getId()), new IntentExtra("scheduledTime", calendar.getTimeInMillis())};
+        String content = reminder.getMedicationFrequency().getMedication().getName() + " " + reminder.getMedicationFrequency().getDose() + " - " + reminder.getMedicationFrequency().getHour();
+
+        notificationGenerator.scheduleNotification(context, calendar, reminder.getId(), "Hora de su medicación", content, extras);
+
     }
 
     public static void requestAlarmPermission(Context context) {
