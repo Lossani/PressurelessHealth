@@ -52,7 +52,9 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         else holder.tvName.setText(leaderboardItem.getFirstName()+" "+leaderboardItem.getLastName());
         holder.tvPosition.setText((position+1)+"");
         holder.tvPoints.setText(leaderboardItem.getPoints().toString());
-        GetImageByUrl.getBitmapFromURL(holder, leaderboardItem.getAvatarURL(), handler, holder.imageView);
+        if(!leaderboardItem.getAvatarURL().equals(""))
+            GetImageByUrl.getBitmapFromURL(holder, leaderboardItem.getAvatarURL(), handler, holder.imageView);
+        else holder.imageView.setImageResource(R.drawable.user);
     }
 
     @Override
