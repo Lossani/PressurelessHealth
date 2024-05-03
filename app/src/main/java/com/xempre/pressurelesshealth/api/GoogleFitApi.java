@@ -113,6 +113,10 @@ public class GoogleFitApi {
     public void readBloodPressureMeasurement(Activity activity, GoogleFitCallback callback, ZonedDateTime startTime, ZonedDateTime endTime) {
         Map<String, Number> results = new HashMap<String, Number>();
 
+        if (googleAccount == null) {
+            Toast.makeText(activity, "No se ha podido conectar a su cuenta de Google.", Toast.LENGTH_LONG).show();
+        }
+
         Fitness.getHistoryClient(activity, googleAccount)
             .readData(createReadRequest(startTime, endTime)).addOnSuccessListener(
                 new OnSuccessListener<DataReadResponse>() {

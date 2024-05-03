@@ -14,11 +14,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "663960676018-nm1tu36li1ar6gkrjjo6tuufti6t8fu4.apps.googleusercontent.com",
+          "client_id": "663960676018-2hl95o4rcv3ac86spgsogsqp3c6c60r9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.xempre.pressurelesshealth",
-            "certificate_hash": "5d7450cc7fdcf90ff5c9a0645cdddfe9f652e3cf"
+            "certificate_hash": "312d427473c323c6296f3866d739a25d9eec6e2e"
+          }
+        },
+        {
+          "client_id": "663960676018-fmpiii30999le3b9aqhcfhksptfm1d7u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xempre.pressurelesshealth",
+            "certificate_hash": "9c1d94fa8d6283c2435c13242e338d36ed6ad31e"
           }
         },
         {
