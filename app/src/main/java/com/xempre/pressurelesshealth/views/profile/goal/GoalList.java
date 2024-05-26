@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.databinding.GoalListBinding;
 import com.xempre.pressurelesshealth.interfaces.GoalService;
 import com.xempre.pressurelesshealth.models.Goal;
+import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.views.shared.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,7 @@ public class GoalList extends Fragment {
     private RecyclerView recyclerView;
     private GoalAdapter goalAdapter;
     private List<Goal> goalList = new ArrayList<Goal>();
+    private List<Goal> goalListFilter = new ArrayList<Goal>();
 
     @Override
     public View onCreateView(
@@ -43,8 +47,17 @@ public class GoalList extends Fragment {
 
         binding = GoalListBinding.inflate(inflater, container, false);
 
+        binding.checkBox.setVisibility(View.VISIBLE);
+        binding.checkBox.setText("Ver solo Mis Logros");
+        binding.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filterList(isChecked);
+            }
+        });
+
         recyclerView = binding.reciclerviewProfile;
-        goalAdapter = new GoalAdapter(getContext(), goalList);
+        goalAdapter = new GoalAdapter(getContext(), goalListFilter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(goalAdapter);
 
@@ -76,6 +89,20 @@ public class GoalList extends Fragment {
 
     }
 
+    public void filterList(boolean onlyReached){
+        List<Goal> goalListTemp = new ArrayList<>();
+        for (Goal goal : goalList) {
+            if (goal.getReached()) {
+                goalListTemp.add(goal);
+            }
+        }
+        if (onlyReached){ goalAdapter.updateList(goalListTemp);
+            this.goalListFilter = goalListTemp;}
+        else {goalAdapter.updateList(goalList);
+            this.goalListFilter = goalList;
+        }
+    }
+
     public void callAPI(){
 
             GoalService goalService = ApiClient.createService(getContext(), GoalService.class,1);
@@ -97,6 +124,7 @@ public class GoalList extends Fragment {
                                 Goal temp = new Goal(element);
                                 goalList.add(temp);
                             }
+                            filterList(false);
                             goalAdapter.notifyDataSetChanged();
                         }
 

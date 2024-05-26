@@ -21,6 +21,7 @@ import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.interfaces.GoalService;
 import com.xempre.pressurelesshealth.models.Goal;
 import com.xempre.pressurelesshealth.models.GoalHistory;
+import com.xempre.pressurelesshealth.models.Measurement;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -60,11 +61,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
         holder.textViewName.setText(String.valueOf(goal.getName()));
         holder.textViewReward.setText(String.valueOf(goal.getReward()) + " Puntos");
 //        holder.progressBar.setProgress(10);
-        validateComplete(goal, holder);
+        validateComplete(goal, holder, position);
         getBitmapFromURL(holder, goal.getImage());
     }
 
-    public boolean validateComplete(Goal goal, NombreViewHolder holder){
+    public boolean validateComplete(Goal goal, NombreViewHolder holder, int position){
         final boolean[] validate = {false};
         GoalService goalService = ApiClient.createService(context, GoalService.class,1);
 
@@ -78,7 +79,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
                     assert responseFromAPI != null;
 
                     if (responseFromAPI.isEmpty()) {
-                        if (context!=null) Toast.makeText(context, "No se encontraron registros.", Toast.LENGTH_SHORT).show();
+                        if (context!=null) Toast.makeText(context, "No se encontraron logros.", Toast.LENGTH_SHORT).show();
                     } else {
                         for (GoalHistory element : responseFromAPI) {
                             Log.d("PERRUNO", element.toString());
@@ -86,10 +87,13 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
                             Log.d("PERRUNO", element.getProgress()+"");
                             Log.d("PERRUNO", element.getIsSucceeded()+"");
 
+
                             //REMPLAZAR CON ID DE USUARIO
                             if (Objects.equals(goalHistory.getGoal(), goal.getId())) {
-                                holder.checkBox.setChecked(!Objects.equals(goalHistory.getReachedOn(), ""));
-                                holder.checkBox.setEnabled(!Objects.equals(goalHistory.getReachedOn(), ""));
+                                goal.setReached(!Objects.equals(goalHistory.getReachedOn(), ""));
+                                holder.checkBox.setChecked(goal.getReached());
+                                holder.checkBox.setEnabled(goal.getReached());
+                                listMeasurements.set(position,goal);
                                 holder.date.setVisibility(View.VISIBLE);
                                 holder.date.setText(goalHistory.getReachedOn().substring(0,10));
                             }
@@ -97,7 +101,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
                     }
 
                 } catch (Exception ignored){
-                    if (context!=null) Toast.makeText(context, "Error al obtener la lista1.", Toast.LENGTH_SHORT).show();
+                    if (context!=null) Toast.makeText(context, "Error al obtener la lista de logros.", Toast.LENGTH_SHORT).show();
                     Log.d("ERROR-Response", ignored.getMessage());
                 }
             }
@@ -110,6 +114,12 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
         });
         return validate[0];
     };
+
+    public void updateList(List<Goal> goalList) {
+        listMeasurements.clear();
+        listMeasurements.addAll(goalList);
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {

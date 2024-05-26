@@ -17,6 +17,8 @@ public class Goal {
     Integer reward;
 
     boolean enabled;
+
+    boolean reached;
     Goal(){}
 
     public Goal(Goal goal){
@@ -77,4 +79,11 @@ public class Goal {
         return enabled;
     }
 
+    public void setReached(boolean reached) {
+        this.reached = reached;
+    }
+
+    public boolean getReached() {
+        return reached;
+    }
 }
