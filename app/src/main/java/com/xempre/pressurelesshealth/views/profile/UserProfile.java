@@ -96,7 +96,7 @@ public class UserProfile extends Fragment {
         binding.btnLogros.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragment(goalList);
+                replaceFragment(new GoalList());
                 binding.btnLogros.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
                 binding.btnChallenge.setBackgroundColor(Color.GRAY);
             }
@@ -115,7 +115,7 @@ public class UserProfile extends Fragment {
         binding.btnChallenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragment(challengeList);
+                replaceFragment(new ChallengeList());
                 binding.btnChallenge.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
                 binding.btnLogros.setBackgroundColor(Color.GRAY);
             }
