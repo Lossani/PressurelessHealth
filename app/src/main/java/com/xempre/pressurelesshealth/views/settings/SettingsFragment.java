@@ -85,6 +85,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
                 Utils.updateMedicationFrequencyNotifications(mainActivity, (boolean) newValue);
+                Utils.disableScheduled12HourMeasurementReminder(mainActivity);
                 return true;
             }
         });

@@ -99,7 +99,6 @@ public class NotificationGenerator {
 
     public void scheduleNotification(Context context, Calendar scheduledTime, String identifier, String title, String content, IntentExtra[] extras) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         if (sharedPreferences.getBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, false) && ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent(context, AlarmReceiver.class);
@@ -113,6 +112,8 @@ public class NotificationGenerator {
             int requestCode = identifier.hashCode();
 
             pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (alarmManager.canScheduleExactAlarms() && sharedPreferences.getBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, false) && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false)) {
                     alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, scheduledTime.getTimeInMillis(), pendingIntent);
@@ -128,10 +129,12 @@ public class NotificationGenerator {
         }
     }
 
-    public void disableNotification(Context context, int identifier) {
+    public void disableNotification(Context context, String identifier) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(context, identifier, intent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
+
+        int requestCode = identifier.hashCode();
+        pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
         alarmManager.cancel(pendingIntent);
     }
 

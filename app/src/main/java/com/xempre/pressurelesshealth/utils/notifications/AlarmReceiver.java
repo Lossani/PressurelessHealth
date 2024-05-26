@@ -25,21 +25,23 @@ public class AlarmReceiver extends BroadcastReceiver {
         try {
             notificationGenerator.sendNotificationWithActionIntent(nextActivity, context, title, content);
         } catch (Exception ex) {
-            Toast.makeText(context, "Apulso - Hora de medicación: No se pudo enviar la notificación.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Apulso: " + content + ".", Toast.LENGTH_LONG).show();
         }
 
-        try {
-            Calendar calendar = Calendar.getInstance();
-            String identifier = intent.getStringExtra("identifier");
-            Long currentScheduledTime = intent.getLongExtra("scheduledTime", calendar.getTimeInMillis());
-            Long nextScheduledTime = currentScheduledTime + 604800000;
-            calendar.setTimeInMillis(nextScheduledTime); // Siguiente semana.
+        String identifier = intent.getStringExtra("identifier");
 
-            IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", identifier), new IntentExtra("scheduledTime", nextScheduledTime)};
-            notificationGenerator.scheduleNotification(context, calendar, identifier, title, content, extras);
-        } catch (Exception ex) {
-            Toast.makeText(context, "Apulso: No se pudo programar la siguiente alarma.", Toast.LENGTH_LONG).show();
+        if (identifier != null) {
+            try {
+                Calendar calendar = Calendar.getInstance();
+                Long currentScheduledTime = intent.getLongExtra("scheduledTime", calendar.getTimeInMillis());
+                Long nextScheduledTime = currentScheduledTime + 604800000;
+                calendar.setTimeInMillis(nextScheduledTime); // Siguiente semana.
+
+                IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", identifier), new IntentExtra("scheduledTime", nextScheduledTime)};
+                notificationGenerator.scheduleNotification(context, calendar, identifier, title, content, extras);
+            } catch (Exception ex) {
+                Toast.makeText(context, "Apulso: No se pudo programar la siguiente alarma.", Toast.LENGTH_LONG).show();
+            }
         }
-
     }
 }

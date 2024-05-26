@@ -49,20 +49,19 @@ public final class Utils {
                             }
 
                             NotificationGenerator notificationGenerator = new NotificationGenerator(context.getSystemService(NotificationManager.class));
-                            if (activate) {
 
-
-                                boolean[] checkedItems = reminder.getMedicationFrequency().getDaysArray();
-
-                                for (int i = 0; i < checkedItems.length; i++){
+                            boolean[] checkedItems = reminder.getMedicationFrequency().getDaysArray();
+                            for (int i = 0; i < checkedItems.length; i++){
+                                if (activate) {
                                     if (checkedItems[i]) generateAlert(i, reminder, notificationGenerator, context);
+                                } else {
+                                    int day = i;
+                                    if (day < 7)
+                                        day += 1;
+                                    else
+                                        day = 1;
+                                    notificationGenerator.disableNotification(context, reminder.getId() + "-" + day);
                                 }
-                                // Integer day = reminder.getMedicationFrequency().getWeekday();
-                                // Calendar Sunday es 1, el API trabaja con lunes = 1 hasta domingo = 7
-
-
-                            } else {
-                                notificationGenerator.disableNotification(context, reminder.getId());
                             }
                         }
 
@@ -112,6 +111,22 @@ public final class Utils {
         notificationGenerator.scheduleNotification(context, calendar, reminder.getId() + "-" + day, "Hora de su medicación", content, extras);
 
     }
+
+    public static void schedule12HourMeasurementReminder(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, 12);
+
+        String content = "Recordatorio: Registró su última medición hace más de 12 horas. Recuerde realizar un seguimiento continuo.";
+
+        NotificationGenerator notificationGenerator = new NotificationGenerator(context.getSystemService(NotificationManager.class));
+        notificationGenerator.scheduleNotification(context, calendar, String.valueOf(Constants.NOTIFICATIONS_LAST_MEASUREMENT_REMINDER_IDENTIFIER), "12 horas desde su última medición", content, new IntentExtra[0]);
+    }
+
+    public static void disableScheduled12HourMeasurementReminder(Context context) {
+        NotificationGenerator notificationGenerator = new NotificationGenerator(context.getSystemService(NotificationManager.class));
+        notificationGenerator.disableNotification(context, String.valueOf(Constants.NOTIFICATIONS_LAST_MEASUREMENT_REMINDER_IDENTIFIER));
+    }
+
 
     public static void requestAlarmPermission(Context context) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {

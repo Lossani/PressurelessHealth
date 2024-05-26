@@ -16,5 +16,5 @@ public final class Constants {
     public static final int NOTIFICATIONS_PERMISSION_REQUEST_CODE = 1001;
     public static final int CALLS_PERMISSION_REQUEST_CODE = 1002;
 
-
+    public static final int NOTIFICATIONS_LAST_MEASUREMENT_REMINDER_IDENTIFIER = 1003;
 }

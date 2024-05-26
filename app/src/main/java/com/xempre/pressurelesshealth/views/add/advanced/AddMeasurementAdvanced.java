@@ -39,6 +39,7 @@ import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Challenge;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.utils.Constants;
+import com.xempre.pressurelesshealth.utils.Utils;
 import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.add.SelectAddMode;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
@@ -443,6 +444,8 @@ public class AddMeasurementAdvanced extends Fragment {
             public void onResponse(Call<Measurement> call, Response<Measurement> response) {
                 if (response.code() == 201){
                     Toast.makeText(getContext(), "Medida guardada exitosamente.", Toast.LENGTH_SHORT).show();
+
+                    Utils.schedule12HourMeasurementReminder(getContext());
 
                     Measurement measurementResponse = response.body();
                     CustomDialog dialog = new CustomDialog();

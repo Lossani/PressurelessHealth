@@ -33,6 +33,7 @@ import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Challenge;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.utils.Utils;
 import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
 import com.xempre.pressurelesshealth.views.settings.contacts.ContactList;
@@ -215,6 +216,8 @@ public class AddMeasurementBasic extends Fragment {
                 // this method is called when we get response from our api.
                 if (response.code() == 201){
                     Toast.makeText(getContext(), "Medida guardada exitosamente.", Toast.LENGTH_SHORT).show();
+
+                    Utils.schedule12HourMeasurementReminder(getContext());
 
                     CustomDialog dialog = new CustomDialog();
                     switch (measurement.categorizeBloodPressure()){
