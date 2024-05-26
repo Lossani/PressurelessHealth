@@ -156,6 +156,6 @@ public class MedicationFrequency {
     public void setMedication(Medication medication) { this.medication = medication; }
 
     public boolean[] getDaysArray(){
-        return new boolean[]{getSunday(), getTuesday(), getWednesday(), getThursday(), getFriday(), getSaturday(), getSunday()};
+        return new boolean[]{getSunday(), getMonday(), getTuesday(), getWednesday(), getThursday(), getFriday(), getSaturday()};
     }
 }

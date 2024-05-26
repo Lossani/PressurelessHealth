@@ -29,6 +29,7 @@ import com.xempre.pressurelesshealth.interfaces.MedicationService;
 import com.xempre.pressurelesshealth.models.IntentExtra;
 import com.xempre.pressurelesshealth.models.Medication;
 import com.xempre.pressurelesshealth.models.MedicationFrequency;
+import com.xempre.pressurelesshealth.utils.Utils;
 import com.xempre.pressurelesshealth.utils.notifications.NotificationGenerator;
 import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.add.SelectAddMode;
@@ -51,12 +52,22 @@ public class AddMedicationFrequency extends Fragment {
     private MedicationFrequencyAddBinding binding;
 
     Medication medication;
+    MedicationFrequency medicationFrequency;
 
     int hour;
     int minute;
 
+    boolean isEditMode = false;
+
     public AddMedicationFrequency(Medication medication){
         this.medication = medication;
+        this.medicationFrequency = new MedicationFrequency();
+    }
+
+    public AddMedicationFrequency(Medication medication, MedicationFrequency medicationFrequency){
+        this.medication = medication;
+        this.medicationFrequency = medicationFrequency;
+        this.isEditMode = true;
     }
 
     @Override
@@ -111,7 +122,6 @@ public class AddMedicationFrequency extends Fragment {
                 }
 
                 if (!binding.button4.getText().toString().equals("Seleccionar Hora") && !binding.editTextText3.getText().toString().equals("")){
-                    MedicationFrequency medicationFrequency = new MedicationFrequency();
                     medicationFrequency.setMedicationId(medication.getId());
                     medicationFrequency.setDeleted(false);
                     medicationFrequency = convertDays(adapter, medicationFrequency);
@@ -123,7 +133,11 @@ public class AddMedicationFrequency extends Fragment {
                     Log.d("PERRO", medicationFrequency.getDose());
                     Log.d("PERRO", medicationFrequency.getHour());
 //                    Log.d("PERRO", medicationFrequency.getWeekday()+"");
-                    callAPI(medicationFrequency);
+                    
+                    if (!isEditMode)
+                        callAPI(medicationFrequency);
+                    else 
+                        updateMedicationFrequency(medicationFrequency);
                 } else {
                     Toast.makeText(getContext(), "La hora y dosis son requeridas.", Toast.LENGTH_SHORT).show();
                 }
@@ -147,6 +161,27 @@ public class AddMedicationFrequency extends Fragment {
                 ChangeFragment.change(getContext(), R.id.frame_layout, selectAddMode);
             }
         });
+
+        if (isEditMode) {
+            binding.textView24.setText("Editar frecuencia");
+            adapter.updateCheckedItems(new boolean[] { this.medicationFrequency.getMonday(),
+            this.medicationFrequency.getTuesday(),
+            this.medicationFrequency.getWednesday(),
+            this.medicationFrequency.getThursday(),
+            this.medicationFrequency.getFriday(),
+            this.medicationFrequency.getSaturday(),
+            this.medicationFrequency.getSunday() });
+
+            String[] parsedTime = this.medicationFrequency.getHour().trim().split(":");
+
+            hour = Integer.parseInt(parsedTime[0]);
+            minute = Integer.parseInt(parsedTime[1]);
+
+            binding.editTextText3.setText(this.medicationFrequency.getDose());
+            binding.button4.setText(String.format(Locale.getDefault(), "%02d:%02d", Integer.parseInt(parsedTime[0]), Integer.parseInt(parsedTime[1])));
+            if (this.medicationFrequency.getReminder() != null)
+                binding.switchFrequencyNotification.setChecked(this.medicationFrequency.getReminder().isActive());
+        }
 
 
         return binding.getRoot();
@@ -205,34 +240,6 @@ public class AddMedicationFrequency extends Fragment {
 
     }
 
-    public void generateAlert(Integer day, MedicationFrequency responseFromAPI){
-        Log.d("GENERANDO ALARMA DIA ", String.valueOf(day));
-        MainActivityView mainActivityView = (MainActivityView) getContext();
-        Calendar calendar = Calendar.getInstance();
-        // Calendar Sunday es 1, el spinner tiene de lunes = 0 hasta domingo = 7
-        if (day < 6)
-            day += 2;
-        else
-            day = 1;
-
-        calendar.set(Calendar.DAY_OF_WEEK, day);
-        calendar.set(Calendar.HOUR_OF_DAY, AddMedicationFrequency.this.hour);
-        calendar.set(Calendar.MINUTE, AddMedicationFrequency.this.minute);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        Calendar now = Calendar.getInstance();
-
-        if (now.compareTo(calendar) > 0)
-            calendar.add(Calendar.DAY_OF_YEAR, 7);
-
-        IntentExtra[] extras = new IntentExtra[] { new IntentExtra("identifier", responseFromAPI.getReminder().getId() + "-" + day), new IntentExtra("scheduledTime", calendar.getTimeInMillis())};
-        NotificationGenerator notificationGenerator = new NotificationGenerator(mainActivityView.notificationManager);
-        String content = responseFromAPI.getMedication().getName() + " " + responseFromAPI.getDose() + " - " + responseFromAPI.getHour();
-        notificationGenerator.scheduleNotification(mainActivityView, calendar, responseFromAPI.getReminder().getId() + "-" + day, "Hora de su medicación", content, extras);
-
-    }
-
     public void callAPI(MedicationFrequency medicationFrequency){
 
         MedicationService medicationService = ApiClient.createService(getContext(), MedicationService.class,1);
@@ -246,22 +253,14 @@ public class AddMedicationFrequency extends Fragment {
             public void onResponse(Call<MedicationFrequency> call, Response<MedicationFrequency> response) {
                 try {
                     MedicationFrequency responseFromAPI = response.body();
+                    String confirmationMessage = binding.switchFrequencyNotification.isChecked() ? "Frecuencia y su recordatorio registrados exitosamente." : "Frecuencia registrada exitosamente.";
 
                     if (response.code()==201) {
-                        if (binding.switchFrequencyNotification.isChecked() && responseFromAPI.getReminder() != null) {
-
-
-                            boolean[] checkedItems = responseFromAPI.getDaysArray();
-
-                            for (int i = 0; i < checkedItems.length; i++){
-                                if (checkedItems[i]) generateAlert(i, responseFromAPI);
-                            }
-
-//                            Integer day = binding.spinnerDias.getSelectedItemPosition();
-
+                        if (binding.switchFrequencyNotification.isChecked()) {
+                            Utils.updateScheduledMedicationFrequencyAlarms(getContext(), responseFromAPI, true);
                         }
 
-                        Toast.makeText(getContext(), "Frecuencia registrada exitosamente.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), confirmationMessage, Toast.LENGTH_LONG).show();
 
                         Fragment fragment = new MedicationView(medication);
                         ChangeFragment.change(getContext(), R.id.frame_layout, fragment);
@@ -269,7 +268,48 @@ public class AddMedicationFrequency extends Fragment {
                         Log.d("Message", response.message());
                     }
                 } catch (Exception ignored){
-                    if (getContext()!=null) Toast.makeText(getContext(), "Error al guardar medicamento.", Toast.LENGTH_SHORT).show();
+                    if (getContext()!=null) Toast.makeText(getContext(), "Error al guardar frecuencia.", Toast.LENGTH_SHORT).show();
+                    Log.d("ERROR", ignored.getMessage());
+                    onDestroyView();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MedicationFrequency> call, Throwable t) {
+                Log.d("ERROR", t.getMessage());
+                if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
+                onDestroyView();
+            }
+        });
+    }
+
+
+    public void updateMedicationFrequency(MedicationFrequency medicationFrequency){
+
+        MedicationService medicationService = ApiClient.createService(getContext(), MedicationService.class,1);
+
+        Call<MedicationFrequency> call = medicationService.updateMedicationFrequency(medicationFrequency.getId(), medicationFrequency);
+
+        call.enqueue(new Callback<MedicationFrequency>() {
+            @Override
+            public void onResponse(Call<MedicationFrequency> call, Response<MedicationFrequency> response) {
+                try {
+                    MedicationFrequency responseFromAPI = response.body();
+                    String confirmationMessage = binding.switchFrequencyNotification.isChecked() ? "Frecuencia y su recordatorio actualizados exitosamente." : "Frecuencia actualizada exitosamente.";
+
+
+                    if (response.isSuccessful()) {
+                        Utils.updateScheduledMedicationFrequencyAlarms(getContext(), responseFromAPI, binding.switchFrequencyNotification.isChecked());
+
+                        Toast.makeText(getContext(), confirmationMessage, Toast.LENGTH_LONG).show();
+
+                        Fragment fragment = new MedicationView(medication);
+                        ChangeFragment.change(getContext(), R.id.frame_layout, fragment);
+                    } else {
+                        Log.d("Message", response.message());
+                    }
+                } catch (Exception ignored){
+                    if (getContext()!=null) Toast.makeText(getContext(), "Error al guardar cambios de la frecuencia.", Toast.LENGTH_SHORT).show();
                     Log.d("ERROR", ignored.getMessage());
                     onDestroyView();
                 }

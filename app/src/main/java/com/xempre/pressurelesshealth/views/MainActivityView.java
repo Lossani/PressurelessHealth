@@ -91,6 +91,7 @@ public class MainActivityView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.notificationGenerator = new NotificationGenerator(this.getSystemService(NotificationManager.class));;
         setTheme(R.style.Theme_PressurelessHealth);
         context = this;
 

@@ -20,17 +20,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
@@ -40,9 +40,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textAlignment="center"
                         android:text="Lu"
                         app:chipEndPadding="0dp"
-                        app:chipStartPadding="4dp"
+                        app:chipStartPadding="3dp"
                         app:textEndPadding="0dp"
                         app:textStartPadding="0dp" />
 
@@ -52,9 +53,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textAlignment="center"
                         android:text="Ma"
                         app:chipEndPadding="0dp"
-                        app:chipStartPadding="4dp"
+                        app:chipStartPadding="3dp"
                         app:textEndPadding="0dp"
                         app:textStartPadding="0dp" />
 
@@ -64,9 +66,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textAlignment="center"
                         android:text="Mi"
                         app:chipEndPadding="0dp"
-                        app:chipStartPadding="4dp"
+                        app:chipStartPadding="3dp"
                         app:textEndPadding="0dp"
                         app:textStartPadding="0dp" />
 
@@ -76,9 +79,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textAlignment="center"
                         android:text="Ju"
                         app:chipEndPadding="0dp"
-                        app:chipStartPadding="4dp"
+                        app:chipStartPadding="3dp"
                         app:textEndPadding="0dp"
                         app:textStartPadding="0dp" />
 
@@ -88,11 +92,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textAlignment="center"
                         android:text="Vi"
                         app:chipEndPadding="0dp"
-                        app:chipStartPadding="4dp"
+                        app:chipStartPadding="3dp"
                         app:textEndPadding="0dp"
-                        app:textStartPadding="0dp" />
+                        app:textStartPadding="0dp"
+                        />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipSa"
@@ -100,9 +106,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Sa"
+                        android:textAlignment="center"
+                        android:text="Sá"
                         app:chipEndPadding="0dp"
-                        app:chipStartPadding="4dp"
+                        app:chipStartPadding="3dp"
                         app:textEndPadding="0dp"
                         app:textStartPadding="0dp" />
 
@@ -112,88 +119,114 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textAlignment="center"
                         android:text="Do"
                         app:chipEndPadding="0dp"
-                        app:chipStartPadding="4dp"
+                        app:chipStartPadding="3dp"
                         app:textEndPadding="0dp"
                         app:textStartPadding="0dp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="2"
-                        android:orientation="vertical">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/tvMedicationHour"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="TextView"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="4"
-                        android:orientation="vertical">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/tvMedicationDose"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="5dp"
-                                android:layout_marginEnd="5dp"
-                                android:text="TextView"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/btnDeleteFrequency"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:clickable="true"
-                    android:src="@drawable/baseline_delete_24"
-                    android:tint="#FFFFFF"
-                    app:backgroundTint="#F44336"
-                    app:fabSize="mini" />
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+
+                        android:layout_weight="8">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <TextView
+                                    android:id="@+id/tvMedicationHour"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_marginEnd="20dp"
+                                    android:text="08:00"
+                                    android:textStyle="bold"
+                                    android:textSize="18dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_gravity="center">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <TextView
+                                    android:id="@+id/tvMedicationDose"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="5dp"
+                                    android:layout_marginEnd="5dp"
+                                    android:text="TextView"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"/>
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="end"
+                        android:orientation="horizontal"
+                        android:paddingEnd="5dp">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/btnEditMedicationFrequency"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:src="@drawable/baseline_edit_24"
+                            android:tint="#FFFFFF"
+                            app:backgroundTint="#009688"
+                            app:fabSize="mini" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/btnDeleteFrequency"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:clickable="true"
+                            android:src="@drawable/baseline_delete_24"
+                            android:tint="#FFFFFF"
+                            app:backgroundTint="#F44336"
+                            app:fabSize="mini" />
+
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
+
+
 
         </LinearLayout>
 

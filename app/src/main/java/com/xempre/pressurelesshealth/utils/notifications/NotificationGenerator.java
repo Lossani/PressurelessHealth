@@ -135,7 +135,9 @@ public class NotificationGenerator {
 
         int requestCode = identifier.hashCode();
         pendingIntent = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
-        alarmManager.cancel(pendingIntent);
+
+        if (pendingIntent != null)
+            alarmManager.cancel(pendingIntent);
     }
 
 }

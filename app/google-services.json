@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "663960676018",
+    "project_id": "pressurelesshealthapp",
+    "storage_bucket": "pressurelesshealthapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663960676018:android:f8915dab3e541750e2cbab",
+        "android_client_info": {
+          "package_name": "com.xempre.pressurelesshealth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663960676018-2hl95o4rcv3ac86spgsogsqp3c6c60r9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xempre.pressurelesshealth",
+            "certificate_hash": "312d427473c323c6296f3866d739a25d9eec6e2e"
+          }
+        },
+        {
+          "client_id": "663960676018-4q7f24kbk0bo97bgsiu0d58sv3ci1sm9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xempre.pressurelesshealth",
+            "certificate_hash": "10931e375f66d8db9a768cc752d9b97822834196"
+          }
+        },
+        {
+          "client_id": "663960676018-fmpiii30999le3b9aqhcfhksptfm1d7u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xempre.pressurelesshealth",
+            "certificate_hash": "9c1d94fa8d6283c2435c13242e338d36ed6ad31e"
+          }
+        },
+        {
+          "client_id": "663960676018-6t3u99l1oeaig14940210qaupu5944q4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgrKmbSO2Urz8rCpdYdF9DUIMqyi8WUJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663960676018-018kjt4tbl77mhn943hf9gam08b9sne2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

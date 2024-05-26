@@ -30,7 +30,7 @@ public class MedicationFrequencyList extends Fragment {
 
     private ListAddBinding binding;
     private RecyclerView recyclerView;
-    private MedicationFrequencyAdapter leaderboardAdapter;
+    private MedicationFrequencyAdapter medicationFrequencyAdapter;
     private List<MedicationFrequency> medicationFrequencyList = new ArrayList<MedicationFrequency>();
 
     Medication medication;
@@ -51,9 +51,9 @@ public class MedicationFrequencyList extends Fragment {
         binding.textView19.setText("Frecuencia de dosis:");
 
         recyclerView = binding.rvMedicationList;
-        leaderboardAdapter = new MedicationFrequencyAdapter(getContext(), medicationFrequencyList);
+        medicationFrequencyAdapter = new MedicationFrequencyAdapter(getContext(), medicationFrequencyList, medication);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(leaderboardAdapter);
+        recyclerView.setAdapter(medicationFrequencyAdapter);
 
         binding.btnAddListAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +96,7 @@ public class MedicationFrequencyList extends Fragment {
 //                            LeaderboardItem temp = new LeaderboardItem(element);
                             medicationFrequencyList.add(element);
                         }
-                        leaderboardAdapter.notifyDataSetChanged();
+                        medicationFrequencyAdapter.notifyDataSetChanged();
                     }
 
                 } catch (Exception ignored){

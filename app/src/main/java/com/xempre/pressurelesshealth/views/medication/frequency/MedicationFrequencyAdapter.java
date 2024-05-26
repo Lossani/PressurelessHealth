@@ -26,6 +26,7 @@ import com.xempre.pressurelesshealth.interfaces.MedicationService;
 import com.xempre.pressurelesshealth.models.Medication;
 import com.xempre.pressurelesshealth.models.MedicationFrequency;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
+import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 
 import java.util.List;
 
@@ -36,10 +37,12 @@ import retrofit2.Response;
 public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationFrequencyAdapter.MedicationFrequencyItemHolder> {
 
     private Context context;
-    private List<MedicationFrequency> leaderboardItemList;
-    public MedicationFrequencyAdapter(Context context, List<MedicationFrequency> leaderboardItemList) {
+    private List<MedicationFrequency> medicationFrequencyList;
+    private Medication medication;
+    public MedicationFrequencyAdapter(Context context, List<MedicationFrequency> medicationFrequencyList, Medication medication) {
         this.context = context;
-        this.leaderboardItemList = leaderboardItemList;
+        this.medicationFrequencyList = medicationFrequencyList;
+        this.medication = medication;
     }
 
 
@@ -52,7 +55,7 @@ public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationF
 
     @Override
     public void onBindViewHolder(MedicationFrequencyItemHolder holder, int position) {
-        MedicationFrequency medicationFrequency = leaderboardItemList.get(position);
+        MedicationFrequency medicationFrequency = medicationFrequencyList.get(position);
         holder.tvHour.setText(medicationFrequency.getHour());
         holder.tvDose.setText(medicationFrequency.getDose());
         if (medicationFrequency.getMonday()) holder.chipLu.setChipBackgroundColorResource(R.color.selected_day);
@@ -63,6 +66,13 @@ public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationF
         if (medicationFrequency.getSaturday()) holder.chipSa.setChipBackgroundColorResource(R.color.selected_day);
         if (medicationFrequency.getSunday()) holder.chipDo.setChipBackgroundColorResource(R.color.selected_day);
 
+        holder.btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddMedicationFrequency addMedicationFrequency = new AddMedicationFrequency(medication, medicationFrequency);
+                ChangeFragment.change(context, R.id.frame_layout, addMedicationFrequency);
+            }
+        });
 //        holder.tvDay.setText(numberToDay(medicationFrequency.getWeekday()));
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +166,7 @@ public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationF
 
     @Override
     public int getItemCount() {
-        return leaderboardItemList.size();
+        return medicationFrequencyList.size();
     }
 
     public class MedicationFrequencyItemHolder extends RecyclerView.ViewHolder {
@@ -175,6 +185,8 @@ public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationF
         Chip chipDo;
 
         FloatingActionButton btnDelete;
+
+        FloatingActionButton btnEdit;
         public MedicationFrequencyItemHolder(View itemView) {
             super(itemView);
 //            tvDay = itemView.findViewById(R.id.tvMedicationDay);
@@ -188,6 +200,7 @@ public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationF
             chipSa = itemView.findViewById(R.id.chipSa);
             chipDo = itemView.findViewById(R.id.chipDo);
             btnDelete = itemView.findViewById(R.id.btnDeleteFrequency);
+            btnEdit = itemView.findViewById(R.id.btnEditMedicationFrequency);
 
 //            frameLayout = itemView.findViewById(R.id.flMedication);
 //            tvPosition = itemView.findViewById(R.id.tvLeadeboardTop);

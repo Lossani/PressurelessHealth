@@ -59,8 +59,19 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/btnContactEdit"
+                    android:id="@+id/btnContactCall"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:clickable="true"
+                    android:src="@drawable/baseline_phone_24"
+                    android:tint="#FFFFFF"
+                    app:backgroundTint="#58BE80"
+                    app:fabSize="mini" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnContactEdit"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
@@ -72,21 +83,10 @@
                     app:fabSize="mini" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/btnContactCall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:clickable="true"
-                    android:src="@drawable/baseline_phone_24"
-                    android:tint="#FFFFFF"
-                    app:backgroundTint="#58BE80"
-                    app:fabSize="mini" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnDeleteContact"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:clickable="true"
                     android:src="@drawable/baseline_delete_24"
                     android:tint="#FFFFFF"

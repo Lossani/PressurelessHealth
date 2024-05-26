@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import com.xempre.pressurelesshealth.api.ApiClient;
@@ -29,6 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public final class Utils {
+    public static NotificationGenerator notificationGenerator = null;
 
     public static void updateMedicationFrequencyNotifications(Context context, boolean activate){
 
@@ -48,21 +51,7 @@ public final class Utils {
                                 continue;
                             }
 
-                            NotificationGenerator notificationGenerator = new NotificationGenerator(context.getSystemService(NotificationManager.class));
-
-                            boolean[] checkedItems = reminder.getMedicationFrequency().getDaysArray();
-                            for (int i = 0; i < checkedItems.length; i++){
-                                if (activate) {
-                                    if (checkedItems[i]) generateAlert(i, reminder, notificationGenerator, context);
-                                } else {
-                                    int day = i;
-                                    if (day < 7)
-                                        day += 1;
-                                    else
-                                        day = 1;
-                                    notificationGenerator.disableNotification(context, reminder.getId() + "-" + day);
-                                }
-                            }
+                            updateScheduledMedicationFrequencyAlarms(context, reminder, activate);
                         }
 
                         Toast.makeText(context, "Preferencias actualizadas.", Toast.LENGTH_SHORT).show();
@@ -83,19 +72,22 @@ public final class Utils {
         });
     }
 
-    public static void generateAlert(Integer day, Reminder reminder, NotificationGenerator notificationGenerator, Context context){
+    public static void scheduleRepeatingAlarm(Context context, int day, String identifier, String title, String content, int hour, int minute) {
+        // day: SUNDAY = 1, MONDAY = 2, TUESDAY = 3, WEDNESDAY = 4 ... SATURDAY = 7
+        Calendar calendar = getNextCalendar(day, hour, minute);
+
+        IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", identifier), new IntentExtra("scheduledTime", calendar.getTimeInMillis())};
+
+        notificationGenerator.scheduleNotification(context, calendar, identifier, title, content, extras);
+    }
+
+    @NonNull
+    private static Calendar getNextCalendar(int day, int hour, int minute) {
         Calendar calendar = Calendar.getInstance();
-        String[] time = reminder.getMedicationFrequency().getHour().split(":");
-
-
-        if (day < 7)
-            day += 1;
-        else
-            day = 1;
 
         calendar.set(Calendar.DAY_OF_WEEK, day);
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0]));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
@@ -103,13 +95,43 @@ public final class Utils {
 
         if (now.compareTo(calendar) > 0)
             calendar.add(Calendar.DAY_OF_YEAR, 7);
+        return calendar;
+    }
 
+    public static void updateScheduledMedicationFrequencyAlarms(Context context, Reminder reminder, boolean activate) {
+        
+        boolean[] checkedItems = reminder.getMedicationFrequency().getDaysArray();
+        
+        for (int i = 0; i < checkedItems.length; i++){
+            if (activate) {
+                String[] time = reminder.getMedicationFrequency().getHour().split(":");
+                if (checkedItems[i]) {
+                    String content = reminder.getMedicationFrequency().getMedication().getName() + " " + reminder.getMedicationFrequency().getDose() + " - " + reminder.getMedicationFrequency().getHour();
 
-        IntentExtra[] extras = new IntentExtra[] {new IntentExtra("identifier", reminder.getId() + "-" + day), new IntentExtra("scheduledTime", calendar.getTimeInMillis())};
-        String content = reminder.getMedicationFrequency().getMedication().getName() + " " + reminder.getMedicationFrequency().getDose() + " - " + reminder.getMedicationFrequency().getHour();
+                    scheduleRepeatingAlarm(context, i + 1, reminder.getMedicationFrequency().getId() + "-" + (i + 1), "Hora de su medicación", content, Integer.parseInt(time[0]), Integer.parseInt(time[1]));
+                }
+            } else {
+                notificationGenerator.disableNotification(context, reminder.getMedicationFrequency().getId() + "-" + (i + 1));
+            }
+        }
+    }
 
-        notificationGenerator.scheduleNotification(context, calendar, reminder.getId() + "-" + day, "Hora de su medicación", content, extras);
+    public static void updateScheduledMedicationFrequencyAlarms(Context context, MedicationFrequency medicationFrequency, boolean activate) {
 
+        boolean[] checkedItems = medicationFrequency.getDaysArray();
+
+        for (int i = 0; i < checkedItems.length; i++){
+            if (activate) {
+                String[] time = medicationFrequency.getHour().split(":");
+                if (checkedItems[i]) {
+                    String content = medicationFrequency.getMedication().getName() + " " + medicationFrequency.getDose() + " - " + medicationFrequency.getHour();
+
+                    scheduleRepeatingAlarm(context, i + 1, medicationFrequency.getId() + "-" + (i + 1), "Hora de su medicación", content, Integer.parseInt(time[0]), Integer.parseInt(time[1]));
+                }
+            } else {
+                notificationGenerator.disableNotification(context, medicationFrequency.getId() + "-" + (i + 1));
+            }
+        }
     }
 
     public static void schedule12HourMeasurementReminder(Context context) {
@@ -129,7 +151,7 @@ public final class Utils {
 
 
     public static void requestAlarmPermission(Context context) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Permiso para notificaciones");
             builder.setMessage("Utilizamos el sistema de alarmas y recordatorios para notificarle a la hora exacta de sus medicaciones configuradas, para ello necesitamos que nos otorgue el permiso correspondiente.")
