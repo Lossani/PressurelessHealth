@@ -314,8 +314,13 @@ public class MeasurementList extends Fragment {
 //                        assert responseFromAPI != null;
                         clearRecyclerView();
                         if (responseFromAPI.isEmpty()) {
-                            if (getContext()!=null) Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
+                            if (getContext()!=null) {
+                                binding.tvMessageHistoryList.setVisibility(View.VISIBLE);
+                                binding.tvMessageHistoryList.setText("No se encontraron registros.");
+                                //Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
+                            }
                         } else {
+                            binding.tvMessageHistoryList.setVisibility(View.INVISIBLE);
                             for (Measurement element : responseFromAPI) {
                                 Log.d("PERRUNO", element.toString());
                                 i +=1;

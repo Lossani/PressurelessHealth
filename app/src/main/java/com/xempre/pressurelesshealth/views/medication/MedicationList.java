@@ -75,8 +75,13 @@ public class MedicationList extends Fragment {
                     List<Medication> responseFromAPI = response.body();
                     assert responseFromAPI != null;
                     if (responseFromAPI.isEmpty()) {
-                        if (getContext()!=null) Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
+                        if (getContext()!=null){
+                            binding.tvMessageAddList.setVisibility(View.VISIBLE);
+                            binding.tvMessageAddList.setText("No se encontraron medicamentos.");
+                            //Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
+                        binding.tvMessageAddList.setVisibility(View.INVISIBLE);
                         for (Medication element : responseFromAPI) {
                             Log.d("PERRUNO", element.getName());
                             Log.d("PERRUNO", element.getDescription());

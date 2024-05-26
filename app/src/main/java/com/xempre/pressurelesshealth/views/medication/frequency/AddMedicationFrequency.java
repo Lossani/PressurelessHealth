@@ -261,7 +261,7 @@ public class AddMedicationFrequency extends Fragment {
 
                         }
 
-                        Toast.makeText(getContext(), "Medicamento actualizado exitosamente.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Frecuencia registrada exitosamente.", Toast.LENGTH_LONG).show();
 
                         Fragment fragment = new MedicationView(medication);
                         ChangeFragment.change(getContext(), R.id.frame_layout, fragment);

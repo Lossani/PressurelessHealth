@@ -80,8 +80,13 @@ public class ContactList extends Fragment {
                         return;
                     }
                     if (responseFromAPI.isEmpty()) {
-                        if (getContext()!=null) Toast.makeText(getContext(), "No existe contactos registrados.", Toast.LENGTH_SHORT).show();
+                        if (getContext()!=null) {
+                            binding.tvMessageAddList.setVisibility(View.VISIBLE);
+                            binding.tvMessageAddList.setText("No se encontraron contactos registrados.");
+                            //Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
+                        binding.tvMessageAddList.setVisibility(View.INVISIBLE);
                         for (Contact element : responseFromAPI) {
 //                            Log.d("PERRUNO", element.getName());
 //                            Log.d("PERRUNO", element.getDescription());

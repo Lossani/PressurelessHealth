@@ -8,8 +8,9 @@
 
     <LinearLayout
         android:id="@+id/linearLayout11"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="60dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,7 +33,7 @@
 
         <EditText
             android:id="@+id/editTextText4"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:ems="10"
@@ -48,19 +49,12 @@
 
         <EditText
             android:id="@+id/editTextTextPassword"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:ems="10"
             android:hint="******"
             android:inputType="textPassword" />
-
-        <TextView
-            android:id="@+id/tvRecoverPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Olvide mi contraseña" />
 
         <Button
             android:id="@+id/btnLogin"
@@ -73,6 +67,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Registrarse" />
+
+        <TextView
+            android:id="@+id/tvRecoverPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="Olvidé mi contraseña"
+            android:textColor="#6750A3"
+            android:textSize="16sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
