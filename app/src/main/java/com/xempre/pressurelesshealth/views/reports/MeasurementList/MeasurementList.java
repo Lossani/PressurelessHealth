@@ -46,10 +46,15 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -175,7 +180,17 @@ public class MeasurementList extends Fragment {
         });
 
         long millis = Instant.now().toEpochMilli();
-        callAPI(convertDateToString(millis), convertDateToString(millis));
+        // Get the system default time zone
+        ZoneId systemZone = ZoneId.systemDefault();
+
+        // Convert the instant to the system default time zone
+        ZonedDateTime zonedDateTime = Instant.now().atZone(systemZone);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Format the ZonedDateTime object
+        String formattedDateTime = zonedDateTime.format(formatter);
+
+        callAPI(formattedDateTime, formattedDateTime);
         // Agrega algunos nombres a la lista
 //        listaNombres.add("Juan");
 //        listaNombres.add("María");
@@ -245,20 +260,47 @@ public class MeasurementList extends Fragment {
     }
 
     public String convertDateToString(Long time){
-        Calendar utc = Calendar.getInstance(TimeZone.getTimeZone("UTC-05"));
-        utc.setTimeInMillis(time);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        return format.format(utc.getTime());
+// Create a SimpleDateFormat object with the desired date format
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        // Set the timezone of the formatter to UTC
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        // Convert the UTC timestamp to a Date object
+        Date utcDate = new Date(time);
+
+        // Format the Date object to a string
+        return sdf.format(utcDate);
     }
 
     public void callAPI(String startDate, String endDate){
         Log.d("PERRUNO", startDate+" "+endDate);
 
-            MeasurementService measurementService = ApiClient.createService(getContext(), MeasurementService.class,1);
+        MeasurementService measurementService = ApiClient.createService(getContext(), MeasurementService.class,1);
 
-            // calling a method to create a post and passing our modal class.
-            Call<List<Measurement>> call = measurementService.getAllByDateRange(startDate+"T00:00:00", endDate+"T23:59:59");
-            Log.d("PERRUNO", startDate+" "+endDate);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+
+        // Parse the date string into LocalDateTime
+        LocalDateTime localStartDateTime = LocalDateTime.parse(startDate+"T00:00:00", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+        // Convert LocalDateTime to ZonedDateTime with UTC timezone
+        ZonedDateTime utcStartDateTime = localStartDateTime.atZone(ZoneId.systemDefault());
+
+        // Convert UTC ZonedDateTime to UTC-5 ZonedDateTime
+        ZonedDateTime startUtcMinusFiveDateTime = utcStartDateTime.withZoneSameInstant(ZoneId.of("UTC-5"));
+
+
+        LocalDateTime localEndDateTime = LocalDateTime.parse(endDate+"T23:59:59", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+
+        // Convert LocalDateTime to ZonedDateTime with UTC timezone
+        ZonedDateTime utcEndDateTime = localEndDateTime.atZone(ZoneId.systemDefault());
+
+        // Convert UTC ZonedDateTime to UTC-5 ZonedDateTime
+        ZonedDateTime endUtcMinusFiveDateTime = utcEndDateTime.withZoneSameInstant(ZoneId.of("UTC-5"));
+
+        // calling a method to create a post and passing our modal class.
+        Call<List<Measurement>> call = measurementService.getAllByDateRange(startUtcMinusFiveDateTime.format(formatter), endUtcMinusFiveDateTime.format(formatter));
             // on below line we are executing our method.
             call.enqueue(new Callback<List<Measurement>>() {
                 @Override
@@ -307,6 +349,12 @@ public class MeasurementList extends Fragment {
 //                responseTV.setText("Error found is : " + t.getMessage());
                 }
             });
+
+
+        // Convertir la fecha al formato deseado
+
+
+
     }
 
     public void clearRecyclerView(){
@@ -428,7 +476,18 @@ public class MeasurementList extends Fragment {
 
             Log.d("PERRUNO", "PARTE5");
             // Guardar el archivo modificado en la carpeta de descargas
-            File outputFile = new File(downloadsPath, "Reporte_PressurelessHealth.xlsx");
+
+            LocalDateTime currentTime = LocalDateTime.now();
+
+            // Define a formatter for the hour part only
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+
+            // Format the current time to get the hour as a string
+            String hourString = currentTime.format(formatter);
+
+            String filename = "Reporte_PressurelessHealth_" + hourString+ ".xlsx";
+
+            File outputFile = new File(downloadsPath, filename);
 
 
 
@@ -437,7 +496,7 @@ public class MeasurementList extends Fragment {
             fileOut.close();
             workbook.close();
 
-            Toast.makeText(context, "Archivo guardado en Descargas (Reporte_PressurelessHealth.xlsx)", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Archivo guardado en Descargas ("+filename+").", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
 
             e.printStackTrace();

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,13 +64,17 @@ public class RegisterFragment extends Fragment {
         binding.btnRegRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Pattern pattern = Patterns.EMAIL_ADDRESS;
+                String email = binding.etRegisterEmail.getText().toString();
+                String pass = binding.etRegisterPassword.getText().toString();
+
                 if (binding.etRegisterPassword.getText().toString().equals("")) {Toast.makeText(getContext(), "La contraseña no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
-                if (binding.etRegisterConfirmPassword.getText().toString().equals("")) {Toast.makeText(getContext(), "La contraseña no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
-                if (binding.etRegisterEmail.getText().toString().equals("")) {Toast.makeText(getContext(), "El correo no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
+                if (email.equals("") || !pattern.matcher(email).matches()) {Toast.makeText(getContext(), "El correo no es valido.", Toast.LENGTH_SHORT).show(); return;}
                 if (binding.etRegisterUsername.getText().toString().equals("")) {Toast.makeText(getContext(), "El nombre de usuario no puede ir en blanco.", Toast.LENGTH_SHORT).show();return;}
                 if (binding.etRegisterName.getText().toString().equals("")) {Toast.makeText(getContext(), "El nombre no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
                 if (binding.etRegisterLastame.getText().toString().equals("")) {Toast.makeText(getContext(), "El apellido no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
-                if (!binding.etRegisterPassword.getText().toString().equals(binding.etRegisterConfirmPassword.getText().toString())){Toast.makeText(getContext(), "La contraseña no coincide.", Toast.LENGTH_SHORT).show(); return;}
+                if (pass.length()<6) {Toast.makeText(getContext(), "La contraseña debe tener al menos 6 caracteres.", Toast.LENGTH_SHORT).show(); return;}
+                if (!pass.equals(binding.etRegisterConfirmPassword.getText().toString())){Toast.makeText(getContext(), "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show(); return;}
                 register();
 
             }

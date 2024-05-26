@@ -30,6 +30,7 @@ import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.api.GoogleFitCallback;
 import com.xempre.pressurelesshealth.databinding.ActivityAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
+import com.xempre.pressurelesshealth.models.Challenge;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
@@ -156,7 +157,7 @@ public class AddMeasurementBasic extends Fragment {
                 try {
                     float sr = Float.parseFloat(sys.getText().toString());
                     float dr = Float.parseFloat(dis.getText().toString());
-                    if (sr<0 || dr<0 || sr > 250 || dr > 150){
+                    if (sr<0 || dr<0 || sr > 250 || dr > 200){
                         Toast.makeText(getContext(), "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -224,6 +225,12 @@ public class AddMeasurementBasic extends Fragment {
                             return;
                         default:
                             break;
+                    }
+
+                    Measurement measurementResponse = response.body();
+
+                    for (Challenge challenge: measurementResponse.getCompletedChallenges()){
+                        dialog.create(getActivity(), "Reto completado", "Has completado el reto: " + challenge.getName() + " y has ganado " + challenge.getReward() + " puntos.");
                     }
 
 

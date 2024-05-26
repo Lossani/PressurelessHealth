@@ -98,12 +98,12 @@
                                     android:layout_margin="10dp"
                                     android:ems="10"
                                     android:inputType="number|numberDecimal|numberSigned"
-                                    android:text="0"
+                                    android:text="1"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/tvSysAdv1"
-                                    tools:text="0" />
+                                    tools:text="1" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>
@@ -135,12 +135,12 @@
                                     android:layout_margin="10dp"
                                     android:ems="10"
                                     android:inputType="number|numberDecimal|numberSigned"
-                                    android:text="0"
+                                    android:text="1"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/tvDiaAd1"
-                                    tools:text="0" />
+                                    tools:text="1" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>
@@ -150,7 +150,7 @@
                         android:id="@+id/btnUpdate1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Actualizar" />
+                        android:text="@string/get_last_measurement_by_google_fit" />
 
                 </LinearLayout>
 
@@ -214,12 +214,12 @@
                                     android:layout_margin="10dp"
                                     android:ems="10"
                                     android:inputType="number|numberDecimal|numberSigned"
-                                    android:text="0"
+                                    android:text="1"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/tvSysAdv2"
-                                    tools:text="0" />
+                                    tools:text="1" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>
@@ -251,12 +251,12 @@
                                     android:layout_margin="10dp"
                                     android:ems="10"
                                     android:inputType="number|numberDecimal|numberSigned"
-                                    android:text="0"
+                                    android:text="1"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/tvDiaAd2"
-                                    tools:text="0" />
+                                    tools:text="1" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>
@@ -266,7 +266,7 @@
                         android:id="@+id/btnUpdate2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Actualizar" />
+                        android:text="@string/get_last_measurement_by_google_fit" />
 
                 </LinearLayout>
 
@@ -330,12 +330,12 @@
                                     android:layout_margin="10dp"
                                     android:ems="10"
                                     android:inputType="number|numberDecimal|numberSigned"
-                                    android:text="0"
+                                    android:text="1"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/tvSysAdv3"
-                                    tools:text="0" />
+                                    tools:text="1" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>
@@ -367,12 +367,12 @@
                                     android:layout_margin="10dp"
                                     android:ems="10"
                                     android:inputType="number|numberDecimal|numberSigned"
-                                    android:text="0"
+                                    android:text="1"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/tvDiaAd3"
-                                    tools:text="0" />
+                                    tools:text="1" />
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>
@@ -382,7 +382,7 @@
                         android:id="@+id/btnUpdate3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Actualizar" />
+                        android:text="@string/get_last_measurement_by_google_fit" />
 
                 </LinearLayout>
 

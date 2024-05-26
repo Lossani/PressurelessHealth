@@ -65,7 +65,7 @@ public class ChallengeList extends Fragment {
 
 
                         // Después de actualizar los datos, asegúrate de llamar a setRefreshing(false)
-                        binding.swiperefresh.setRefreshing(false);
+                        if (binding!=null) binding.swiperefresh.setRefreshing(false);
                     }
                 }, 2000);
             }
@@ -133,7 +133,17 @@ public class ChallengeList extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        Log.d("PERRO", "PAUSA");
+        if (binding.swiperefresh.isRefreshing()){
+            binding.swiperefresh.setRefreshing(false);
+        }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (binding.swiperefresh.isRefreshing()){
+            binding.swiperefresh.setRefreshing(false);
+        }
+    }
 }

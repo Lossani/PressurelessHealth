@@ -65,7 +65,7 @@ public class GoalList extends Fragment {
 
 
                         // Después de actualizar los datos, asegúrate de llamar a setRefreshing(false)
-                        binding.swiperefresh.setRefreshing(false);
+                        if (binding!=null) binding.swiperefresh.setRefreshing(false);
                     }
                 }, 2000);
             }
@@ -87,7 +87,7 @@ public class GoalList extends Fragment {
                 public void onResponse(Call<List<Goal>> call, Response<List<Goal>> response) {
                     try {
                         List<Goal> responseFromAPI = response.body();
-                        assert responseFromAPI != null;
+                        //assert responseFromAPI != null;
                         clearRecyclerView();
                         if (responseFromAPI.isEmpty()) {
                             if (getContext()!=null) Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
@@ -101,7 +101,7 @@ public class GoalList extends Fragment {
                         }
 
                     } catch (Exception ignored){
-                        if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista1.", Toast.LENGTH_SHORT).show();
+                        if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista de Logros.", Toast.LENGTH_SHORT).show();
                         Log.d("ERROR", ignored.getMessage());
                         onDestroyView();
                     }
@@ -123,12 +123,23 @@ public class GoalList extends Fragment {
         goalAdapter.notifyItemRangeRemoved(0,size);
     }
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d("PERRO", "PAUSA");
+        if (binding.swiperefresh.isRefreshing()){
+            binding.swiperefresh.setRefreshing(false);
+        }
+
     }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+
+        Log.d("PERRO", "PAUSA");
+        if (binding.swiperefresh.isRefreshing()){
+            binding.swiperefresh.setRefreshing(false);
+        }
+
     }
 }

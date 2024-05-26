@@ -106,7 +106,7 @@ public class AddMedicationFrequency extends Fragment {
                 }
 
                 if (!selectedDay) {
-                    Toast.makeText(getContext(), "Debe seleccionar almenos un día.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Debe seleccionar al menos un día.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

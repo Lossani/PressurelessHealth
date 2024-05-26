@@ -109,7 +109,7 @@ public class MainActivityView extends AppCompatActivity {
 
         checkNotificationPermissions();
 
-        if (sharedPreferences.getBoolean("syncGoogleFit", false)) {
+        if (sharedPreferences.getBoolean(Constants.SETTINGS_GOOGLE_AUTH_SIGNED_IN, false)) {
             setGoogleFitApi(new GoogleFitApi(this));
         }
 

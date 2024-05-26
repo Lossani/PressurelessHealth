@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,8 +58,15 @@ public class RestartPasswordFragment extends Fragment {
         binding.btnSendCode.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 if (!binding.etSendCode.getText().toString().equals("")) sendCode();
-                 else Toast.makeText(getContext(), "Debe ingresar un correo.", Toast.LENGTH_LONG).show();
+                 if (!binding.etSendCode.getText().toString().equals("")) {
+                     Pattern pattern = Patterns.EMAIL_ADDRESS;
+                     if (pattern.matcher(binding.etSendCode.getText().toString()).matches()) sendCode();
+                     else Toast.makeText(getContext(), "Correo no valido.", Toast.LENGTH_LONG).show();
+                 }
+                 else {
+
+                     Toast.makeText(getContext(), "Debe ingresar un correo.", Toast.LENGTH_LONG).show();
+                 }
              }
          }
         );

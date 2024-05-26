@@ -26,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.fitness.data.Field;
 import com.xempre.pressurelesshealth.MainActivity;
@@ -35,12 +36,15 @@ import com.xempre.pressurelesshealth.api.GoogleFitApi;
 import com.xempre.pressurelesshealth.api.GoogleFitCallback;
 import com.xempre.pressurelesshealth.databinding.AdvancedAddMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
+import com.xempre.pressurelesshealth.models.Challenge;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.utils.Constants;
 import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.add.SelectAddMode;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
 import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
+import com.xempre.pressurelesshealth.views.shared.CustomDialog;
 import com.xempre.pressurelesshealth.views.shared.MinMaxFilter;
 
 import org.w3c.dom.Text;
@@ -134,6 +138,16 @@ public class AddMeasurementAdvanced extends Fragment {
             }
         });
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());;
+        boolean isGoogleAuth = sharedPreferences.getBoolean(Constants.SETTINGS_GOOGLE_AUTH_SIGNED_IN, false);
+
+        if (!isGoogleAuth){
+            binding.btnUpdate1.setVisibility(View.INVISIBLE);
+            binding.btnUpdate2.setVisibility(View.INVISIBLE);
+            binding.btnUpdate3.setVisibility(View.INVISIBLE);
+        }
+
+
         binding.btnBackAddAdvanced.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,12 +194,13 @@ public class AddMeasurementAdvanced extends Fragment {
             }
         });
 
-        binding.etDiastolicAd1.setFilters(new InputFilter[]{new MinMaxFilter("0","250")});
-        binding.etDiastolicAd2.setFilters(new InputFilter[]{new MinMaxFilter("0","250")});
-        binding.etDiastolicAd3.setFilters(new InputFilter[]{new MinMaxFilter("0","250")});
-        binding.etSystolicAd1.setFilters(new InputFilter[]{new MinMaxFilter("0","250")});
-        binding.etSystolicAd2.setFilters(new InputFilter[]{new MinMaxFilter("0","250")});
-        binding.etSystolicAd3.setFilters(new InputFilter[]{new MinMaxFilter("0","250")});
+
+        binding.etSystolicAd1.setFilters(new InputFilter[]{new MinMaxFilter(1,250)});
+        binding.etSystolicAd2.setFilters(new InputFilter[]{new MinMaxFilter(1,250)});
+        binding.etSystolicAd3.setFilters(new InputFilter[]{new MinMaxFilter(1,250)});
+        binding.etDiastolicAd1.setFilters(new InputFilter[]{new MinMaxFilter(1,200)});
+        binding.etDiastolicAd2.setFilters(new InputFilter[]{new MinMaxFilter(1,200)});
+        binding.etDiastolicAd3.setFilters(new InputFilter[]{new MinMaxFilter(1,200)});
 
         binding.etDiastolicAd1.addTextChangedListener(new TextWatcher() {
 
@@ -419,7 +434,7 @@ public class AddMeasurementAdvanced extends Fragment {
 //                            calculateMeasurement();
 //                        }
                     } else {
-                        Toast.makeText(getActivity(), "No se ha detectado una nueva medida, vuelva a intentar en unos segundos."+ finalText, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "No se ha detectado una nueva medida reciente en Google Fit."+ finalText, Toast.LENGTH_LONG).show();
                     }
 
                 } else {
@@ -479,6 +494,13 @@ public class AddMeasurementAdvanced extends Fragment {
             public void onResponse(Call<Measurement> call, Response<Measurement> response) {
                 if (response.code() == 201){
                     Toast.makeText(getContext(), "Medida guardada exitosamente.", Toast.LENGTH_SHORT).show();
+
+                    Measurement measurementResponse = response.body();
+                    CustomDialog dialog = new CustomDialog();
+                    for (Challenge challenge: measurementResponse.getCompletedChallenges()){
+                        dialog.create(getActivity(), "Reto completado", "Has completado el reto: " + challenge.getName() + " y has ganado " + challenge.getReward() + " puntos.");
+                    }
+
                     replaceFragment(new MeasurementList());
                 } else {
                     Log.d("ADVANCE", response.toString() + res.first.floatValue() + res.second.floatValue());

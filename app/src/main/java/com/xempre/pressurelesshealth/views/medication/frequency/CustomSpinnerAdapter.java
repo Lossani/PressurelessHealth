@@ -21,12 +21,17 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
     private ArrayList<String> mItems;
     private boolean[] checkedItems;
 
+    CheckBox checkBox;
+
+    TextView textView;
     public CustomSpinnerAdapter(Context context, ArrayList<String> items) {
         super(context, 0, items);
         mContext = context;
         mItems = items;
         checkedItems = new boolean[items.size()];
     }
+
+
 
     @NonNull
     @Override
@@ -35,8 +40,8 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.custom_spinner_item, parent, false);
         }
 
-        CheckBox checkBox = convertView.findViewById(R.id.cbCustomItem);
-        TextView textView = convertView.findViewById(R.id.tvCustomItem);
+        checkBox = convertView.findViewById(R.id.cbCustomItem);
+        textView = convertView.findViewById(R.id.tvCustomItem);
         checkBox.setVisibility(View.GONE);
 
         final String item = mItems.get(position);
@@ -47,13 +52,41 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
             public void onClick(View v) {
                 CheckBox cb = (CheckBox) v;
                 checkedItems[position] = cb.isChecked();
+                notifyDataSetChanged();
             }
         });
 
         checkBox.setText(item);
-        textView.setText("SELECCIONAR");
+
+        updateText();
+        //textView.setText("SELECCIONAR");
+
+
 
         return convertView;
+    }
+
+
+
+    public void updateText(){
+        String text = "";
+
+        for (int i = 0; i< checkedItems.length;i++){
+            if (i== 0 && checkedItems[i]) text += " Lu ";
+            if (i== 1 && checkedItems[i]) text += " Ma ";
+            if (i== 2 && checkedItems[i]) text += " Mi ";
+            if (i== 3 && checkedItems[i]) text += " Ju ";
+            if (i== 4 && checkedItems[i]) text += " Vi ";
+            if (i== 5 && checkedItems[i]) text += " Sa ";
+            if (i== 6 && checkedItems[i]) text += " Do ";
+        }
+
+//        textView.invalidate();
+//        textView.requestLayout();
+
+        if (text.equals("")) textView.setText("SELECCIONAR");
+        else textView.setText(text);
+
     }
 
     @Override
@@ -62,8 +95,8 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.custom_spinner_item, parent, false);
         }
 
-        CheckBox checkBox = convertView.findViewById(R.id.cbCustomItem);
-        TextView textView = convertView.findViewById(R.id.tvCustomItem);
+        checkBox = convertView.findViewById(R.id.cbCustomItem);
+        textView = convertView.findViewById(R.id.tvCustomItem);
         textView.setVisibility(View.GONE);
 
         final String item = mItems.get(position);
@@ -74,6 +107,7 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
             public void onClick(View v) {
                 CheckBox cb = (CheckBox) v;
                 checkedItems[position] = cb.isChecked();
+                notifyDataSetChanged();
             }
         });
 

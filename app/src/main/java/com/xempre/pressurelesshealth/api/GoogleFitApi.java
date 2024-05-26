@@ -115,6 +115,7 @@ public class GoogleFitApi {
 
         if (googleAccount == null) {
             Toast.makeText(activity, "No se ha podido conectar a su cuenta de Google.", Toast.LENGTH_LONG).show();
+            return;
         }
 
         Fitness.getHistoryClient(activity, googleAccount)
@@ -159,7 +160,7 @@ public class GoogleFitApi {
                                 //}
                             }else {
                                 if (dataSet.getDataType().getName().equals("com.google.blood_pressure"))
-                                    Toast.makeText(activity, "No se ha detectado ninguna medida reciente.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity, "No se ha detectado ninguna medida reciente en Google Fit.", Toast.LENGTH_LONG).show();
                             }
                         }
                     }

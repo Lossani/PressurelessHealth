@@ -7,6 +7,7 @@
     <string name="next">Next</string>
     <string name="previous">Volver</string>
     <string name="save">Guardar</string>
+    <string name="get_last_measurement_by_google_fit">Obtener última medida de Google Fit</string>
 
     <string-array name="weekday">
         <item>Lunes</item>

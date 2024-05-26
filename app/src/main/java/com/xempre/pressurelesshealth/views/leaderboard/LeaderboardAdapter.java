@@ -48,8 +48,9 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     @Override
     public void onBindViewHolder(LeaderboardItemHolder holder, int position) {
         LeaderboardItem leaderboardItem = leaderboardItemList.get(position);
-        if (leaderboardItem.getFirstName().equals("") && leaderboardItem.getFirstName().equals("")) holder.tvName.setText(leaderboardItem.getUsername());
-        else holder.tvName.setText(leaderboardItem.getFirstName()+" "+leaderboardItem.getLastName());
+        //if (leaderboardItem.getFirstName().equals("") && leaderboardItem.getLastName().equals(""))
+        holder.tvName.setText(leaderboardItem.getUsername());
+        //else holder.tvName.setText(leaderboardItem.getFirstName()+" "+leaderboardItem.getLastName());
         holder.tvPosition.setText((position+1)+"");
         holder.tvPoints.setText(leaderboardItem.getPoints().toString());
         if(!leaderboardItem.getAvatarURL().equals(""))

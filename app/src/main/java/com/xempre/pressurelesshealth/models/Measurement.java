@@ -20,6 +20,12 @@ public class Measurement {
     @JsonProperty("description")
     private String description;
 
+    @JsonProperty("completed_challenges")
+    private Challenge[] completedChallenges;
+
+    @JsonProperty("failed_challenges")
+    private Challenge[] failedChallenges;
+
     @JsonProperty("comments")
     private String comments;
     public Measurement() {
@@ -38,6 +44,22 @@ public class Measurement {
         this.diastolicPressure = measurement.getDiastolicRecord();
         this.measurementDate = measurement.getMeasurementDate();
         this.isAdvancedMethod = measurement.getIsAdvanced();
+    }
+
+    public Challenge[] getFailedChallenges() {
+        return failedChallenges;
+    }
+
+    public Challenge[] getCompletedChallenges() {
+        return completedChallenges;
+    }
+
+    public void setCompletedChallenges(Challenge[] completedChallenges) {
+        this.completedChallenges = completedChallenges;
+    }
+
+    public void setFailedChallenges(Challenge[] failedChallenges) {
+        this.failedChallenges = failedChallenges;
     }
 
     public String getMeasurementDate() {
