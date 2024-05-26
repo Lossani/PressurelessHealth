@@ -76,7 +76,9 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
             Log.d("DATA", challenge.toString());
             holder.textViewDesc.setText(String.valueOf(challenge.getDescription()));
             holder.textViewName.setText(String.valueOf(challenge.getName()));
-            holder.textViewReward.setText(String.valueOf(challenge.getReward()));
+            holder.textViewReward.setText(String.valueOf(challenge.getReward())+ " Puntos");
+
+
 
             if (!challenge.isRepeatable()) {
                 ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
@@ -90,6 +92,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
                 holder.button.setLayoutParams(layoutParams);
                 try {
                     holder.checkBox.setChecked((int) (challenge.getLatestHistory()[0].getProgress()) >= 100);
+                    holder.checkBox.setEnabled((int) (challenge.getLatestHistory()[0].getProgress()) >= 100);
                     holder.progressBar.setProgress((int) (challenge.getLatestHistory()[0].getProgress()));
                 } catch (Exception ignore) {
                 }

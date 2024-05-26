@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.xempre.pressurelesshealth.R;
 
 public class CustomDialog {
-    public void create(Context activity, String title, String content){
+    public static void create(Context activity, String title, String content){
         Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.ok_dialog);
         dialog.setCancelable(false);

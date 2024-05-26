@@ -9,9 +9,11 @@
 
     <LinearLayout
         android:id="@+id/linearLayout8"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingHorizontal="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -73,13 +75,14 @@
 
         <EditText
             android:id="@+id/mltAddBasic"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:ems="10"
             android:gravity="start|top"
+            android:hint="Ej: Después de desayunar"
             android:inputType="textMultiLine" />
 
         <LinearLayout

@@ -80,7 +80,7 @@ public class ContactList extends Fragment {
                         return;
                     }
                     if (responseFromAPI.isEmpty()) {
-                        if (getContext()!=null) Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
+                        if (getContext()!=null) Toast.makeText(getContext(), "No existe contactos registrados.", Toast.LENGTH_SHORT).show();
                     } else {
                         for (Contact element : responseFromAPI) {
 //                            Log.d("PERRUNO", element.getName());

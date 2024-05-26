@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +47,18 @@ public class ContactAdd extends Fragment {
 
         binding = FragmentContactAddBinding.inflate(inflater, container, false);
 
+        InputFilter letterFilter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    if (!Character.isLetter(source.charAt(i)) && !Character.isSpaceChar(source.charAt(i))) {
+                        return "";
+                    }
+                }
+                return null;
+            }
+        };
+
         binding.btnContactAddSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +86,8 @@ public class ContactAdd extends Fragment {
                 ChangeFragment.change(getContext(), R.id.frame_layout, new ContactList());
             }
         });
+
+        binding.etAddContactName.setFilters(new InputFilter[]{letterFilter});
 
         return binding.getRoot();
 

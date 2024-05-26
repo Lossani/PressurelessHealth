@@ -8,9 +8,11 @@
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -38,24 +40,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Nombres"
-            android:inputType="text" />
+            android:hint="Nombre"
+            android:inputType="textPersonName" />
 
         <TextView
             android:id="@+id/tbAddContactNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Número"
+            android:text="Número Telefónico"
             android:textSize="16sp" />
 
         <EditText
             android:id="@+id/etAddContactNumber"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="987654321"
-            android:inputType="text"
+            android:inputType="phone"
             android:phoneNumber="true" />
 
         <LinearLayout

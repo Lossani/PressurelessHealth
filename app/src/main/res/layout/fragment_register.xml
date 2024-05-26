@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Nombres"
-            android:inputType="text" />
+            android:inputType="textPersonName" />
 
         <TextView
             android:id="@+id/labelRegisterLastname"
@@ -45,12 +45,12 @@
             android:textSize="20dp" />
 
         <EditText
-            android:id="@+id/etRegisterLastame"
+            android:id="@+id/etRegisterLastname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Apellidos"
-            android:inputType="text" />
+            android:inputType="textPersonName" />
 
         <TextView
             android:id="@+id/labelRegisterUsername"
@@ -81,7 +81,7 @@
             android:autoLink="email"
             android:ems="10"
             android:hint="email@test.com"
-            android:inputType="text" />
+            android:inputType="text|textEmailAddress" />
 
         <TextView
             android:id="@+id/labelRegisterPassword"
@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="******"
-            android:inputType="text"
+            android:inputType="textPassword"
             android:password="true" />
 
         <TextView

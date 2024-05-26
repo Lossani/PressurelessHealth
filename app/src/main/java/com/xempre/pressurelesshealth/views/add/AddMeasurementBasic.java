@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -155,10 +156,20 @@ public class AddMeasurementBasic extends Fragment {
             @Override
             public void onClick(View view) {
                 try {
+                    if (sys.getText().toString().equals("")) {
+                        CustomDialog.create(getActivity(), "Alerta", "La medida de Presión Sistólica no tiene un valor válido.");
+                        return;
+                    }
+
+                    if (dis.getText().toString().equals("")) {
+                        CustomDialog.create(getActivity(), "Alerta", "La medida de Presión Diastólica no tiene un valor válido.");
+                        return;
+                    }
+
                     float sr = Float.parseFloat(sys.getText().toString());
                     float dr = Float.parseFloat(dis.getText().toString());
-                    if (sr<0 || dr<0 || sr > 250 || dr > 200){
-                        Toast.makeText(getContext(), "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
+                    if (sr<1 || dr<1 || sr > 250 || dr > 200){
+                        CustomDialog.create(getActivity(), "Alerta", "Asegurece de ingresar números validos.");
                         return;
                     }
                     String pattern = "yyy-MM-dd'T'HH:mm:ss'Z'";

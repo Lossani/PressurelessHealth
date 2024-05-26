@@ -58,7 +58,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
         Log.d("DATA", goal.toString());
         holder.textViewDesc.setText(String.valueOf(goal.getDescription()));
         holder.textViewName.setText(String.valueOf(goal.getName()));
-        holder.textViewReward.setText(String.valueOf(goal.getReward()));
+        holder.textViewReward.setText(String.valueOf(goal.getReward()) + " Puntos");
 //        holder.progressBar.setProgress(10);
         validateComplete(goal, holder);
         getBitmapFromURL(holder, goal.getImage());
@@ -89,6 +89,7 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
                             //REMPLAZAR CON ID DE USUARIO
                             if (Objects.equals(goalHistory.getGoal(), goal.getId())) {
                                 holder.checkBox.setChecked(!Objects.equals(goalHistory.getReachedOn(), ""));
+                                holder.checkBox.setEnabled(!Objects.equals(goalHistory.getReachedOn(), ""));
                                 holder.date.setVisibility(View.VISIBLE);
                                 holder.date.setText(goalHistory.getReachedOn().substring(0,10));
                             }

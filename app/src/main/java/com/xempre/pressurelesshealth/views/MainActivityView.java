@@ -57,6 +57,7 @@ import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementLi
 import com.xempre.pressurelesshealth.views.settings.SettingsFragment;
 import com.xempre.pressurelesshealth.utils.Constants;
 import com.xempre.pressurelesshealth.views.shared.ChangeDate;
+import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 import com.xempre.pressurelesshealth.views.shared.CustomDialog;
 
 import java.time.Duration;
@@ -263,29 +264,29 @@ public class MainActivityView extends AppCompatActivity {
         binding = ActivityMainViewBinding.inflate(getLayoutInflater());
         bottomNavigationView = binding.bottomNavigationMain;
         setContentView(binding.getRoot());
-        replaceFragment(new UserProfile());
+        ChangeFragment.change(this,R.id.frame_layout,new UserProfile());
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bb_add){
-                replaceFragment(new SelectAddMode());
+                ChangeFragment.change(this,R.id.frame_layout, new SelectAddMode());
             } else if (item.getItemId() == R.id.bb_report) {
-                replaceFragment(new MeasurementList());
+                ChangeFragment.change(this,R.id.frame_layout,new MeasurementList());
             } else if (item.getItemId() == R.id.bb_profile) {
-                replaceFragment(new UserProfile());
+                ChangeFragment.change(this,R.id.frame_layout,new UserProfile());
             } else if (item.getItemId() == R.id.bb_config) {
-                replaceFragment(new SettingsFragment());
+                ChangeFragment.change(this,R.id.frame_layout,new SettingsFragment());
             } else if (item.getItemId() == R.id.bb_medication) {
-                replaceFragment(new MedicationList());
+                ChangeFragment.change(this,R.id.frame_layout,new MedicationList());
             }
             return true;
         });
     }
 
-    private void replaceFragment(Fragment fragment){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
-    }
+//    private void replaceFragment(Fragment fragment){
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.frame_layout, fragment);
+//        fragmentTransaction.commit();
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -27,7 +27,9 @@ import com.xempre.pressurelesshealth.interfaces.GoalService;
 import com.xempre.pressurelesshealth.interfaces.LeaderboardService;
 import com.xempre.pressurelesshealth.models.Goal;
 import com.xempre.pressurelesshealth.models.LeaderboardItem;
+import com.xempre.pressurelesshealth.views.profile.UserProfile;
 import com.xempre.pressurelesshealth.views.profile.goal.GoalAdapter;
+import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -59,6 +61,13 @@ public class LeaderboardList extends Fragment {
         leaderboardAdapter = new LeaderboardAdapter(getContext(), leaderboardItemList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(leaderboardAdapter);
+
+        binding.btnBackLeaderboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeFragment.change(getContext(), R.id.frame_layout, new UserProfile());
+            }
+        });
 
         callAPI();
 

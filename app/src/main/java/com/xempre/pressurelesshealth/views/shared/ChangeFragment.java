@@ -15,6 +15,7 @@ public class ChangeFragment {
         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(id, fragment);
+        //fragmentTransaction.addToBackStack(String.valueOf(id));
         fragmentTransaction.commit();
     }
 }

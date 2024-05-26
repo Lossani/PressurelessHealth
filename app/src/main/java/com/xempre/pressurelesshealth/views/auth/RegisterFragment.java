@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -53,6 +55,34 @@ public class RegisterFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentRegisterBinding.inflate(getLayoutInflater());
 
+        InputFilter letterFilter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    if (!Character.isLetter(source.charAt(i)) && !Character.isSpaceChar(source.charAt(i))) {
+                        return "";
+                    }
+                }
+                return null;
+            }
+        };
+
+        InputFilter alphanumericFilter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    char c = source.charAt(i);
+                    if (!Character.isLetterOrDigit(c)) {
+                        return "";
+                    }
+                }
+                return null;
+            }
+        };
+
+        binding.etRegisterName.setFilters(new InputFilter[]{letterFilter});
+        binding.etRegisterLastname.setFilters(new InputFilter[]{letterFilter});
+        binding.etRegisterUsername.setFilters(new InputFilter[]{alphanumericFilter});
         binding.btnRegBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,11 +98,11 @@ public class RegisterFragment extends Fragment {
                 String email = binding.etRegisterEmail.getText().toString();
                 String pass = binding.etRegisterPassword.getText().toString();
 
-                if (binding.etRegisterPassword.getText().toString().equals("")) {Toast.makeText(getContext(), "La contraseña no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
-                if (email.equals("") || !pattern.matcher(email).matches()) {Toast.makeText(getContext(), "El correo no es valido.", Toast.LENGTH_SHORT).show(); return;}
-                if (binding.etRegisterUsername.getText().toString().equals("")) {Toast.makeText(getContext(), "El nombre de usuario no puede ir en blanco.", Toast.LENGTH_SHORT).show();return;}
-                if (binding.etRegisterName.getText().toString().equals("")) {Toast.makeText(getContext(), "El nombre no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
-                if (binding.etRegisterLastame.getText().toString().equals("")) {Toast.makeText(getContext(), "El apellido no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
+                if (binding.etRegisterPassword.getText().toString().trim().isEmpty()) {Toast.makeText(getContext(), "La contraseña no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
+                if (email.trim().isEmpty() || !pattern.matcher(email).matches()) {Toast.makeText(getContext(), "El correo no es valido.", Toast.LENGTH_SHORT).show(); return;}
+                if (binding.etRegisterUsername.getText().toString().trim().isEmpty()) {Toast.makeText(getContext(), "El nombre de usuario no puede ir en blanco.", Toast.LENGTH_SHORT).show();return;}
+                if (binding.etRegisterName.getText().toString().trim().isEmpty()) {Toast.makeText(getContext(), "El nombre no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
+                if (binding.etRegisterLastname.getText().toString().trim().isEmpty()) {Toast.makeText(getContext(), "El apellido no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
                 if (pass.length()<6) {Toast.makeText(getContext(), "La contraseña debe tener al menos 6 caracteres.", Toast.LENGTH_SHORT).show(); return;}
                 if (!pass.equals(binding.etRegisterConfirmPassword.getText().toString())){Toast.makeText(getContext(), "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show(); return;}
                 register();
@@ -88,10 +118,10 @@ public class RegisterFragment extends Fragment {
         UserService userService = ApiClient.createService(getContext(), UserService.class, 0);
         User temp = new User();
         temp.setPassword(binding.etRegisterPassword.getText().toString());
-        temp.setUsername(binding.etRegisterUsername.getText().toString());
-        temp.setFirstName(binding.etRegisterName.getText().toString());
-        temp.setLastName(binding.etRegisterLastame.getText().toString());
-        temp.setEmail(binding.etRegisterEmail.getText().toString());
+        temp.setUsername(binding.etRegisterUsername.getText().toString().trim());
+        temp.setFirstName(binding.etRegisterName.getText().toString().trim());
+        temp.setLastName(binding.etRegisterLastname.getText().toString().trim());
+        temp.setEmail(binding.etRegisterEmail.getText().toString().trim());
 
         Call<User> call = userService.register(temp);
         call.enqueue(new Callback<User>() {

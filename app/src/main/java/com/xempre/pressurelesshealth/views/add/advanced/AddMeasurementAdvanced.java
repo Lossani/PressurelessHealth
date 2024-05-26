@@ -233,6 +233,19 @@ public class AddMeasurementAdvanced extends Fragment {
 
             }
         });
+
+//        binding.etSystolicAd1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (!hasFocus){
+//                    if (binding.etSystolicAd1.getText().toString().isEmpty()) {
+//                        binding.etSystolicAd1.setText("1");
+//                        binding.etSystolicAd1.setSelection(binding.etSystolicAd1.getText().length()); // Mover el cursor al final del texto
+//                    }
+//                }
+//            }
+//        });
+
         binding.etDiastolicAd2.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -295,91 +308,6 @@ public class AddMeasurementAdvanced extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
 
-            }
-        });
-
-        binding.etSystolicAd1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    if(binding.etSystolicAd1.getText().length() == 1 && binding.etSystolicAd1.getText().toString().trim().equals("0")){
-                        binding.etSystolicAd1.setText("");
-                    }
-                }else {
-                    if(binding.etSystolicAd1.getText().length() == 0){
-                        binding.etSystolicAd1.setText("0");
-                    }
-                }
-            }
-        });
-        binding.etSystolicAd2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    if(binding.etSystolicAd2.getText().length() == 1 && binding.etSystolicAd2.getText().toString().trim().equals("0")){
-                        binding.etSystolicAd2.setText("");
-                    }
-                }else {
-                    if(binding.etSystolicAd2.getText().length() == 0){
-                        binding.etSystolicAd2.setText("0");
-                    }
-                }
-            }
-        });
-        binding.etSystolicAd3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    if(binding.etSystolicAd3.getText().length() == 1 && binding.etSystolicAd3.getText().toString().trim().equals("0")){
-                        binding.etSystolicAd3.setText("");
-                    }
-                }else {
-                    if(binding.etSystolicAd3.getText().length() == 0){
-                        binding.etSystolicAd3.setText("0");
-                    }
-                }
-            }
-        });
-        binding.etDiastolicAd1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    if(binding.etDiastolicAd1.getText().length() == 1 && binding.etDiastolicAd1.getText().toString().trim().equals("0")){
-                        binding.etDiastolicAd1.setText("");
-                    }
-                }else {
-                    if(binding.etDiastolicAd1.getText().length() == 0){
-                        binding.etDiastolicAd1.setText("0");
-                    }
-                }
-            }
-        });
-        binding.etDiastolicAd2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    if(binding.etDiastolicAd2.getText().length() == 1 && binding.etDiastolicAd2.getText().toString().trim().equals("0")){
-                        binding.etDiastolicAd2.setText("");
-                    }
-                }else {
-                    if(binding.etDiastolicAd2.getText().length() == 0){
-                        binding.etDiastolicAd2.setText("0");
-                    }
-                }
-            }
-        });
-        binding.etDiastolicAd3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
-                    if(binding.etDiastolicAd3.getText().length() == 1 && binding.etDiastolicAd3.getText().toString().trim().equals("0")){
-                        binding.etDiastolicAd3.setText("");
-                    }
-                }else {
-                    if(binding.etDiastolicAd3.getText().length() == 0){
-                        binding.etDiastolicAd3.setText("0");
-                    }
-                }
             }
         });
 
@@ -465,6 +393,27 @@ public class AddMeasurementAdvanced extends Fragment {
 //        float sr = Float.parseFloat(sys.getText().toString());
 //        float dr = Float.parseFloat(dis.getText().toString());
 
+        String alertMessage = null;
+
+        if (binding.etSystolicAd1.getText().toString().equals("")) {
+            alertMessage = "La medida de Presión Sistólica 1 no tiene un valor válido.";
+        } else if (binding.etSystolicAd2.getText().toString().equals("")) {
+            alertMessage = "La medida de Presión Sistólica 2 no tiene un valor válido.";
+        } else if (binding.etSystolicAd3.getText().toString().equals("")) {
+            alertMessage = "La medida de Presión Sistólica 3 no tiene un valor válido.";
+        } else if (binding.etDiastolicAd1.getText().toString().equals("")) {
+            alertMessage = "La medida de Presión Diastólica 1 no tiene un valor válido.";
+        } else if (binding.etDiastolicAd2.getText().toString().equals("")) {
+            alertMessage = "La medida de Presión Diastólica 2 no tiene un valor válido.";
+        } else if (binding.etDiastolicAd3.getText().toString().equals("")) {
+            alertMessage = "La medida de Presión Diastólica 3 no tiene un valor válido.";
+        }
+
+        if (alertMessage != null) {
+            CustomDialog.create(getActivity(), "Alerta", alertMessage);
+            return;
+        }
+
         Pair<Number, Number> res = calculateMeasurement();
 
         String pattern = "yyy-MM-dd'T'HH:mm:ss'Z'";
@@ -524,16 +473,16 @@ public class AddMeasurementAdvanced extends Fragment {
 //            throw new IllegalArgumentException("La lista no puede ser nula o vacía.");
 //        }
 
-        if (binding.etSystolicAd1.getText().toString().equals("")) binding.etSystolicAd1.setText("0");
-        if (binding.etSystolicAd2.getText().toString().equals("")) binding.etSystolicAd2.setText("0");
-        if (binding.etSystolicAd3.getText().toString().equals("")) binding.etSystolicAd3.setText("0");
-        if (binding.etDiastolicAd1.getText().toString().equals("")) binding.etDiastolicAd1.setText("0");
-        if (binding.etDiastolicAd2.getText().toString().equals("")) binding.etDiastolicAd2.setText("0");
-        if (binding.etDiastolicAd3.getText().toString().equals("")) binding.etDiastolicAd3.setText("0");
+//        if (binding.etSystolicAd1.getText().toString().equals("")) binding.etSystolicAd1.setText("1");
+//        if (binding.etSystolicAd2.getText().toString().equals("")) binding.etSystolicAd2.setText("1");
+//        if (binding.etSystolicAd3.getText().toString().equals("")) binding.etSystolicAd3.setText("1");
+//        if (binding.etDiastolicAd1.getText().toString().equals("")) binding.etDiastolicAd1.setText("1");
+//        if (binding.etDiastolicAd2.getText().toString().equals("")) binding.etDiastolicAd2.setText("1");
+//        if (binding.etDiastolicAd3.getText().toString().equals("")) binding.etDiastolicAd3.setText("1");
 
-        measurements[0] = new Pair<>(Float.valueOf(binding.etSystolicAd1.getText().toString()), Float.valueOf(binding.etDiastolicAd1.getText().toString()));
-        measurements[1] = new Pair<>(Float.valueOf(binding.etSystolicAd2.getText().toString()), Float.valueOf(binding.etDiastolicAd2.getText().toString()));
-        measurements[2] = new Pair<>(Float.valueOf(binding.etSystolicAd3.getText().toString()), Float.valueOf(binding.etDiastolicAd3.getText().toString()));
+        measurements[0] = new Pair<>(Float.valueOf(binding.etSystolicAd1.getText().toString().equals("")?"0":binding.etSystolicAd1.getText().toString()), Float.valueOf(binding.etDiastolicAd1.getText().toString().equals("")?"0":binding.etDiastolicAd1.getText().toString()));
+        measurements[1] = new Pair<>(Float.valueOf(binding.etSystolicAd2.getText().toString().equals("")?"0":binding.etSystolicAd2.getText().toString()), Float.valueOf(binding.etDiastolicAd2.getText().toString().equals("")?"0":binding.etDiastolicAd2.getText().toString()));
+        measurements[2] = new Pair<>(Float.valueOf(binding.etSystolicAd3.getText().toString().equals("")?"0":binding.etSystolicAd3.getText().toString()), Float.valueOf(binding.etDiastolicAd3.getText().toString().equals("")?"0":binding.etDiastolicAd3.getText().toString()));
 
 
         float sumaDis = 0;
