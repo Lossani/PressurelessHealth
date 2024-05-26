@@ -21,6 +21,8 @@ import com.xempre.pressurelesshealth.interfaces.MedicationService;
 import com.xempre.pressurelesshealth.models.Medication;
 import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 
+import org.apache.commons.math3.analysis.function.Add;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,6 +32,16 @@ public class AddMedication extends Fragment {
     private MedicationAddBinding binding;
 
     Medication medication;
+
+    boolean isEditMode;
+
+    AddMedication(){
+        isEditMode = false;
+    }
+    AddMedication(Medication medication){
+        this.medication = medication;
+        isEditMode = true;
+    }
 
     @Override
     public View onCreateView(
@@ -49,12 +61,16 @@ public class AddMedication extends Fragment {
 
                     int userId = sharedPreferences.getInt("userId", 0);
 
-                    Medication medication = new Medication();
-                    medication.setUserId(userId);
-                    medication.setDeleted(false);
-                    medication.setName(binding.editTextText.getText().toString());
-                    medication.setDescription(binding.editTextText2.getText().toString());
-                    callAPI(medication);
+                    Medication medicationTemp = new Medication();
+
+                    medicationTemp.setUserId(userId);
+                    medicationTemp.setDeleted(false);
+                    medicationTemp.setName(binding.editTextText.getText().toString());
+                    medicationTemp.setDescription(binding.editTextText2.getText().toString());
+                    if (!isEditMode) callAPI(medicationTemp);
+                    else {
+                        medicationTemp.setId(medication.getId());
+                        updateMedication(medicationTemp);}
                 } else {
                     Toast.makeText(getContext(), "Verifique que los campos no estén vacíos.", Toast.LENGTH_SHORT).show();
                 }
@@ -70,8 +86,43 @@ public class AddMedication extends Fragment {
             }
         });
 
+        if (isEditMode){
+            binding.editTextText.setText(medication.getName());
+            binding.editTextText2.setText(medication.getDescription());
+            binding.textView20.setText("Editar Medicina");
+        }
+
         return binding.getRoot();
 
+    }
+
+    public void updateMedication(Medication medication){
+
+        MedicationService medicationService = ApiClient.createService(getContext(), MedicationService.class,1);
+
+//        Medication temp = new Medication();
+//        temp.setDeleted(true);
+
+        Call<Medication> call = medicationService.updateMedication(medication.getId(), medication);
+
+        call.enqueue(new Callback<Medication>() {
+            @Override
+            public void onResponse(Call<Medication> call, Response<Medication> response) {
+                if(response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Se editó la medicación.", Toast.LENGTH_SHORT).show();
+                    ChangeFragment.change(getContext(), R.id.frame_layout, new MedicationList());
+                } else {
+                    Toast.makeText(getContext(), "Error al intentar eliminar la medicación.", Toast.LENGTH_SHORT).show();
+                    Log.d("ERROR", response.message());
+                    Log.d("ERROR", String.valueOf(response.body()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Medication> call, Throwable t) {
+                Log.d("ERROR", t.getMessage());
+            }
+        });
     }
 
     public void callAPI(Medication medication){

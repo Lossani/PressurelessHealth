@@ -38,6 +38,17 @@ public class ContactAdd extends Fragment {
 
     Contact contact;
 
+    boolean isEditMode;
+
+    ContactAdd(){
+        isEditMode = false;
+    }
+
+    ContactAdd(Contact contact){
+        isEditMode=true;
+        this.contact = contact;
+    }
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -68,11 +79,16 @@ public class ContactAdd extends Fragment {
 
                     int userId = sharedPreferences.getInt("userId", 0);
 
-                    Contact contact = new Contact();
-                    contact.setFirstName(binding.etAddContactName.getText().toString());
-                    contact.setPhone(binding.etAddContactNumber.getText().toString());
-                    contact.setUserId(userId);
-                    callAPI(contact);
+                    Contact contactTemp = new Contact();
+                    contactTemp.setFirstName(binding.etAddContactName.getText().toString());
+                    contactTemp.setPhone(binding.etAddContactNumber.getText().toString());
+                    contactTemp.setUserId(userId);
+                    if (!isEditMode)
+                    callAPI(contactTemp);
+                    else {
+                        contactTemp.setId(contact.getId());
+                        updateContact(contactTemp);
+                    }
                 } else {
                     Toast.makeText(getContext(), "Verifique que los campos no estén vacíos.", Toast.LENGTH_SHORT).show();
                 }
@@ -89,8 +105,43 @@ public class ContactAdd extends Fragment {
 
         binding.etAddContactName.setFilters(new InputFilter[]{letterFilter});
 
+        if (isEditMode){
+            binding.etAddContactName.setText(contact.getFirstName());
+            binding.etAddContactNumber.setText(contact.getPhone());
+            binding.tbAddContactTitle.setText("Editar Contacto");
+        }
+
         return binding.getRoot();
 
+    }
+
+    public void updateContact(Contact contact){
+
+        ContactService contactService = ApiClient.createService(getContext(), ContactService.class,1);
+
+//        Contact temp = new Contact();
+//        temp.setDeleted(true);
+
+        Call<Contact> call = contactService.updateContact(contact.getId(), contact);
+//        Log.d("ERROR", String.valueOf(temp.getDeleted()));
+        call.enqueue(new Callback<Contact>() {
+            @Override
+            public void onResponse(Call<Contact> call, Response<Contact> response) {
+                if(response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Se modificó el contacto.", Toast.LENGTH_SHORT).show();
+                    ChangeFragment.change(getContext(), R.id.frame_layout, new ContactList());
+                } else {
+                    Toast.makeText(getContext(), "Error al intentar eliminar la frecuencia.", Toast.LENGTH_SHORT).show();
+                    Log.d("ERROR", response.message());
+                    Log.d("ERROR", String.valueOf(response.body()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Contact> call, Throwable t) {
+                Log.d("ERROR", t.getMessage());
+            }
+        });
     }
 
     public void callAPI(Contact contact){

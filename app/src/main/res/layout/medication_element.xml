@@ -27,9 +27,9 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="4"
+                    android:layout_weight="8"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -39,7 +39,21 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="TextView" />
+
                 </LinearLayout>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnMedicationAddEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:clickable="true"
+                    android:src="@drawable/baseline_edit_24"
+                    android:tint="#FFFFFF"
+                    app:backgroundTint="#009688"
+                    app:fabSize="mini" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnMedicationElementMore"

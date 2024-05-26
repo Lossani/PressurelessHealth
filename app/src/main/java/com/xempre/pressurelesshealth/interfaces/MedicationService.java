@@ -1,5 +1,6 @@
 package com.xempre.pressurelesshealth.interfaces;
 
+import com.xempre.pressurelesshealth.models.Contact;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.models.Medication;
 import com.xempre.pressurelesshealth.models.MedicationFrequency;
@@ -28,9 +29,11 @@ public interface MedicationService {
     @PATCH("health/medications/{id}/")
     public Call<Medication> deleteMedication(@Path("id") int id, @Body Medication medication);
 
+    @PATCH("health/medications/{id}/")
+    public Call<Medication> updateMedication(@Path("id") int id, @Body Medication medication);
+
     @PATCH("health/medication_frequencies/{id}/")
     public Call<MedicationFrequency> deleteMedicationFrequency(@Path("id") int id, @Body MedicationFrequency medicationFrequency);
-
 
     @POST("health/medication_frequencies/")
     public Call<MedicationFrequency> saveMedicationFrequency(@Body MedicationFrequency medicationFrequency);

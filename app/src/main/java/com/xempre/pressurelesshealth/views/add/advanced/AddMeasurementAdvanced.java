@@ -29,6 +29,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.fitness.data.Field;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.xempre.pressurelesshealth.MainActivity;
 import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.api.ApiClient;
@@ -383,6 +384,9 @@ public class AddMeasurementAdvanced extends Fragment {
     }
 
     private void replaceFragment(Fragment fragment){
+        BottomNavigationView bottomNavigationMain = getActivity().findViewById(R.id.bottomNavigationMain);
+        bottomNavigationMain.setSelectedItemId(R.id.bb_report);
+
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);

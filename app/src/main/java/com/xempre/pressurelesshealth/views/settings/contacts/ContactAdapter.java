@@ -89,6 +89,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactA
             }
         });
 
+        holder.btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeFragment.change(context,R.id.frame_layout, new ContactAdd(contact));
+            }
+        });
+
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,12 +163,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactA
 
         FloatingActionButton btnDelete;
 
+        FloatingActionButton btnEdit;
+
         public ContactAdapterItemHolder(View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvContactName);
             tvPhone = itemView.findViewById(R.id.tvContactNumber);
             btnCall = itemView.findViewById(R.id.btnContactCall);;
             btnDelete = itemView.findViewById(R.id.btnDeleteContact);
+            btnEdit = itemView.findViewById(R.id.btnContactEdit);
 //            btnMedicationElementMoreDelete = itemView.findViewById(R.id.btnMedicationElementMoreDelete);;
         }
     }

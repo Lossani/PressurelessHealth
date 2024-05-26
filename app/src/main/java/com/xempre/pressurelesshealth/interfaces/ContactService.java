@@ -23,4 +23,7 @@ public interface ContactService {
 
     @PATCH("core/contacts/{id}/")
     public Call<Contact> deleteContact(@Path("id") int id,@Body Contact contact);
+
+    @PATCH("core/contacts/{id}/")
+    public Call<Contact> updateContact(@Path("id") int id,@Body Contact contact);
 }

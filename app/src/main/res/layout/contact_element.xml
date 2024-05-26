@@ -59,6 +59,19 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnContactEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:src="@drawable/baseline_edit_24"
+                    android:tint="#FFFFFF"
+                    app:backgroundTint="#009688"
+                    app:fabSize="mini" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnContactCall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

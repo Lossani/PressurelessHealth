@@ -26,6 +26,7 @@ import com.xempre.pressurelesshealth.models.LeaderboardItem;
 import com.xempre.pressurelesshealth.models.Medication;
 import com.xempre.pressurelesshealth.models.MedicationFrequency;
 import com.xempre.pressurelesshealth.views.medication.frequency.MedicationFrequencyList;
+import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 
 import java.util.List;
 
@@ -63,6 +64,17 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
 //        fragmentTransaction.replace(R.id.frame_layout, medicationFrequencyList);
 //        fragmentTransaction.commit();
 
+        holder.btnMedicationEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeFragment.change((FragmentActivity)context, R.id.frame_layout, new AddMedication(medication));
+//                FragmentManager fragmentManager = ((FragmentActivity)context).getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                Fragment medicationView = new MedicationView(medication);
+//                fragmentTransaction.replace(R.id.frame_layout, medicationView);
+//                fragmentTransaction.commit();
+            }
+        });
         holder.btnMedicationElementMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,6 +158,8 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
         TextView tvName;
         FloatingActionButton btnMedicationElementMore;
         FloatingActionButton btnMedicationElementMoreDelete;
+
+        FloatingActionButton btnMedicationEdit;
 //        TextView tvDescription;
 
 //        FrameLayout frameLayout;
@@ -155,7 +169,9 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
             tvName = itemView.findViewById(R.id.tvMedicationElementName);
             btnMedicationElementMore = itemView.findViewById(R.id.btnMedicationElementMore);;
             btnMedicationElementMoreDelete = itemView.findViewById(R.id.btnMedicationElementMoreDelete);;
-//            tvDescription = itemView.findViewById(R.id.tvMedicationViewDescription);
+            btnMedicationEdit = itemView.findViewById(R.id.btnMedicationAddEdit);;
+
+            //            tvDescription = itemView.findViewById(R.id.tvMedicationViewDescription);
 //            frameLayout = itemView.findViewById(R.id.flMedication);
 //            tvPosition = itemView.findViewById(R.id.tvLeadeboardTop);
         }
