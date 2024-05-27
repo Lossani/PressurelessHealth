@@ -82,12 +82,14 @@ public class MedicationList extends Fragment {
                         }
                     } else {
                         binding.tvMessageAddList.setVisibility(View.INVISIBLE);
-                        for (Medication element : responseFromAPI) {
+                        medicationList.clear();
+                        medicationList.addAll(responseFromAPI);
+                        /*for (Medication element : responseFromAPI) {
                             Log.d("PERRUNO", element.getName());
                             Log.d("PERRUNO", element.getDescription());
 //                            LeaderboardItem temp = new LeaderboardItem(element);
                             medicationList.add(element);
-                        }
+                        }*/
                         medicationAdapter.notifyDataSetChanged();
                     }
 

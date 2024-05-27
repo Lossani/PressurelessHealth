@@ -19,6 +19,9 @@ public class Goal {
     boolean enabled;
 
     boolean reached;
+
+    @JsonProperty("reached_on")
+    String reachedOn;
     Goal(){}
 
     public Goal(Goal goal){
@@ -85,5 +88,13 @@ public class Goal {
 
     public boolean getReached() {
         return reached;
+    }
+
+    public String getReachedOn() {
+        return reachedOn;
+    }
+
+    public void setReachedOn(String reachedOn) {
+        this.reachedOn = reachedOn;
     }
 }

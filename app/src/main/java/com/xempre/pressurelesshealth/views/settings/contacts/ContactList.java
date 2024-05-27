@@ -87,12 +87,11 @@ public class ContactList extends Fragment {
                         }
                     } else {
                         binding.tvMessageAddList.setVisibility(View.INVISIBLE);
-                        for (Contact element : responseFromAPI) {
-//                            Log.d("PERRUNO", element.getName());
-//                            Log.d("PERRUNO", element.getDescription());
-//                            LeaderboardItem temp = new LeaderboardItem(element);
-                            medicationList.add(element);
-                        }
+                        medicationList.clear();
+                        //                            Log.d("PERRUNO", element.getName());
+                        //                            Log.d("PERRUNO", element.getDescription());
+                        //                            LeaderboardItem temp = new LeaderboardItem(element);
+                        medicationList.addAll(responseFromAPI);
                         contactAdapter.notifyDataSetChanged();
                     }
 

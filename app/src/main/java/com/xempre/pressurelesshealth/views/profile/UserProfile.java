@@ -39,6 +39,7 @@ import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.leaderboard.LeaderboardList;
 import com.xempre.pressurelesshealth.views.profile.challenge.ChallengeList;
 import com.xempre.pressurelesshealth.views.profile.goal.GoalList;
+import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 import com.xempre.pressurelesshealth.views.shared.CustomDialog;
 
 import java.io.InputStream;
@@ -59,7 +60,7 @@ public class UserProfile extends Fragment {
 
     ImageView imageView;
 
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
     User user;
     MainActivityView mainViewActivity;
     GoogleFitApi googleFitApi;
@@ -69,7 +70,14 @@ public class UserProfile extends Fragment {
 
     Fragment leaderboardList = new LeaderboardList();
 
+    Fragment currentFragment = null;
 
+
+    private void loadChildFragment(Fragment fragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.frameProfile, fragment);
+        transaction.commit();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,35 +97,47 @@ public class UserProfile extends Fragment {
         binding = FragmentUserProfileBinding.inflate(inflater, container, false);
         imageView = binding.imageView;
         loadUserData();
-        replaceFragment(challengeList);
-        binding.btnChallenge.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
-        binding.btnLogros.setBackgroundColor(Color.GRAY);
+        //ChangeFragment.change(this.mainViewActivity, R.id.frameProfile, challengeList, false);
+
+
+        if (savedInstanceState == null) {
+            currentFragment = challengeList;
+            loadChildFragment(currentFragment);
+            binding.btnChallenge.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
+            binding.btnLogros.setBackgroundColor(Color.GRAY);
+        }
+
+
 
         binding.btnLogros.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragment(new GoalList());
                 binding.btnLogros.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
                 binding.btnChallenge.setBackgroundColor(Color.GRAY);
+                currentFragment = goalList;
+                loadChildFragment(currentFragment);
             }
         });
 
         binding.btnLeaderboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                ChangeFragment.change(mainViewActivity, R.id.frame_layout, leaderboardList);
+                /*FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.frame_layout, leaderboardList);
-                fragmentTransaction.commit();
+                fragmentTransaction.commit();*/
             }
         });
 
         binding.btnChallenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragment(new ChallengeList());
+                // ChangeFragment.change(mainViewActivity, R.id.frameProfile, challengeList, false);
                 binding.btnChallenge.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
                 binding.btnLogros.setBackgroundColor(Color.GRAY);
+                currentFragment = challengeList;
+                loadChildFragment(currentFragment);
             }
         });
 
@@ -181,14 +201,15 @@ public class UserProfile extends Fragment {
 //            }
 //        });
     }
-
+/*
     private void replaceFragment(Fragment fragment){
+
         FragmentManager fragmentManager = this.mainViewActivity.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameProfile, fragment);
         fragmentTransaction.commit();
     }
-
+*/
     public void loadUserData(){
 
         UserService userService = ApiClient.createService(getContext(), UserService.class,1);

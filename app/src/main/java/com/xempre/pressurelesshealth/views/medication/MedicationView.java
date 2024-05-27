@@ -39,6 +39,12 @@ public class MedicationView extends Fragment {
 
     Medication medication;
 
+    private void loadChildFragment(Fragment fragment) {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.flMedication, fragment);
+        transaction.commit();
+    }
+
     public MedicationView(Medication medication){
         this.medication = medication;
     }
@@ -55,7 +61,8 @@ public class MedicationView extends Fragment {
         binding.tvMedicationViewDescription.setText(medication.getDescription());
 
         Fragment medicationView = new MedicationFrequencyList(medication);
-        ChangeFragment.change(getContext(), R.id.flMedication, medicationView);
+        // ChangeFragment.change(getContext(), R.id.flMedication, medicationView);
+        loadChildFragment(medicationView);
 
         return binding.getRoot();
 

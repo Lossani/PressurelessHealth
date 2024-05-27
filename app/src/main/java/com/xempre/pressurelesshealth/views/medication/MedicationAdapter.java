@@ -78,11 +78,12 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
         holder.btnMedicationElementMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = ((FragmentActivity)context).getSupportFragmentManager();
+                ChangeFragment.change((FragmentActivity)context, R.id.frame_layout, new MedicationView(medication));
+                /*FragmentManager fragmentManager = ((FragmentActivity)context).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Fragment medicationView = new MedicationView(medication);
                 fragmentTransaction.replace(R.id.frame_layout, medicationView);
-                fragmentTransaction.commit();
+                fragmentTransaction.commit();*/
             }
         });
 

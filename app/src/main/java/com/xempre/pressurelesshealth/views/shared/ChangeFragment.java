@@ -11,11 +11,11 @@ import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
 
 public class ChangeFragment {
-    public static void change(Context context,int id, Fragment fragment){
+    public static void change(Context context, int id, Fragment fragment){
         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(id, fragment);
-        //fragmentTransaction.addToBackStack(String.valueOf(id));
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 }

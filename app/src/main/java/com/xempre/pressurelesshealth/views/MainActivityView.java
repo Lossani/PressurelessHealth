@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -50,7 +51,9 @@ import com.xempre.pressurelesshealth.models.Medication;
 import com.xempre.pressurelesshealth.models.User;
 import com.xempre.pressurelesshealth.utils.Utils;
 import com.xempre.pressurelesshealth.utils.notifications.NotificationGenerator;
+import com.xempre.pressurelesshealth.views.add.AddMeasurementBasic;
 import com.xempre.pressurelesshealth.views.add.SelectAddMode;
+import com.xempre.pressurelesshealth.views.add.advanced.AddMeasurementAdvanced;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
 import com.xempre.pressurelesshealth.views.profile.UserProfile;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
@@ -71,7 +74,7 @@ import retrofit2.Response;
 public class MainActivityView extends AppCompatActivity {
 
     ActivityMainViewBinding binding;
-    BottomNavigationView bottomNavigationView;
+    public BottomNavigationView bottomNavigationView;
 
     public NotificationManager notificationManager;
 
@@ -120,6 +123,24 @@ public class MainActivityView extends AppCompatActivity {
 
         reloadFragment();
 
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
+                if (currentFragment instanceof UserProfile) {
+                    bottomNavigationView.setSelectedItemId(R.id.bb_profile);
+                } else if (currentFragment instanceof AddMeasurementBasic || currentFragment instanceof AddMeasurementAdvanced || currentFragment instanceof SelectAddMode) {
+                    bottomNavigationView.setSelectedItemId(R.id.bb_add);
+                } else if (currentFragment instanceof MeasurementList) {
+                    bottomNavigationView.setSelectedItemId(R.id.bb_report);
+                } else if (currentFragment instanceof MedicationList) {
+                    bottomNavigationView.setSelectedItemId(R.id.bb_medication);
+                } else if (currentFragment instanceof SettingsFragment) {
+                    bottomNavigationView.setSelectedItemId(R.id.bb_config);
+                }
+
+            }
+        });
     }
 
     public void checkLatestMeasurement(){
@@ -266,17 +287,25 @@ public class MainActivityView extends AppCompatActivity {
         bottomNavigationView = binding.bottomNavigationMain;
         setContentView(binding.getRoot());
         ChangeFragment.change(this,R.id.frame_layout,new UserProfile());
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.bb_add){
+            MenuItem current = bottomNavigationView.getMenu().findItem(bottomNavigationView.getSelectedItemId());
+
+            if (current == item)
+                return true;
+
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
+
+            if (item.getItemId() == R.id.bb_add && !(currentFragment instanceof SelectAddMode)){
                 ChangeFragment.change(this,R.id.frame_layout, new SelectAddMode());
-            } else if (item.getItemId() == R.id.bb_report) {
-                ChangeFragment.change(this,R.id.frame_layout,new MeasurementList());
-            } else if (item.getItemId() == R.id.bb_profile) {
-                ChangeFragment.change(this,R.id.frame_layout,new UserProfile());
-            } else if (item.getItemId() == R.id.bb_config) {
-                ChangeFragment.change(this,R.id.frame_layout,new SettingsFragment());
-            } else if (item.getItemId() == R.id.bb_medication) {
-                ChangeFragment.change(this,R.id.frame_layout,new MedicationList());
+            } else if (item.getItemId() == R.id.bb_report && !(currentFragment instanceof MeasurementList)) {
+                ChangeFragment.change(this,R.id.frame_layout, new MeasurementList());
+            } else if (item.getItemId() == R.id.bb_profile && !(currentFragment instanceof UserProfile)) {
+                ChangeFragment.change(this,R.id.frame_layout, new UserProfile());
+            } else if (item.getItemId() == R.id.bb_config && !(currentFragment instanceof SettingsFragment)) {
+                ChangeFragment.change(this,R.id.frame_layout, new SettingsFragment());
+            } else if (item.getItemId() == R.id.bb_medication && !(currentFragment instanceof MedicationList)) {
+                ChangeFragment.change(this,R.id.frame_layout, new MedicationList());
             }
             return true;
         });
@@ -328,5 +357,19 @@ public class MainActivityView extends AppCompatActivity {
         }
 
         editor.apply(); // or editor.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
+
+            if (!(currentFragment instanceof UserProfile))
+                getSupportFragmentManager().popBackStackImmediate();
+            else
+                finish();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
