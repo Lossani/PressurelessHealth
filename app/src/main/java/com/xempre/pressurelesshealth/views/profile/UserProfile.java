@@ -114,7 +114,7 @@ public class UserProfile extends Fragment {
             public void onClick(View view) {
                 binding.btnLogros.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.Hip1));
                 binding.btnChallenge.setBackgroundColor(Color.GRAY);
-                currentFragment = goalList;
+                currentFragment = new GoalList();
                 loadChildFragment(currentFragment);
             }
         });
@@ -276,6 +276,6 @@ public class UserProfile extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        //binding = null;
     }
 }

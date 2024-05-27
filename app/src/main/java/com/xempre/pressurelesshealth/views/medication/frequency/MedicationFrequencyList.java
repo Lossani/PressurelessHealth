@@ -101,7 +101,7 @@ public class MedicationFrequencyList extends Fragment {
                     }
 
                 } catch (Exception ignored){
-                    if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista1.", Toast.LENGTH_SHORT).show();
+                    if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista de medicaciones.", Toast.LENGTH_SHORT).show();
                     Log.d("ERROR", ignored.getMessage());
                     onDestroyView();
                 }
@@ -110,7 +110,7 @@ public class MedicationFrequencyList extends Fragment {
             @Override
             public void onFailure(Call<List<MedicationFrequency>> call, Throwable t) {
                 Log.d("ERROR", t.getMessage());
-                if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
+                if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista de medicaciones.", Toast.LENGTH_SHORT).show();
                 onDestroyView();
             }
         });

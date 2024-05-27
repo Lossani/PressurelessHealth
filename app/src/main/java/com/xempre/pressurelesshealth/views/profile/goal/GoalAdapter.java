@@ -60,60 +60,66 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
         holder.textViewDesc.setText(String.valueOf(goal.getDescription()));
         holder.textViewName.setText(String.valueOf(goal.getName()));
         holder.textViewReward.setText(String.valueOf(goal.getReward()) + " Puntos");
+        holder.checkBox.setChecked(goal.getReachedOn()!=null);
+        if (goal.getReachedOn()!=null){
+            holder.date.setVisibility(View.VISIBLE);
+            holder.date.setText(goal.getReachedOn().substring(0,10));
+        }
+
 //        holder.progressBar.setProgress(10);
-        validateComplete(goal, holder, position);
+        //validateComplete(goal, holder, position);
         getBitmapFromURL(holder, goal.getImage());
     }
 
-    public boolean validateComplete(Goal goal, NombreViewHolder holder, int position){
-        final boolean[] validate = {false};
-        GoalService goalService = ApiClient.createService(context, GoalService.class,1);
-
-        Call<List<GoalHistory>> call = goalService.getAllComplete();
-
-        call.enqueue(new Callback<List<GoalHistory>>() {
-            @Override
-            public void onResponse(Call<List<GoalHistory>> call, Response<List<GoalHistory>> response) {
-                try {
-                    List<GoalHistory> responseFromAPI = response.body();
-                    assert responseFromAPI != null;
-
-                    if (responseFromAPI.isEmpty()) {
-                        if (context!=null) Toast.makeText(context, "No se encontraron logros.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        for (GoalHistory element : responseFromAPI) {
-                            Log.d("PERRUNO", element.toString());
-                            GoalHistory goalHistory = new GoalHistory(element);
-                            Log.d("PERRUNO", element.getProgress()+"");
-                            Log.d("PERRUNO", element.getIsSucceeded()+"");
-
-
-                            //REMPLAZAR CON ID DE USUARIO
-                            if (Objects.equals(goalHistory.getGoal(), goal.getId())) {
-                                goal.setReached(!Objects.equals(goalHistory.getReachedOn(), ""));
-                                holder.checkBox.setChecked(goal.getReached());
-                                holder.checkBox.setEnabled(goal.getReached());
-                                listMeasurements.set(position,goal);
-                                holder.date.setVisibility(View.VISIBLE);
-                                holder.date.setText(goalHistory.getReachedOn().substring(0,10));
-                            }
-                        }
-                    }
-
-                } catch (Exception ignored){
-                    if (context!=null) Toast.makeText(context, "Error al obtener la lista de logros.", Toast.LENGTH_SHORT).show();
-                    Log.d("ERROR-Response", ignored.getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<GoalHistory>> call, Throwable t) {
-                Log.d("ERROR-Failure", t.getMessage());
-                if (context!=null) Toast.makeText(context, "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
-            }
-        });
-        return validate[0];
-    };
+//    public boolean validateComplete(Goal goal, NombreViewHolder holder, int position){
+//        final boolean[] validate = {false};
+//        GoalService goalService = ApiClient.createService(context, GoalService.class,1);
+//
+//        Call<List<GoalHistory>> call = goalService.getAllComplete();
+//
+//        call.enqueue(new Callback<List<GoalHistory>>() {
+//            @Override
+//            public void onResponse(Call<List<GoalHistory>> call, Response<List<GoalHistory>> response) {
+//                try {
+//                    List<GoalHistory> responseFromAPI = response.body();
+//                    assert responseFromAPI != null;
+//
+//                    if (responseFromAPI.isEmpty()) {
+//                        if (context!=null) Toast.makeText(context, "No se encontraron logros.", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        for (GoalHistory element : responseFromAPI) {
+//                            Log.d("PERRUNO", element.toString());
+//                            GoalHistory goalHistory = new GoalHistory(element);
+//                            Log.d("PERRUNO", element.getProgress()+"");
+//                            Log.d("PERRUNO", element.getIsSucceeded()+"");
+//
+//
+//                            //REMPLAZAR CON ID DE USUARIO
+//                            if (Objects.equals(goalHistory.getGoal(), goal.getId())) {
+//                                goal.setReached(!Objects.equals(goalHistory.getReachedOn(), ""));
+//                                holder.checkBox.setChecked(goal.getReached());
+//                                holder.checkBox.setEnabled(goal.getReached());
+//                                listMeasurements.set(position,goal);
+//                                holder.date.setVisibility(View.VISIBLE);
+//                                holder.date.setText(goalHistory.getReachedOn().substring(0,10));
+//                            }
+//                        }
+//                    }
+//
+//                } catch (Exception ignored){
+//                    if (context!=null) Toast.makeText(context, "Error al obtener la lista de logros.", Toast.LENGTH_SHORT).show();
+//                    Log.d("ERROR-Response", ignored.getMessage());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<GoalHistory>> call, Throwable t) {
+//                Log.d("ERROR-Failure", t.getMessage());
+//                if (context!=null) Toast.makeText(context, "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        return validate[0];
+//    };
 
     public void updateList(List<Goal> goalList) {
         listMeasurements.clear();

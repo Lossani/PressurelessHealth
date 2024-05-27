@@ -63,18 +63,21 @@ public class GoalList extends Fragment {
 
         callAPI();
 
+
         binding.swiperefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Aquí puedes realizar la carga de datos nuevamente, por ejemplo, consultando una API
                 // Después de cargar los nuevos datos, asegúrate de llamar a setRefreshing(false) para indicar que la recarga ha terminado.
                 // En este ejemplo, simplemente simulo una recarga con un retardo de 2 segundos
-                callAPI();
+
                 recyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         // Agrega aquí tu lógica para recargar los datos
                         // Por ejemplo, adapter.notifyDataSetChanged();
+                        callAPI();
+
 
 
                         // Después de actualizar los datos, asegúrate de llamar a setRefreshing(false)
@@ -92,7 +95,7 @@ public class GoalList extends Fragment {
     public void filterList(boolean onlyReached){
         List<Goal> goalListTemp = new ArrayList<>();
         for (Goal goal : goalList) {
-            if (goal.getReached()) {
+            if (goal.getReachedOn()!=null) {
                 goalListTemp.add(goal);
             }
         }
@@ -124,7 +127,7 @@ public class GoalList extends Fragment {
                                 Goal temp = new Goal(element);
                                 goalList.add(temp);
                             }
-                            filterList(false);
+                            filterList(binding.checkBox.isChecked());
                             goalAdapter.notifyDataSetChanged();
                         }
 
@@ -138,7 +141,7 @@ public class GoalList extends Fragment {
                 @Override
                 public void onFailure(Call<List<Goal>> call, Throwable t) {
                     Log.d("ERROR", t.getMessage());
-                    if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
+                    if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista de logros.", Toast.LENGTH_SHORT).show();
                     onDestroyView();
                 }
             });

@@ -315,8 +315,11 @@ public class MeasurementList extends Fragment {
                         clearRecyclerView();
                         if (responseFromAPI.isEmpty()) {
                             if (getContext()!=null) {
-                                binding.tvMessageHistoryList.setVisibility(View.VISIBLE);
-                                binding.tvMessageHistoryList.setText("No se encontraron registros.");
+                                if (binding!=null){
+                                    binding.tvMessageHistoryList.setVisibility(View.VISIBLE);
+                                    binding.tvMessageHistoryList.setText("No se encontraron registros.");
+                                }
+
                                 //Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
                             }
                         } else {
@@ -339,16 +342,16 @@ public class MeasurementList extends Fragment {
                         filterList(false);
 
                     } catch (Exception ignored){
-                        if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
-                        onDestroyView();
+                        if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista de medidas.", Toast.LENGTH_SHORT).show();
+                        //onDestroyView();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Measurement>> call, Throwable t) {
                     Log.d("ERROR", t.getMessage());
-                    if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
-                    onDestroyView();
+                    if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista de medidas.", Toast.LENGTH_SHORT).show();
+                    //onDestroyView();
                     // setting text to our text view when
                     // we get error response from API.
 //                responseTV.setText("Error found is : " + t.getMessage());
@@ -512,6 +515,6 @@ public class MeasurementList extends Fragment {
     public void onDestroyView() {
         if (binding!=null) binding.btnChangeDate.setClickable(false);
         super.onDestroyView();
-        binding = null;
+//        binding = null;
     }
 }

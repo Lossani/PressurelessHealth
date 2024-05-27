@@ -277,7 +277,7 @@ public class AddMedicationFrequency extends Fragment {
             @Override
             public void onFailure(Call<MedicationFrequency> call, Throwable t) {
                 Log.d("ERROR", t.getMessage());
-                if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
+                if (getContext()!=null) Toast.makeText(getContext(), "Error al guardar frecuencia.", Toast.LENGTH_SHORT).show();
                 onDestroyView();
             }
         });
@@ -318,7 +318,7 @@ public class AddMedicationFrequency extends Fragment {
             @Override
             public void onFailure(Call<MedicationFrequency> call, Throwable t) {
                 Log.d("ERROR", t.getMessage());
-                if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
+                if (getContext()!=null) Toast.makeText(getContext(), "Error al guardar cambios de la frecuencia.", Toast.LENGTH_SHORT).show();
                 onDestroyView();
             }
         });

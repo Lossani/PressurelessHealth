@@ -56,13 +56,13 @@ public class ChallengeList extends Fragment {
                 // Aquí puedes realizar la carga de datos nuevamente, por ejemplo, consultando una API
                 // Después de cargar los nuevos datos, asegúrate de llamar a setRefreshing(false) para indicar que la recarga ha terminado.
                 // En este ejemplo, simplemente simulo una recarga con un retardo de 2 segundos
-                callAPI();
+
                 recyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         // Agrega aquí tu lógica para recargar los datos
                         // Por ejemplo, adapter.notifyDataSetChanged();
-
+                        callAPI();
 
                         // Después de actualizar los datos, asegúrate de llamar a setRefreshing(false)
                         if (binding!=null) binding.swiperefresh.setRefreshing(false);
@@ -105,7 +105,7 @@ public class ChallengeList extends Fragment {
                     }
 
                 } catch (Exception ignored){
-                    if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista1.", Toast.LENGTH_SHORT).show();
+                    if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista de retos.", Toast.LENGTH_SHORT).show();
                     Log.d("ERROR", ignored.getMessage());
                     onDestroyView();
                 }
@@ -114,7 +114,7 @@ public class ChallengeList extends Fragment {
             @Override
             public void onFailure(Call<List<Challenge>> call, Throwable t) {
                 Log.d("ERROR", t.getMessage());
-                if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
+                if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista de retos.", Toast.LENGTH_SHORT).show();
                 onDestroyView();
             }
         });

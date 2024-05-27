@@ -175,7 +175,7 @@ public class ContactAdd extends Fragment {
             @Override
             public void onFailure(Call<Contact> call, Throwable t) {
                 Log.d("ERROR", t.getMessage());
-                if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista.", Toast.LENGTH_SHORT).show();
+                if (getContext()!=null) Toast.makeText(getContext(), "Error al guardar contacto.", Toast.LENGTH_SHORT).show();
                 onDestroyView();
             }
         });

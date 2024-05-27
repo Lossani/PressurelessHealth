@@ -383,15 +383,15 @@ public class AddMeasurementAdvanced extends Fragment {
         }
     }
 
-    private void replaceFragment(Fragment fragment){
-        BottomNavigationView bottomNavigationMain = getActivity().findViewById(R.id.bottomNavigationMain);
-        bottomNavigationMain.setSelectedItemId(R.id.bb_report);
-
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
-    }
+//    private void replaceFragment(Fragment fragment){
+//        BottomNavigationView bottomNavigationMain = getActivity().findViewById(R.id.bottomNavigationMain);
+//        bottomNavigationMain.setSelectedItemId(R.id.bb_report);
+//
+//        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.frame_layout, fragment);
+//        fragmentTransaction.commit();
+//    }
 
     public void saveButton(){
 
@@ -456,8 +456,8 @@ public class AddMeasurementAdvanced extends Fragment {
                     for (Challenge challenge: measurementResponse.getCompletedChallenges()){
                         dialog.create(getActivity(), "Reto completado", "Has completado el reto: " + challenge.getName() + " y has ganado " + challenge.getReward() + " puntos.");
                     }
-
-                    replaceFragment(new MeasurementList());
+                    ChangeFragment.change(getContext(), R.id.frame_layout, new MeasurementList());
+                    //replaceFragment(new MeasurementList());
                 } else {
                     Log.d("ADVANCE", response.toString() + res.first.floatValue() + res.second.floatValue());
                     Toast.makeText(getContext(), "Ocurrio un error. Error " + response.code(), Toast.LENGTH_SHORT).show();

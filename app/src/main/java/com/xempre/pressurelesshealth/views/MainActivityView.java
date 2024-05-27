@@ -59,6 +59,7 @@ import com.xempre.pressurelesshealth.views.profile.UserProfile;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
 import com.xempre.pressurelesshealth.views.settings.SettingsFragment;
 import com.xempre.pressurelesshealth.utils.Constants;
+import com.xempre.pressurelesshealth.views.settings.contacts.ContactList;
 import com.xempre.pressurelesshealth.views.shared.ChangeDate;
 import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 import com.xempre.pressurelesshealth.views.shared.CustomDialog;
@@ -135,7 +136,7 @@ public class MainActivityView extends AppCompatActivity {
                     bottomNavigationView.setSelectedItemId(R.id.bb_report);
                 } else if (currentFragment instanceof MedicationList) {
                     bottomNavigationView.setSelectedItemId(R.id.bb_medication);
-                } else if (currentFragment instanceof SettingsFragment) {
+                } else if (currentFragment instanceof SettingsFragment || currentFragment instanceof ContactList) {
                     bottomNavigationView.setSelectedItemId(R.id.bb_config);
                 }
 
@@ -302,7 +303,7 @@ public class MainActivityView extends AppCompatActivity {
                 ChangeFragment.change(this,R.id.frame_layout, new MeasurementList());
             } else if (item.getItemId() == R.id.bb_profile && !(currentFragment instanceof UserProfile)) {
                 ChangeFragment.change(this,R.id.frame_layout, new UserProfile());
-            } else if (item.getItemId() == R.id.bb_config && !(currentFragment instanceof SettingsFragment)) {
+            } else if (item.getItemId() == R.id.bb_config && !(currentFragment instanceof SettingsFragment || currentFragment instanceof ContactList)) {
                 ChangeFragment.change(this,R.id.frame_layout, new SettingsFragment());
             } else if (item.getItemId() == R.id.bb_medication && !(currentFragment instanceof MedicationList)) {
                 ChangeFragment.change(this,R.id.frame_layout, new MedicationList());

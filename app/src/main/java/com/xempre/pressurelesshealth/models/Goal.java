@@ -31,6 +31,7 @@ public class Goal {
         this.enabled = goal.getEnabled();
         this.image = goal.getImage();
         this.reward = goal.getReward();
+        this.reachedOn = goal.getReachedOn();
 
     }
 
