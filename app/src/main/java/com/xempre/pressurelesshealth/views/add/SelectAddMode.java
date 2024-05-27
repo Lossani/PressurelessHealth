@@ -28,6 +28,7 @@ import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.add.advanced.AddMeasurementAdvanced;
+import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -71,23 +72,15 @@ public class SelectAddMode extends Fragment {
         binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragment(new AddMeasurementBasic());
+                ChangeFragment.change(mainActivity, R.id.frame_layout, new AddMeasurementBasic());
             }
         });
 
         binding.button2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                replaceFragment(new AddMeasurementAdvanced());
+            public void onClick(View view) { ChangeFragment.change(mainActivity, R.id.frame_layout, new AddMeasurementAdvanced());
             }
         });
-    }
-
-    private void replaceFragment(Fragment fragment){
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
     }
 
     @Override
