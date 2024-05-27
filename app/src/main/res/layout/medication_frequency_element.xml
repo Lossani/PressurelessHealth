@@ -132,12 +132,13 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
 
-                        android:layout_weight="8">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="8"
+
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -155,8 +156,8 @@
                                     android:layout_marginStart="15dp"
                                     android:layout_marginEnd="20dp"
                                     android:text="08:00"
-                                    android:textStyle="bold"
                                     android:textSize="18dp"
+                                    android:textStyle="bold"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -166,27 +167,18 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center">
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
 
-                            <androidx.constraintlayout.widget.ConstraintLayout
+                            <TextView
+                                android:id="@+id/tvMedicationDose"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent">
-
-                                <TextView
-                                    android:id="@+id/tvMedicationDose"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="5dp"
-                                    android:layout_marginEnd="5dp"
-                                    android:text="TextView"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent"/>
-                            </androidx.constraintlayout.widget.ConstraintLayout>
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:text="TextView" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -194,7 +186,6 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:gravity="end"
                         android:orientation="horizontal"
                         android:paddingEnd="5dp">
