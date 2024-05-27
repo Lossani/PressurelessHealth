@@ -315,10 +315,8 @@ public class MeasurementList extends Fragment {
                         clearRecyclerView();
                         if (responseFromAPI.isEmpty()) {
                             if (getContext()!=null) {
-                                if (binding!=null){
-                                    binding.tvMessageHistoryList.setVisibility(View.VISIBLE);
-                                    binding.tvMessageHistoryList.setText("No se encontraron registros.");
-                                }
+                                binding.tvMessageHistoryList.setVisibility(View.VISIBLE);
+                                binding.tvMessageHistoryList.setText("No se encontraron registros.");
 
                                 //Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
                             }
