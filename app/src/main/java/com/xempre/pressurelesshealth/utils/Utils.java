@@ -153,7 +153,7 @@ public final class Utils {
     public static void requestAlarmPermission(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Permiso para notificaciones");
+            builder.setTitle("Permiso para alarmas");
             builder.setMessage("Utilizamos el sistema de alarmas y recordatorios para notificarle a la hora exacta de sus medicaciones configuradas, para ello necesitamos que nos otorgue el permiso correspondiente.")
                     .setPositiveButton("Continuar", new DialogInterface.OnClickListener() {
                         @Override

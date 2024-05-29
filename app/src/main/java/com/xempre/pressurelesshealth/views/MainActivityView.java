@@ -212,6 +212,11 @@ public class MainActivityView extends AppCompatActivity {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                 if (ContextCompat.checkSelfPermission(MainActivityView.this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                                     ActivityCompat.requestPermissions(MainActivityView.this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, Constants.NOTIFICATIONS_PERMISSION_REQUEST_CODE);
+                                } else {
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, true);
+                                    editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, false);
+                                    editor.apply();
                                 }
                             } else if (!notificationManager.areNotificationsEnabled()) {
                                 Toast.makeText(MainActivityView.this, "Active las notificaciones desde la configuración de la app.", Toast.LENGTH_LONG).show();
@@ -273,7 +278,7 @@ public class MainActivityView extends AppCompatActivity {
             editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, false);
             editor.apply();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (!alarmManager.canScheduleExactAlarms() && sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION, false) && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false)) {
+                if (!alarmManager.canScheduleExactAlarms() && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION, false) && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false)) {
                     Utils.requestAlarmPermission(this);
                 } else if (alarmManager.canScheduleExactAlarms() && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false)) {
                     editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION, true);
@@ -328,8 +333,6 @@ public class MainActivityView extends AppCompatActivity {
             editor.putBoolean(Constants.SETTINGS_GOOGLE_AUTH_SIGNED_IN, googleFitApi.onActivityResult(data));
             editor.apply();
         }
-
-
     }
 
     @Override
@@ -349,6 +352,8 @@ public class MainActivityView extends AppCompatActivity {
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED);
             editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_DENIED);
+
+            Utils.requestAlarmPermission(this);
         }
         if (requestCode == Constants.CALLS_PERMISSION_REQUEST_CODE) {
             editor.putBoolean(Constants.SETTINGS_CALL_PERMISSION, grantResults.length > 0
