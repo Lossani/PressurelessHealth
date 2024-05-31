@@ -81,9 +81,9 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
 
 
             if (!challenge.isRepeatable()) {
-                ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
-                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                holder.button.setLayoutParams(layoutParams);
+                holder.button.setVisibility(View.VISIBLE);
+            } else {
+                holder.button.setVisibility(View.GONE);
             }
 
             if (challenge.getLatestHistory().length > 0) {

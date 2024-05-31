@@ -81,8 +81,7 @@ public class AddMedication extends Fragment {
         binding.btnBackAddMedicina.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment medicationList = new MedicationList();
-                ChangeFragment.change(getContext(), R.id.frame_layout, medicationList);
+                ChangeFragment.back(getContext());
             }
         });
 

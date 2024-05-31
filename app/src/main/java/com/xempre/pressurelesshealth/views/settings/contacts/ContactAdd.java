@@ -99,7 +99,7 @@ public class ContactAdd extends Fragment {
         binding.btnContactAddBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChangeFragment.change(getContext(), R.id.frame_layout, new ContactList());
+                ChangeFragment.back(getContext());
             }
         });
 

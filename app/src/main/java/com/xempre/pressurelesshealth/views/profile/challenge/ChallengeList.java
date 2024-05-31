@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.gson.Gson;
 import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.databinding.GoalListBinding;
 import com.xempre.pressurelesshealth.interfaces.ChallengeService;
@@ -87,6 +88,8 @@ public class ChallengeList extends Fragment {
             public void onResponse(Call<List<Challenge>> call, Response<List<Challenge>> response) {
                 try {
                     List<Challenge> responseFromAPI = response.body();
+                    Gson gson = new Gson();
+                    Log.d("INFO", gson.toJson(responseFromAPI));
                     if (responseFromAPI == null) {
                         // Manejar el caso en que la respuesta es nula
                         Log.e("ERROR", "La respuesta del servidor es nula.");

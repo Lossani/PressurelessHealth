@@ -96,7 +96,7 @@ public class UserProfile extends Fragment {
 
         binding = FragmentUserProfileBinding.inflate(inflater, container, false);
         imageView = binding.imageView;
-        loadUserData();
+        //loadUserData();
         //ChangeFragment.change(this.mainViewActivity, R.id.frameProfile, challengeList, false);
 
 
@@ -185,6 +185,7 @@ public class UserProfile extends Fragment {
     }
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        loadUserData();
 
 //        binding.saveButton.setOnClickListener(new View.OnClickListener() {
 //            @Override

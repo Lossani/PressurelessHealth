@@ -9,6 +9,8 @@
         android:id="@+id/linearLayout7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,22 +21,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="9"
+            android:layout_weight="6"
             android:gravity="center"
             android:text="Título"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnAddListAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
-            android:layout_weight="1"
-            android:text="Agregar" />
+            android:src="@drawable/baseline_add_24"
+            android:tint="#FFFFFF"
+            app:backgroundTint="#4CAF50"
+            app:fabSize="mini" />
+
+        <Button
+            android:id="@+id/btnBackList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="Volver"
+            android:visibility="gone" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

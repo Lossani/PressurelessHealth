@@ -86,8 +86,7 @@ public class RegisterFragment extends Fragment {
         binding.btnRegBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginFragment loginFragment= new LoginFragment();
-                ChangeFragment.change(getContext(), R.id.PrincipalContainerView, loginFragment);
+                ChangeFragment.back(getContext());
             }
         });
 

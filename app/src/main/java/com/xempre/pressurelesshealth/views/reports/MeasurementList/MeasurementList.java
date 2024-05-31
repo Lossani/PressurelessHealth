@@ -1,13 +1,22 @@
 package com.xempre.pressurelesshealth.views.reports.MeasurementList;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Html;
@@ -23,12 +32,17 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.gson.Gson;
 import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.databinding.ActivityListMeasurementBinding;
+import com.xempre.pressurelesshealth.interfaces.ContactService;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
+import com.xempre.pressurelesshealth.models.Contact;
 import com.xempre.pressurelesshealth.models.Measurement;
+import com.xempre.pressurelesshealth.views.settings.contacts.ContactList;
 import com.xempre.pressurelesshealth.views.shared.ChangeDate;
+import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 import com.xempre.pressurelesshealth.views.shared.CustomDialog;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -86,11 +100,17 @@ public class MeasurementList extends Fragment {
 
     Dialog dialog;
     ApiClient apiClient;
+
+    private Drawable icon;
+    private ColorDrawable background;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+
+        icon = ContextCompat.getDrawable(getContext(), R.drawable.baseline_delete_24);
+        icon.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
 
 
 //        View view = inflater.inflate(R.layout.measurement_list, container, false);
@@ -98,6 +118,70 @@ public class MeasurementList extends Fragment {
         binding = ActivityListMeasurementBinding.inflate(inflater, container, false);
 //        lineChart = binding.chart;
 //        apiClient = new ApiClient();
+
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                int position = viewHolder.getAdapterPosition();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage("¿Está seguro de eliminar?")
+                        .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Ejecutar la función de eliminación aquí
+                                deleteMeasurement(measurementAdapter.getByPosition(position), position);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // Cancelar la eliminación
+                                dialog.dismiss();
+                                measurementAdapter.notifyItemChanged(position);
+                            }
+                        });
+                // Crear y mostrar el diálogo
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                View itemView = viewHolder.itemView;
+                int backgroundCornerOffset = 20; // Desplazamiento de la esquina del fondo
+
+                int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+                int iconBottom = iconTop + icon.getIntrinsicHeight();
+
+                if (dX > 0) { // Deslizar a la derecha
+                    int iconLeft = itemView.getLeft() + iconMargin;
+                    int iconRight = iconLeft + icon.getIntrinsicWidth();
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+
+                } else if (dX < 0) { // Deslizar a la izquierda
+                    int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
+                    int iconRight = itemView.getRight() - iconMargin;
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+
+                } else { // Vista desactivada
+                }
+                icon.draw(c);
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
 
         recyclerView = binding.recyclerView;
         measurementAdapter = new MeasurementAdapter(getContext(), measurementList);
@@ -204,6 +288,40 @@ public class MeasurementList extends Fragment {
 
     }
 
+    private void deleteMeasurement(Measurement measurement, int position) {
+        MeasurementService contactService = ApiClient.createService(getContext(), MeasurementService.class,1);
+
+//        Measurement temp = new Measurement();
+//        temp.setDeleted(true);
+        measurement.setDeleted(true);
+
+        Call<Measurement> call = contactService.delete(String.valueOf(measurement.getId()), measurement);
+        Log.d("ERROR", String.valueOf(measurement.getDeleted()));
+        call.enqueue(new Callback<Measurement>() {
+            @Override
+            public void onResponse(Call<Measurement> call, Response<Measurement> response) {
+                if(response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Se eliminó la medida.", Toast.LENGTH_SHORT).show();
+                    measurementAdapter.deleteItem(position);
+                    if (measurementAdapter.getItemCount() == 0) {
+                        binding.tvMessageHistoryList.setVisibility(View.VISIBLE);
+                        binding.tvMessageHistoryList.setText("No se encontraron registros.");
+                    }
+                    measurementAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getContext(), "Error al intentar eliminar la medida.", Toast.LENGTH_SHORT).show();
+                    Log.d("ERROR", response.message());
+                    Log.d("ERROR", String.valueOf(response.body()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Measurement> call, Throwable t) {
+                Log.d("ERROR", t.getMessage());
+            }
+        });
+    }
+
     public void calcAverage(){
         int i = 0;
         float prom1 = 0;
@@ -308,6 +426,8 @@ public class MeasurementList extends Fragment {
                     // this method is called when we get response from our api.
                     try {
                         List<Measurement> responseFromAPI = response.body();
+                        Gson msj = new Gson();
+                        Log.d("INFO", msj.toJson(responseFromAPI));
                         int i = 0;
                         float prom1 = 0;
                         float prom2 = 0;
@@ -317,7 +437,6 @@ public class MeasurementList extends Fragment {
                             if (getContext()!=null) {
                                 binding.tvMessageHistoryList.setVisibility(View.VISIBLE);
                                 binding.tvMessageHistoryList.setText("No se encontraron registros.");
-
                                 //Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
                             }
                         } else {

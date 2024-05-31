@@ -87,8 +87,7 @@ public class AddMeasurementBasic extends Fragment {
         binding.btnBackAddBasic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment selectAddMode = new SelectAddMode();
-                ChangeFragment.change(getContext(), R.id.frame_layout, selectAddMode);
+                ChangeFragment.back(getContext());
             }
         });
 
@@ -205,7 +204,7 @@ public class AddMeasurementBasic extends Fragment {
 
         int userId = sharedPreferences.getInt("userId", 0);
 
-        Measurement measurement = new Measurement(userId, sr, dr, date, false);
+        Measurement measurement = new Measurement(0, userId, sr, dr, date, false);
 
         if(!binding.mltAddBasic.getText().toString().equals(""))
             measurement.setComments(binding.mltAddBasic.getText().toString());

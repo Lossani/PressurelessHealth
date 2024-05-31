@@ -82,7 +82,7 @@ public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationF
                         .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // Ejecutar la función de eliminación aquí
-                                deleteFrequency(medicationFrequency);
+                                deleteFrequency(medicationFrequency, position);
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -98,7 +98,7 @@ public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationF
         });
     }
 
-    public void deleteFrequency(MedicationFrequency frequency){
+    public void deleteFrequency(MedicationFrequency frequency, int position){
 
         MedicationService medicationService = ApiClient.createService(context, MedicationService.class,1);
 
@@ -112,11 +112,13 @@ public class MedicationFrequencyAdapter extends RecyclerView.Adapter<MedicationF
             public void onResponse(Call<MedicationFrequency> call, Response<MedicationFrequency> response) {
                 if(response.isSuccessful()) {
                     Toast.makeText(context, "Se eliminó la frecuencia.", Toast.LENGTH_SHORT).show();
-                    FragmentManager fragmentManager = ((FragmentActivity)context).getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    Fragment medicationList = new MedicationList();
-                    fragmentTransaction.replace(R.id.frame_layout, medicationList);
-                    fragmentTransaction.commit();
+                    medicationFrequencyList.remove(frequency);
+                    notifyItemRemoved(position);
+//                    FragmentManager fragmentManager = ((FragmentActivity)context).getSupportFragmentManager();
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    Fragment medicationList = new MedicationList();
+//                    fragmentTransaction.replace(R.id.frame_layout, medicationList);
+//                    fragmentTransaction.commit();
                 } else {
                     Toast.makeText(context, "Error al intentar eliminar la frecuencia.", Toast.LENGTH_SHORT).show();
                     Log.d("ERROR", response.message());

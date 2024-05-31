@@ -6,7 +6,9 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -23,5 +25,8 @@ public interface MeasurementService {
     public Call<List<Measurement>> getAllByDateRange(@Query("measurement_date_start") String startDate, @Query("measurement_date_end") String endDate);
     @POST("health/measurements/")
     public Call<Measurement> save(@Body Measurement measurement);
+
+    @PATCH("health/measurements/{id}/")
+    public Call<Measurement> delete(@Path("id") String id, @Body Measurement measurement);
 
 }

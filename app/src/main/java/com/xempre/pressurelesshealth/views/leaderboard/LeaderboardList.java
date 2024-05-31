@@ -65,7 +65,7 @@ public class LeaderboardList extends Fragment {
         binding.btnBackLeaderboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChangeFragment.change(getContext(), R.id.frame_layout, new UserProfile());
+                ChangeFragment.back(getContext());
             }
         });
 

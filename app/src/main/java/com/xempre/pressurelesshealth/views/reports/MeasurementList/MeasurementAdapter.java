@@ -127,9 +127,18 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
         notifyDataSetChanged();
     }
 
+    public void deleteItem(int id) {
+        listMeasurementsFilter.remove(id);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return listMeasurementsFilter.size();
+    }
+
+    public Measurement getByPosition(int id) {
+        return listMeasurementsFilter.get(id);
     }
 
     public class MeasurementItemHolder extends RecyclerView.ViewHolder {

@@ -153,8 +153,7 @@ public class AddMeasurementAdvanced extends Fragment {
         binding.btnBackAddAdvanced.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment selectAddMode = new SelectAddMode();
-                ChangeFragment.change(getContext(), R.id.frame_layout, selectAddMode);
+                ChangeFragment.back(getContext());
             }
         });
 
@@ -436,7 +435,7 @@ public class AddMeasurementAdvanced extends Fragment {
 
         int userId = sharedPreferences.getInt("userId", 0);
 
-        Measurement measurement = new Measurement(userId, new Float(df.format(res.first)), new Float(df.format(res.second)), date, true);
+        Measurement measurement = new Measurement(0, userId, new Float(df.format(res.first)), new Float(df.format(res.second)), date, true);
 
         if(!binding.emltCommentAdvanced.getText().toString().equals(""))
             measurement.setComments(binding.emltCommentAdvanced.getText().toString());

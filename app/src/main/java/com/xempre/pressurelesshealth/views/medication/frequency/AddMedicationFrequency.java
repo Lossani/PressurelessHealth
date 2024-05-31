@@ -157,8 +157,7 @@ public class AddMedicationFrequency extends Fragment {
         binding.btnBackAddFrequency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment selectAddMode = new MedicationView(medication);
-                ChangeFragment.change(getContext(), R.id.frame_layout, selectAddMode);
+                ChangeFragment.back(getContext());
             }
         });
 

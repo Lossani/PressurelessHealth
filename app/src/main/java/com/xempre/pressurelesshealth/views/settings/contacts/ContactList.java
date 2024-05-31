@@ -56,6 +56,15 @@ public class ContactList extends Fragment {
             }
         });
 
+        binding.btnBackList.setVisibility(View.VISIBLE);
+
+        binding.btnBackList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeFragment.back(getContext());
+            }
+        });
+
         callAPI();
 
 

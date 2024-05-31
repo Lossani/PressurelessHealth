@@ -60,6 +60,13 @@ public class MedicationView extends Fragment {
         binding.tvMedicationViewName.setText(medication.getName());
         binding.tvMedicationViewDescription.setText(medication.getDescription());
 
+        binding.btnBackMedicationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChangeFragment.back(getContext());
+            }
+        });
+
         Fragment medicationView = new MedicationFrequencyList(medication);
         // ChangeFragment.change(getContext(), R.id.flMedication, medicationView);
         loadChildFragment(medicationView);

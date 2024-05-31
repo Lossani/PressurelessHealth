@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Measurement {
+    private int id;
     @JsonProperty("user")
     private int idUser;
     @JsonProperty("systolic_pressure")
@@ -28,10 +29,13 @@ public class Measurement {
 
     @JsonProperty("comments")
     private String comments;
+
+    private boolean deleted;
     public Measurement() {
     }
-    public Measurement(int id, float sr, float dr, String measurementDate, boolean isAdvancedMethod){
-        this.idUser = id;
+    public Measurement(int id, int userId, float sr, float dr, String measurementDate, boolean isAdvancedMethod){
+        this.id = id;
+        this.idUser = userId;
         this.systolicPressure = sr;
         this.diastolicPressure = dr;
         this.measurementDate = measurementDate;
@@ -52,6 +56,22 @@ public class Measurement {
 
     public Challenge[] getCompletedChallenges() {
         return completedChallenges;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean getDeleted() {
+        return deleted;
     }
 
     public void setCompletedChallenges(Challenge[] completedChallenges) {
