@@ -61,9 +61,11 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
         holder.textViewName.setText(String.valueOf(goal.getName()));
         holder.textViewReward.setText(String.valueOf(goal.getReward()) + " Puntos");
         holder.checkBox.setChecked(goal.getReachedOn()!=null);
+        holder.imageView.setImageResource(R.drawable.star_disabled);
         if (goal.getReachedOn()!=null){
             holder.date.setVisibility(View.VISIBLE);
             holder.date.setText(goal.getReachedOn().substring(0,10));
+            holder.imageView.setImageResource(R.drawable.star);
         }
 
 //        holder.progressBar.setProgress(10);
@@ -159,33 +161,34 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
     public void getBitmapFromURL(NombreViewHolder holder, String src) {
 
         // Ejecutar operaciones de red en un hilo separado usando Runnable
-        final Bitmap[] myBitmap = new Bitmap[1];
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // Coloca aquí tu código de operaciones de red
+//        final Bitmap[] myBitmap = new Bitmap[1];
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                // Coloca aquí tu código de operaciones de red
+//
+//                // Ejemplo:
+//                // HttpURLConnection connection = ...
+//                // Realizar operaciones de red...
+//                try{
+//                    Log.e("src",src);
+//                    URL url = new URL(src);
+//                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                    connection.setDoInput(true);
+//                    connection.connect();
+//                    InputStream input = connection.getInputStream();
+//                    myBitmap[0] = BitmapFactory.decodeStream(input);}
+//                catch (Exception e){}
+//                // Si necesitas actualizar la interfaz de usuario, usa el Handler
+//                handler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        // Actualizar la interfaz de usuario si es necesario
+//                        holder.imageView.setImageBitmap(myBitmap[0]);
+//                    }
+//                });
+//            }
+//        }).start();
 
-                // Ejemplo:
-                // HttpURLConnection connection = ...
-                // Realizar operaciones de red...
-                try{
-                    Log.e("src",src);
-                    URL url = new URL(src);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setDoInput(true);
-                    connection.connect();
-                    InputStream input = connection.getInputStream();
-                    myBitmap[0] = BitmapFactory.decodeStream(input);}
-                catch (Exception e){}
-                // Si necesitas actualizar la interfaz de usuario, usa el Handler
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Actualizar la interfaz de usuario si es necesario
-                        holder.imageView.setImageBitmap(myBitmap[0]);
-                    }
-                });
-            }
-        }).start();
     }
 }

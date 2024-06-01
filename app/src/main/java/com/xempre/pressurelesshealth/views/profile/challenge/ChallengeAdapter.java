@@ -77,7 +77,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
             holder.textViewDesc.setText(String.valueOf(challenge.getDescription()));
             holder.textViewName.setText(String.valueOf(challenge.getName()));
             holder.textViewReward.setText(String.valueOf(challenge.getReward())+ " Puntos");
-
+            holder.imageView.setImageResource(R.drawable.star_disabled);
 
 
             if (!challenge.isRepeatable()) {
@@ -98,6 +98,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
                 }
 
                 if (challenge.getLatestHistory()[0].getProgress() >= 100 || challenge.getLatestHistory()[0].getIsSucceeded()) {
+                    holder.imageView.setImageResource(R.drawable.star);
                     ViewGroup.LayoutParams layoutParams1 = holder.button.getLayoutParams();
                     holder.button.setText("Reiniciar");
                     layoutParams1.height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -260,28 +261,28 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
 
     public void getBitmapFromURL(ChallengeAdapter.NombreViewHolder holder, String src) {
 
-        final Bitmap[] myBitmap = new Bitmap[1];
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    Log.e("src",src);
-                    URL url = new URL(src);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setDoInput(true);
-                    connection.connect();
-                    InputStream input = connection.getInputStream();
-                    myBitmap[0] = BitmapFactory.decodeStream(input);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.imageView.setImageBitmap(myBitmap[0]);
-                        }
-                    });
-                }
-                catch (Exception ignored){}
-
-            }
-        }).start();
+//        final Bitmap[] myBitmap = new Bitmap[1];
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try{
+//                    Log.e("src",src);
+//                    URL url = new URL(src);
+//                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                    connection.setDoInput(true);
+//                    connection.connect();
+//                    InputStream input = connection.getInputStream();
+//                    myBitmap[0] = BitmapFactory.decodeStream(input);
+//                    handler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            holder.imageView.setImageBitmap(myBitmap[0]);
+//                        }
+//                    });
+//                }
+//                catch (Exception ignored){}
+//
+//            }
+//        }).start();
     }
 }

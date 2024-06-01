@@ -513,7 +513,10 @@ public class MeasurementList extends Fragment {
     }
 
     public void generateReport(Context context) {
+        String fnt = "";
         try {
+
+            binding.tvExportReport.setEnabled(false);
 
             InputStream inputStream = context.getAssets().open("baseReport.xlsx");
             Workbook workbook = new XSSFWorkbook(inputStream);
@@ -612,8 +615,19 @@ public class MeasurementList extends Fragment {
 
             String filename = "Reporte_PressurelessHealth_" + hourString+ ".xlsx";
 
-            File outputFile = new File(downloadsPath, filename);
 
+            File outputFile = new File(downloadsPath, filename);
+            fnt = filename;
+
+
+            int c = 0;
+
+            while (outputFile.exists()) {
+                c++;
+                filename = "Reporte_PressurelessHealth_" + hourString + "(" + String.valueOf(c) + ").xlsx";
+                outputFile = new File(downloadsPath, filename);
+            }
+            fnt = filename;
 
 
             FileOutputStream fileOut = new FileOutputStream(outputFile);
@@ -622,10 +636,13 @@ public class MeasurementList extends Fragment {
             workbook.close();
 
             Toast.makeText(context, "Archivo guardado en Descargas ("+filename+").", Toast.LENGTH_LONG).show();
+            binding.tvExportReport.setEnabled(true);
         } catch (IOException e) {
 
             e.printStackTrace();
+            CustomDialog.create(getActivity(), "Error", "No se ha podido exportar el reporte. Por favor eliminar el archivo " +fnt+" de su carpeta de descargas y volver a intentar." );
             Toast.makeText(context, "Error al guardar el archivo", Toast.LENGTH_SHORT).show();
+            binding.tvExportReport.setEnabled(true);
         }
     }
     @Override
