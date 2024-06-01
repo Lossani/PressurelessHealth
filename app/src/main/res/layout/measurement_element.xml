@@ -131,7 +131,7 @@
                     android:theme="@style/Theme.MaterialComponents"
                     app:borderWidth="0dp"
                     android:src="@drawable/baseline_info_24"
-                    android:tint="#FFFFFF"
+                    app:tint="#FFFFFF"
                     android:visibility="visible"
                     app:backgroundTint="#6750A3"
                     app:fabSize="mini" />
@@ -154,7 +154,7 @@
                     android:clickable="true"
                     android:contentDescription="Eliminar"
                     android:src="@drawable/baseline_delete_24"
-                    android:tint="#FFFFFF"
+                    app:tint="#FFFFFF"
                     app:backgroundTint="#F44336"
                     app:fabSize="normal"
                     android:theme="@style/Theme.MaterialComponents"
