@@ -67,7 +67,9 @@
                     android:src="@drawable/baseline_phone_24"
                     android:tint="#FFFFFF"
                     app:backgroundTint="#58BE80"
-                    app:fabSize="mini" />
+                    app:fabSize="mini"
+                    android:theme="@style/Theme.MaterialComponents"
+                    app:borderWidth="0dp"/>
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnContactEdit"
@@ -80,7 +82,9 @@
                     android:src="@drawable/baseline_edit_24"
                     android:tint="#FFFFFF"
                     app:backgroundTint="#009688"
-                    app:fabSize="mini" />
+                    app:fabSize="mini"
+                    android:theme="@style/Theme.MaterialComponents"
+                    app:borderWidth="0dp"/>
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnDeleteContact"
@@ -91,7 +95,9 @@
                     android:src="@drawable/baseline_delete_24"
                     android:tint="#FFFFFF"
                     app:backgroundTint="#FF0000"
-                    app:fabSize="mini" />
+                    app:fabSize="mini"
+                    android:theme="@style/Theme.MaterialComponents"
+                    app:borderWidth="0dp"/>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

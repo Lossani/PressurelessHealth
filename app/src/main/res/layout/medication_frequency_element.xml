@@ -198,7 +198,9 @@
                             android:src="@drawable/baseline_edit_24"
                             android:tint="#FFFFFF"
                             app:backgroundTint="#009688"
-                            app:fabSize="mini" />
+                            app:fabSize="mini"
+                            android:theme="@style/Theme.MaterialComponents"
+                            app:borderWidth="0dp"/>
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
                             android:id="@+id/btnDeleteFrequency"
@@ -210,7 +212,9 @@
                             android:src="@drawable/baseline_delete_24"
                             android:tint="#FFFFFF"
                             app:backgroundTint="#F44336"
-                            app:fabSize="mini" />
+                            app:fabSize="mini"
+                            android:theme="@style/Theme.MaterialComponents"
+                            app:borderWidth="0dp"/>
 
                     </LinearLayout>
                 </LinearLayout>

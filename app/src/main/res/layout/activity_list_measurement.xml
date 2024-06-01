@@ -177,7 +177,9 @@
         app:backgroundTint="#ff6750a4"
         app:fabSize="mini"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/Theme.MaterialComponents"
+        app:borderWidth="0dp"/>
 
     <TextView
         android:id="@+id/tvMessageHistoryList"

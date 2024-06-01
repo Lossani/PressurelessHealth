@@ -55,7 +55,9 @@
                     android:tint="#FFFFFF"
                     app:backgroundTint="#ff6750a4"
                     app:elevation="0dp"
-                    app:fabSize="mini" />
+                    app:fabSize="mini"
+                    android:theme="@style/Theme.MaterialComponents"
+                    app:borderWidth="0dp"/>
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnMedicationAddEdit"
@@ -66,7 +68,9 @@
                     android:src="@drawable/baseline_edit_24"
                     android:tint="#FFFFFF"
                     app:backgroundTint="#009688"
-                    app:fabSize="mini" />
+                    app:fabSize="mini"
+                    android:theme="@style/Theme.MaterialComponents"
+                    app:borderWidth="0dp"/>
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/btnMedicationElementMoreDelete"
@@ -83,7 +87,9 @@
                     app:elevation="0dp"
                     app:fabSize="mini"
                     app:maxImageSize="24dp"
-                    app:pressedTranslationZ="1dp" />
+                    app:pressedTranslationZ="1dp"
+                    android:theme="@style/Theme.MaterialComponents"
+                    app:borderWidth="0dp"/>
 
             </LinearLayout>
 

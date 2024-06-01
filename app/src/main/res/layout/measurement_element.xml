@@ -129,10 +129,10 @@
                     android:clickable="true"
                     android:contentDescription="Ver Notas"
                     android:theme="@style/Theme.MaterialComponents"
+                    app:borderWidth="0dp"
                     android:src="@drawable/baseline_info_24"
                     android:tint="#FFFFFF"
                     android:visibility="visible"
-                    app:borderWidth="0dp"
                     app:backgroundTint="#6750A3"
                     app:fabSize="mini" />
 
@@ -156,7 +156,9 @@
                     android:src="@drawable/baseline_delete_24"
                     android:tint="#FFFFFF"
                     app:backgroundTint="#F44336"
-                    app:fabSize="normal" />
+                    app:fabSize="normal"
+                    android:theme="@style/Theme.MaterialComponents"
+                    app:borderWidth="0dp"/>
             </LinearLayout>
 
         </LinearLayout>
