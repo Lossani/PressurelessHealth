@@ -97,11 +97,11 @@ public class RegisterFragment extends Fragment {
                 String email = binding.etRegisterEmail.getText().toString();
                 String pass = binding.etRegisterPassword.getText().toString();
 
-                if (binding.etRegisterPassword.getText().toString().trim().isEmpty()) {Toast.makeText(getContext(), "La contraseña no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
-                if (email.trim().isEmpty() || !pattern.matcher(email).matches()) {Toast.makeText(getContext(), "El correo no es valido.", Toast.LENGTH_SHORT).show(); return;}
-                if (binding.etRegisterUsername.getText().toString().trim().isEmpty()) {Toast.makeText(getContext(), "El nombre de usuario no puede ir en blanco.", Toast.LENGTH_SHORT).show();return;}
                 if (binding.etRegisterName.getText().toString().trim().isEmpty()) {Toast.makeText(getContext(), "El nombre no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
                 if (binding.etRegisterLastname.getText().toString().trim().isEmpty()) {Toast.makeText(getContext(), "El apellido no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
+                if (binding.etRegisterUsername.getText().toString().trim().isEmpty()) {Toast.makeText(getContext(), "El nombre de usuario no puede ir en blanco.", Toast.LENGTH_SHORT).show();return;}
+                if (email.trim().isEmpty() || !pattern.matcher(email).matches()) {Toast.makeText(getContext(), "El correo no es válido.", Toast.LENGTH_SHORT).show(); return;}
+                if (binding.etRegisterPassword.getText().toString().trim().isEmpty()) {Toast.makeText(getContext(), "La contraseña no puede ir en blanco.", Toast.LENGTH_SHORT).show(); return;}
                 if (pass.length()<6) {Toast.makeText(getContext(), "La contraseña debe tener al menos 6 caracteres.", Toast.LENGTH_SHORT).show(); return;}
                 if (!pass.equals(binding.etRegisterConfirmPassword.getText().toString())){Toast.makeText(getContext(), "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show(); return;}
                 register();

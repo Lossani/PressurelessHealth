@@ -7,14 +7,14 @@
     tools:context=".views.auth.RegisterFragment" >
 
     <LinearLayout
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_marginHorizontal="70dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <ImageView
             android:id="@+id/imageView4"
             android:layout_width="match_parent"
@@ -22,102 +22,174 @@
             android:layout_marginBottom="20dp"
             android:src="@drawable/logo" />
 
-        <TextView
-            android:id="@+id/labelRegisterName"
+        <!--        <TextView-->
+        <!--            android:id="@+id/labelRegisterName"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Nombres"-->
+        <!--            android:textSize="20dp" />-->
+
+        <!--        <EditText-->
+        <!--            android:id="@+id/etRegisterName"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:ems="10"-->
+        <!--            android:hint="Nombres"-->
+        <!--            android:inputType="textPersonName" />-->
+
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nombres"
-            android:textSize="20dp" />
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegisterName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Nombres"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/etRegisterName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Nombres"
-            android:inputType="textPersonName" />
+        <!--        <TextView-->
+        <!--            android:id="@+id/labelRegisterLastname"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Apellidos"-->
+        <!--            android:textSize="20dp" />-->
 
-        <TextView
-            android:id="@+id/labelRegisterLastname"
+        <!--        <EditText-->
+        <!--            android:id="@+id/etRegisterLastname"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:ems="10"-->
+        <!--            android:hint="Apellidos"-->
+        <!--            android:inputType="textPersonName" />-->
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Apellidos"
-            android:textSize="20dp" />
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegisterLastname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Apellidos"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/etRegisterLastname"
+        <!--        <TextView-->
+        <!--            android:id="@+id/labelRegisterUsername"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Nombre de usuario"-->
+        <!--            android:textSize="20dp" />-->
+
+        <!--        <EditText-->
+        <!--            android:id="@+id/etRegisterUsername"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:ems="10"-->
+        <!--            android:hint="Nombre de usuario"-->
+        <!--            android:inputType="text" />-->
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Apellidos"
-            android:inputType="textPersonName" />
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegisterUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Nombre de usuario"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/labelRegisterUsername"
+        <!--        <TextView-->
+        <!--            android:id="@+id/labelEmail"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Correo electronico"-->
+        <!--            android:textSize="20sp" />-->
+
+        <!--        <EditText-->
+        <!--            android:id="@+id/etRegisterEmail"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:autoLink="email"-->
+        <!--            android:ems="10"-->
+        <!--            android:hint="email@test.com"-->
+        <!--            android:inputType="text|textEmailAddress" />-->
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nombre de usuario"
-            android:textSize="20dp" />
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegisterEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="email"
+                android:ems="10"
+                android:hint="Correo electrónico"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/etRegisterUsername"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Nombre de usuario"
-            android:inputType="text" />
-
-        <TextView
-            android:id="@+id/labelEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Correo electronico"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/etRegisterEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="email"
-            android:ems="10"
-            android:hint="email@test.com"
-            android:inputType="text|textEmailAddress" />
-
+        <!--
         <TextView
             android:id="@+id/labelRegisterPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Contraseña"
             android:textSize="20dp" />
+        -->
 
-        <EditText
-            android:id="@+id/etRegisterPassword"
+        <com.google.android.material.textfield.TextInputLayout
+            app:passwordToggleEnabled="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="******"
-            android:inputType="textPassword"
-            android:password="true" />
+            >
+            <!-- <EditText -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegisterPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:password="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/labelConfirmPassword"
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/labelConfirmPassword"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="Confirmar Contraseña"-->
+        <!--            android:textSize="20dp" />-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            app:passwordToggleEnabled="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Confirmar Contraseña"
-            android:textSize="20dp" />
-
-        <EditText
-            android:id="@+id/etRegisterConfirmPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="******"
-            android:inputType="textPassword" />
+            >
+            <!--        <EditText-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegisterConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Confirmar contraseña"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btnRegRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:text="Registrar" />
 
         <Button
@@ -126,5 +198,6 @@
             android:layout_height="wrap_content"
             android:text="Volver" />
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
