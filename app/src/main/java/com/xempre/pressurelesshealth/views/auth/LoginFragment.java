@@ -111,7 +111,7 @@ public class LoginFragment extends Fragment {
                     }
                 }
                 else {
-                    Toast.makeText(getContext(), "Valide los datos ingresados.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Datos incorrectos, verifique el Nombre de usuario y/o Contraseña.", Toast.LENGTH_LONG).show();
                     Gson gson = new Gson();
                     String json = gson.toJson(temp);
 //                    Toast.makeText(getContext(), temp.getUsername(), Toast.LENGTH_LONG).show();

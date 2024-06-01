@@ -21,11 +21,11 @@
         android:title="Historial"
         android:id="@+id/bb_report" />
     <item
+        android:id="@+id/bb_medication"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/baseline_medication_24"
-        android:title="Medicina"
-        android:id="@+id/bb_medication" />
+        android:title="Medicación" />
     <item
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -324,6 +324,16 @@ public class MeasurementList extends Fragment {
             if (measurement.getIsAdvanced()) {
                 measurementListFilter.add(measurement);
             }
+        }
+
+
+        if (isAdvanced){ measurementAdapter.updateList(measurementListFilter);
+            this.measurementListFilter = measurementListFilter;}
+        else {measurementAdapter.updateList(measurementList);
+        this.measurementListFilter = measurementList;
+        }
+
+        for (Measurement measurement : this.measurementListFilter) {
             if(!showedMessage && (measurement.categorizeBloodPressure().equals("HYPERTENSION_STAGE_1") ||
                     measurement.categorizeBloodPressure().equals("HYPERTENSION_STAGE_2") ||
                     measurement.categorizeBloodPressure().equals("HYPERTENSIVE_CRISIS"))
@@ -333,14 +343,6 @@ public class MeasurementList extends Fragment {
                 dialog.create(getActivity(), "ALERTA", "Se ha detectado una medida por encima de Hipertensión en Etapa 1.");
             }
         }
-
-        if (isAdvanced){ measurementAdapter.updateList(measurementListFilter);
-            this.measurementListFilter = measurementListFilter;}
-        else {measurementAdapter.updateList(measurementList);
-        this.measurementListFilter = measurementList;
-        }
-
-
 
         Log.d("INFO", "ENTRE");
     }
@@ -481,6 +483,10 @@ public class MeasurementList extends Fragment {
     }
 
     public void generateReport(Context context) {
+        if(measurementListFilter.isEmpty()){
+            CustomDialog.create(getActivity(), "INFO", "No se han encontrado registros para exportar.");
+            return;
+        }
         String fnt = "";
         try {
 

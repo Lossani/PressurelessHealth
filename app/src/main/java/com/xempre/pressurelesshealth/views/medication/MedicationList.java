@@ -40,7 +40,7 @@ public class MedicationList extends Fragment {
 
 
         binding = ListAddBinding.inflate(inflater, container, false);
-        binding.textView19.setText("Mis Medicamentos");
+        binding.textView19.setText("Mi Medicación");
 
         recyclerView = binding.rvMedicationList;
         medicationAdapter = new MedicationAdapter(getContext(), medicationList);
