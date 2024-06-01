@@ -206,8 +206,8 @@ public class AddMeasurementBasic extends Fragment {
 
         Measurement measurement = new Measurement(0, userId, sr, dr, date, false);
 
-        if(!binding.mltAddBasic.getText().toString().equals(""))
-            measurement.setComments(binding.mltAddBasic.getText().toString());
+        if(!binding.mltAddBasic.getText().toString().trim().equals(""))
+            measurement.setComments(binding.mltAddBasic.getText().toString().trim());
 
         // calling a method to create a post and passing our modal class.
         Call<Measurement> call = measurementService.save(measurement);

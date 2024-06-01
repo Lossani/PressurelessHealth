@@ -12,5 +12,6 @@
     <color name="Crisis">#FF2B3A</color>
     <color name="mi_color_de_texto_oscuro">#FFFFFF</color>
     <color name="selected_day">#FFC107</color>
-
+    <color name="principal">#6750A3</color>
+    <color name="alert">#F44336</color>
 </resources>

@@ -28,108 +28,97 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="30dp"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/tvSystolic"
-                                android:layout_width="wrap_content"
+                                android:id="@+id/tvDate"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
+                                android:gravity="center"
                                 android:text="TextView"
                                 android:textSize="16sp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.506"
-                                app:layout_constraintStart_toStartOf="parent" />
+                                tools:text="date" />
 
                             <TextView
                                 android:id="@+id/textView3"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
+                                android:gravity="center"
                                 android:text="Sistólica"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.505"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
                                 tools:text="Sistólica" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    </LinearLayout>
+                            <TextView
+                                android:id="@+id/tvSystolic"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="TextView"
+                                android:textSize="16sp" />
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        </LinearLayout>
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvHour"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="TextView"
+                                android:textSize="16sp"
+                                tools:text="hour" />
 
                             <TextView
                                 android:id="@+id/tv2"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
+                                android:gravity="center"
                                 android:text="Diastólica"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
                                 tools:text="Diastólica" />
 
                             <TextView
                                 android:id="@+id/tvDiastolic"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
+                                android:gravity="center"
                                 android:text="TextView"
-                                android:textSize="16sp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="TextView"
-                            android:textSize="16sp"
-                            tools:text="date" />
-
-                        <TextView
-                            android:id="@+id/tvHour"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="TextView"
-                            android:textSize="16sp"
-                            tools:text="hour" />
 
                         <Button
                             android:id="@+id/btnIsAdvanced"
@@ -148,7 +137,38 @@
                             app:iconPadding="0dp"
                             app:iconSize="10dp" />
 
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/btnInfoMeasurementElement"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:src="@drawable/baseline_info_24"
+                            android:tint="#FFFFFF"
+                            android:visibility="visible"
+                            app:backgroundTint="#6750A3"
+                            app:fabSize="mini" />
+
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/btnDeleteMeasurementElement"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:src="@drawable/baseline_delete_24"
+                            android:tint="#FFFFFF"
+                            app:backgroundTint="#F44336"
+                            app:fabSize="normal" />
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
 

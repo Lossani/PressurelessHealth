@@ -120,68 +120,68 @@ public class MeasurementList extends Fragment {
 //        apiClient = new ApiClient();
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-                int position = viewHolder.getAdapterPosition();
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setMessage("¿Está seguro de eliminar?")
-                        .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // Ejecutar la función de eliminación aquí
-                                deleteMeasurement(measurementAdapter.getByPosition(position), position);
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // Cancelar la eliminación
-                                dialog.dismiss();
-                                measurementAdapter.notifyItemChanged(position);
-                            }
-                        });
-                // Crear y mostrar el diálogo
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-
-            }
-
-            @Override
-            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
-                View itemView = viewHolder.itemView;
-                int backgroundCornerOffset = 20; // Desplazamiento de la esquina del fondo
-
-                int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
-                int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
-                int iconBottom = iconTop + icon.getIntrinsicHeight();
-
-                if (dX > 0) { // Deslizar a la derecha
-                    int iconLeft = itemView.getLeft() + iconMargin;
-                    int iconRight = iconLeft + icon.getIntrinsicWidth();
-                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
-
-                } else if (dX < 0) { // Deslizar a la izquierda
-                    int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
-                    int iconRight = itemView.getRight() - iconMargin;
-                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
-
-                } else { // Vista desactivada
-                }
-                icon.draw(c);
-            }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
+//        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+//            @Override
+//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//
+//                int position = viewHolder.getAdapterPosition();
+//
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//                builder.setMessage("¿Está seguro de eliminar?")
+//                        .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                // Ejecutar la función de eliminación aquí
+//                                deleteMeasurement(measurementAdapter.getByPosition(position), position);
+//                            }
+//                        })
+//                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                // Cancelar la eliminación
+//                                dialog.dismiss();
+//                                measurementAdapter.notifyItemChanged(position);
+//                            }
+//                        });
+//                // Crear y mostrar el diálogo
+//                AlertDialog dialog = builder.create();
+//                dialog.show();
+//
+//
+//            }
+//
+//            @Override
+//            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+//                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+//
+//                View itemView = viewHolder.itemView;
+//                int backgroundCornerOffset = 20; // Desplazamiento de la esquina del fondo
+//
+//                int iconMargin = (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+//                int iconTop = itemView.getTop() + (itemView.getHeight() - icon.getIntrinsicHeight()) / 2;
+//                int iconBottom = iconTop + icon.getIntrinsicHeight();
+//
+//                if (dX > 0) { // Deslizar a la derecha
+//                    int iconLeft = itemView.getLeft() + iconMargin;
+//                    int iconRight = iconLeft + icon.getIntrinsicWidth();
+//                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+//
+//                } else if (dX < 0) { // Deslizar a la izquierda
+//                    int iconLeft = itemView.getRight() - iconMargin - icon.getIntrinsicWidth();
+//                    int iconRight = itemView.getRight() - iconMargin;
+//                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom);
+//
+//                } else { // Vista desactivada
+//                }
+//                icon.draw(c);
+//            }
+//        };
+//
+//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+//        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
 
         recyclerView = binding.recyclerView;
         measurementAdapter = new MeasurementAdapter(getContext(), measurementList);
@@ -288,39 +288,7 @@ public class MeasurementList extends Fragment {
 
     }
 
-    private void deleteMeasurement(Measurement measurement, int position) {
-        MeasurementService contactService = ApiClient.createService(getContext(), MeasurementService.class,1);
 
-//        Measurement temp = new Measurement();
-//        temp.setDeleted(true);
-        measurement.setDeleted(true);
-
-        Call<Measurement> call = contactService.delete(String.valueOf(measurement.getId()), measurement);
-        Log.d("ERROR", String.valueOf(measurement.getDeleted()));
-        call.enqueue(new Callback<Measurement>() {
-            @Override
-            public void onResponse(Call<Measurement> call, Response<Measurement> response) {
-                if(response.isSuccessful()) {
-                    Toast.makeText(getContext(), "Se eliminó la medida.", Toast.LENGTH_SHORT).show();
-                    measurementAdapter.deleteItem(position);
-                    if (measurementAdapter.getItemCount() == 0) {
-                        binding.tvMessageHistoryList.setVisibility(View.VISIBLE);
-                        binding.tvMessageHistoryList.setText("No se encontraron registros.");
-                    }
-                    measurementAdapter.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(getContext(), "Error al intentar eliminar la medida.", Toast.LENGTH_SHORT).show();
-                    Log.d("ERROR", response.message());
-                    Log.d("ERROR", String.valueOf(response.body()));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Measurement> call, Throwable t) {
-                Log.d("ERROR", t.getMessage());
-            }
-        });
-    }
 
     public void calcAverage(){
         int i = 0;
