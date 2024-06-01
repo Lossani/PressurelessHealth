@@ -16,160 +16,150 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="9dp">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:orientation="horizontal"
-                tools:layout_editor_absoluteX="9dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                android:layout_marginEnd="0dp"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="0dp"
-                    android:layout_weight="4"
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:text="TextView"
+                    android:textSize="16sp"
+                    tools:text="date" />
 
-                    <TextView
-                        android:id="@+id/tvDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="TextView"
-                        android:textSize="16sp"
-                        tools:text="date" />
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
-                        android:gravity="center"
-                        android:text="Sistólica"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        tools:text="Sistólica" />
-
-                    <TextView
-                        android:id="@+id/tvSystolic"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="TextView"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvHour"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="TextView"
-                        android:textSize="16sp"
-                        tools:text="hour" />
-
-                    <TextView
-                        android:id="@+id/tv2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Diastólica"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        tools:text="Diastólica" />
-
-                    <TextView
-                        android:id="@+id/tvDiastolic"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="TextView"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
                     android:gravity="center"
-                    android:minWidth="70dp"
-                    android:orientation="vertical">
+                    android:text="Sistólica"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="Sistólica" />
 
-                    <Button
-                        android:id="@+id/btnIsAdvanced"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#A6A6A6"
-                        android:clickable="false"
-                        android:includeFontPadding="false"
-                        android:minWidth="20dp"
-                        android:minHeight="20dp"
-                        android:paddingLeft="6dp"
-                        android:paddingTop="2dp"
-                        android:paddingRight="6dp"
-                        android:paddingBottom="2dp"
-                        android:text="Avanzada"
-                        app:iconPadding="0dp"
-                        app:iconSize="10dp" />
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/btnInfoMeasurementElement"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:theme="@style/Theme.MaterialComponents"
-                        android:src="@drawable/baseline_info_24"
-                        android:tint="#FFFFFF"
-                        android:visibility="visible"
-                        app:borderWidth="0dp"
-                        app:backgroundTint="#6750A3"
-                        app:fabSize="mini" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
+                <TextView
+                    android:id="@+id/tvSystolic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/btnDeleteMeasurementElement"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:src="@drawable/baseline_delete_24"
-                        android:tint="#FFFFFF"
-                        app:backgroundTint="#F44336"
-                        app:fabSize="normal" />
-                </LinearLayout>
+                    android:text="TextView"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tvHour"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="TextView"
+                    android:textSize="16sp"
+                    tools:text="hour" />
+
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Diastólica"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="Diastólica" />
+
+                <TextView
+                    android:id="@+id/tvDiastolic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="TextView"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:minWidth="70dp"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/btnIsAdvanced"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#A6A6A6"
+                    android:clickable="false"
+                    android:includeFontPadding="false"
+                    android:minWidth="20dp"
+                    android:minHeight="20dp"
+                    android:paddingLeft="6dp"
+                    android:paddingTop="2dp"
+                    android:paddingRight="6dp"
+                    android:paddingBottom="2dp"
+                    android:text="Avanzada"
+                    app:iconPadding="0dp"
+                    app:iconSize="10dp" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnInfoMeasurementElement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:contentDescription="Ver Notas"
+                    android:theme="@style/Theme.MaterialComponents"
+                    android:src="@drawable/baseline_info_24"
+                    android:tint="#FFFFFF"
+                    android:visibility="visible"
+                    app:borderWidth="0dp"
+                    app:backgroundTint="#6750A3"
+                    app:fabSize="mini" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btnDeleteMeasurementElement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:contentDescription="Eliminar"
+                    android:src="@drawable/baseline_delete_24"
+                    android:tint="#FFFFFF"
+                    app:backgroundTint="#F44336"
+                    app:fabSize="normal" />
+            </LinearLayout>
+
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
