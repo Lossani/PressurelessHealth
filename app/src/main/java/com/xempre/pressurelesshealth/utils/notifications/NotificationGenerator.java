@@ -29,6 +29,7 @@ import com.xempre.pressurelesshealth.utils.Constants;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 public class NotificationGenerator {
     private static final String CHANNEL_ID = "777";
@@ -68,7 +69,7 @@ public class NotificationGenerator {
         notificationManagerCompat.notify(Integer.parseInt(CHANNEL_ID), builder.build());
     }
 
-    public void sendNotificationWithActionIntent(Intent intent, Context context, String title, String content) {
+    public void sendNotificationWithActionIntent(Intent intent, Context context, String title, String content, int channelID) {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
@@ -94,13 +95,17 @@ public class NotificationGenerator {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        notificationManagerCompat.notify(Integer.parseInt(CHANNEL_ID), builder.build());
+        notificationManagerCompat.notify(channelID, builder.build());
     }
 
     public void scheduleNotification(Context context, Calendar scheduledTime, String identifier, String title, String content, IntentExtra[] extras) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (sharedPreferences.getBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, false) && ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            Random rand = new Random();
+            int randomNumber = rand.nextInt(1001);
+            scheduledTime.set(Calendar.MILLISECOND, randomNumber);
+
             Intent intent = new Intent(context, AlarmReceiver.class);
             intent.putExtra("title", title);
             intent.putExtra("content", content);

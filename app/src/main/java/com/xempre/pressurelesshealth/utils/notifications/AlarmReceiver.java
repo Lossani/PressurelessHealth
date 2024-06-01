@@ -22,13 +22,13 @@ public class AlarmReceiver extends BroadcastReceiver {
         String content = intent.getStringExtra("content");
         NotificationGenerator notificationGenerator = new NotificationGenerator(context.getSystemService(NotificationManager.class));
 
+        String identifier = intent.getStringExtra("identifier");
+
         try {
-            notificationGenerator.sendNotificationWithActionIntent(nextActivity, context, title, content);
+            notificationGenerator.sendNotificationWithActionIntent(nextActivity, context, title, content, identifier == null ? 0 : identifier.hashCode());
         } catch (Exception ex) {
             Toast.makeText(context, "Apulso: " + content + ".", Toast.LENGTH_LONG).show();
         }
-
-        String identifier = intent.getStringExtra("identifier");
 
         if (identifier != null) {
             try {
