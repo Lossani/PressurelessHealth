@@ -194,7 +194,7 @@ public class AddMeasurementBasic extends Fragment {
 
                         final boolean[] confirmSave = {false};
                         String msjSystolic = sr<90?"Se ha detectado que la medida de presión Sistólica es demasiado baja ("+sr+").":"";
-                        String msjDiastolic = dr<90?"\nSe ha detectado que la medida de presión Diastólica es demasiado baja ("+dr+").":"";
+                        String msjDiastolic = dr<60?"\nSe ha detectado que la medida de presión Diastólica es demasiado baja ("+dr+").":"";
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setMessage(
                                         msjSystolic+msjDiastolic+ "\n¿Está seguro que desea almacenar está medida?")

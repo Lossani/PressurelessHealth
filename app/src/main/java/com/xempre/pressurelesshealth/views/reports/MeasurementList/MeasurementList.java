@@ -184,7 +184,7 @@ public class MeasurementList extends Fragment {
 //        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
 
         recyclerView = binding.recyclerView;
-        measurementAdapter = new MeasurementAdapter(getContext(), measurementList);
+        measurementAdapter = new MeasurementAdapter(getContext(), measurementListFilter, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(measurementAdapter);
         promDiastolic = binding.tvDiasProm;
@@ -294,7 +294,9 @@ public class MeasurementList extends Fragment {
         int i = 0;
         float prom1 = 0;
         float prom2 = 0;
-        for (Measurement element : measurementList) {
+        promDiastolic.setText("0.00");
+        promSystolic.setText("0.00");
+        for (Measurement element : measurementListFilter) {
             if(binding.cbOnlyAdvanced.isChecked()){
                 if (element.getIsAdvanced()){
                     i +=1;
@@ -317,15 +319,18 @@ public class MeasurementList extends Fragment {
 
     }
 
+    public void deleteItem(Measurement measurement){
+        measurementList.remove(measurement);
+    }
+
     private void filterList(boolean isAdvanced) {
         List<Measurement> measurementListFilter = new ArrayList<>();
         boolean showedMessage = false;
         for (Measurement measurement : measurementList) {
-            if (measurement.getIsAdvanced()) {
+            if (measurement.getIsAdvanced()==isAdvanced) {
                 measurementListFilter.add(measurement);
             }
         }
-
 
         if (isAdvanced){ measurementAdapter.updateList(measurementListFilter);
             this.measurementListFilter = measurementListFilter;}
@@ -345,6 +350,14 @@ public class MeasurementList extends Fragment {
         }
 
         Log.d("INFO", "ENTRE");
+    }
+
+    public void updateMessage(boolean show){
+        if (show){
+            binding.tvMessageHistoryList.setVisibility(View.VISIBLE);
+            binding.tvMessageHistoryList.setText("No se encontraron registros.");
+        } else binding.tvMessageHistoryList.setVisibility(View.GONE);
+
     }
 
     public String convertDateToString(Long time){
@@ -405,8 +418,7 @@ public class MeasurementList extends Fragment {
                         clearRecyclerView();
                         if (responseFromAPI.isEmpty()) {
                             if (getContext()!=null) {
-                                binding.tvMessageHistoryList.setVisibility(View.VISIBLE);
-                                binding.tvMessageHistoryList.setText("No se encontraron registros.");
+                                updateMessage(true);
                                 //Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
                             }
                         } else {
@@ -419,14 +431,18 @@ public class MeasurementList extends Fragment {
                                 prom1 += element.getDiastolicRecord();
                                 prom2 += element.getSystolicRecord();
                             }
-                            DecimalFormat df = new DecimalFormat("0.00");
-                            promDiastolic.setText(df.format(prom2/i)+"");
-                            promSystolic.setText(df.format(prom1/i)+"");
+                            measurementListFilter = measurementList;
+
+                            calcAverage();
+                            filterList(false);
+                            measurementAdapter.notifyDataSetChanged();
+//                            DecimalFormat df = new DecimalFormat("0.00");
+//                            promDiastolic.setText(df.format(prom2/i)+"");
+//                            promSystolic.setText(df.format(prom1/i)+"");
 //                            measurementAdapter.notifyDataSetChanged();
 //                            filterList(false);
                         }
-                        measurementAdapter.notifyDataSetChanged();
-                        filterList(false);
+
 
                     } catch (Exception ignored){
                         if (getContext()!=null) Toast.makeText(getContext(), "Error al obtener la lista de medidas.", Toast.LENGTH_SHORT).show();

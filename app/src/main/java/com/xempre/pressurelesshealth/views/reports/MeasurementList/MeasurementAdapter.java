@@ -40,10 +40,13 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
     private List<Measurement> listMeasurements;
     private List<Measurement> listMeasurementsFilter;
 
-    public MeasurementAdapter(Context context, List<Measurement> listMeasurements) {
+    private MeasurementList measurementListFragment;
+
+    public MeasurementAdapter(Context context, List<Measurement> listMeasurements, MeasurementList measurementListFragment){
         this.context = context;
         this.listMeasurements = listMeasurements;
         this.listMeasurementsFilter = new ArrayList<>(listMeasurements);
+        this.measurementListFragment = measurementListFragment;
     }
 
 
@@ -190,11 +193,14 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
     public void updateList(List<Measurement> measurementList) {
         listMeasurementsFilter.clear();
         listMeasurementsFilter.addAll(measurementList);
+        measurementListFragment.updateMessage(listMeasurementsFilter.isEmpty());
         notifyDataSetChanged();
     }
 
     public void deleteItem(int id) {
+        measurementListFragment.deleteItem(getByPosition(id));
         listMeasurementsFilter.remove(id);
+        measurementListFragment.updateMessage(listMeasurementsFilter.isEmpty());
         notifyDataSetChanged();
     }
 
@@ -222,11 +228,8 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
                 if(response.isSuccessful()) {
                     Toast.makeText(context, "Se eliminó la medida.", Toast.LENGTH_SHORT).show();
                     deleteItem(position);
-//                    if (getItemCount() == 0) {
-//                        binding.tvMessageHistoryList.setVisibility(View.VISIBLE);
-//                        binding.tvMessageHistoryList.setText("No se encontraron registros.");
-//                    }
-                    notifyDataSetChanged();
+                    measurementListFragment.calcAverage();
+                    notifyItemRemoved(position);
                 } else {
                     Toast.makeText(context, "Error al intentar eliminar la medida.", Toast.LENGTH_SHORT).show();
                     Log.d("ERROR", response.message());
@@ -239,6 +242,10 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
                 Log.d("ERROR", t.getMessage());
             }
         });
+    }
+
+    public List<Measurement> getItems(){
+        return listMeasurementsFilter;
     }
 
     public class MeasurementItemHolder extends RecyclerView.ViewHolder {
