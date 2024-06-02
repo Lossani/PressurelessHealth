@@ -193,14 +193,14 @@
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
                             android:id="@+id/btnEditMedicationFrequency"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:clickable="true"
                             android:src="@drawable/baseline_edit_24"
-                            app:tint="#FFFFFF"
-                            app:backgroundTint="#009688"
-                            app:fabSize="mini"
                             android:theme="@style/Theme.MaterialComponents"
-                            app:borderWidth="0dp"/>
+                            app:backgroundTint="#009688"
+                            app:borderWidth="0dp"
+                            app:fabSize="mini"
+                            app:tint="#FFFFFF" />
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
                             android:id="@+id/btnDeleteFrequency"

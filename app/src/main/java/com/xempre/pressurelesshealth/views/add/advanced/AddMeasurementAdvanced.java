@@ -4,7 +4,9 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC;
 import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,6 +47,7 @@ import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.add.SelectAddMode;
 import com.xempre.pressurelesshealth.views.medication.MedicationList;
 import com.xempre.pressurelesshealth.views.reports.MeasurementList.MeasurementList;
+import com.xempre.pressurelesshealth.views.settings.contacts.ContactList;
 import com.xempre.pressurelesshealth.views.shared.ChangeFragment;
 import com.xempre.pressurelesshealth.views.shared.CustomDialog;
 import com.xempre.pressurelesshealth.views.shared.MinMaxFilter;
@@ -110,7 +113,57 @@ public class AddMeasurementAdvanced extends Fragment {
             @Override
             public void onClick(View view) {
                 try {
-                    saveButton();
+                    String message = "";
+                    message += validateInputs(binding.etSystolicAd1.getText().toString(), binding.etDiastolicAd1.getText().toString(), 1);
+                    message += validateInputs(binding.etSystolicAd2.getText().toString(), binding.etDiastolicAd2.getText().toString(), 2);
+                    message += validateInputs(binding.etSystolicAd3.getText().toString(), binding.etDiastolicAd3.getText().toString(), 3);
+
+                    if (!message.equals("")) {
+                        CustomDialog.create(getActivity(), "ALERTA", message);
+                        return;
+                    }
+
+                    float sr1 = Float.parseFloat(binding.etSystolicAd1.getText().toString());
+                    float dr1 = Float.parseFloat(binding.etDiastolicAd1.getText().toString());
+
+                    float sr2 = Float.parseFloat(binding.etSystolicAd2.getText().toString());
+                    float dr2 = Float.parseFloat(binding.etDiastolicAd2.getText().toString());
+
+                    float sr3 = Float.parseFloat(binding.etSystolicAd3.getText().toString());
+                    float dr3 = Float.parseFloat(binding.etDiastolicAd3.getText().toString());
+
+                    if (sr1 < 90 || dr1 < 60 || sr2 < 90 || dr2 < 60 || sr3 < 90 || dr3 < 60) {
+
+                        final boolean[] confirmSave = {false};
+                        String msjSystolic1 = sr1<90?"Se ha detectado que la medida de presión Sistólica [1] es demasiado baja ("+sr1+").":"";
+                        String msjDiastolic1 = dr1<60?"\nSe ha detectado que la medida de presión Diastólica [1] es demasiado baja ("+dr1+").":"";
+                        String msjSystolic2 = sr2<90?"\nSe ha detectado que la medida de presión Sistólica [2] es demasiado baja ("+sr2+").":"";
+                        String msjDiastolic2 = dr2<60?"\nSe ha detectado que la medida de presión Diastólica [2] es demasiado baja ("+dr2+").":"";
+                        String msjSystolic3 = sr3<90?"\nSe ha detectado que la medida de presión Sistólica [3] es demasiado baja ("+sr3+").":"";
+                        String msjDiastolic3 = dr3<60?"\nSe ha detectado que la medida de presión Diastólica [3] es demasiado baja ("+dr3+").":"";
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setMessage(
+                                        msjSystolic1+msjDiastolic1+msjSystolic2+msjDiastolic2+msjSystolic3+msjDiastolic3+ "\n¿Está seguro que desea almacenar está medida?")
+                                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // Ejecutar la función de eliminación aquí
+                                        saveButton();
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                        // Crear y mostrar el diálogo
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    } else {
+                        saveButton();
+                    }
+
+                    //saveButton();
                 } catch (Exception ignored){
                     Toast.makeText(getContext(), "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
                 }
@@ -144,9 +197,9 @@ public class AddMeasurementAdvanced extends Fragment {
         boolean isGoogleAuth = sharedPreferences.getBoolean(Constants.SETTINGS_GOOGLE_AUTH_SIGNED_IN, false);
 
         if (!isGoogleAuth){
-            binding.btnUpdate1.setVisibility(View.INVISIBLE);
-            binding.btnUpdate2.setVisibility(View.INVISIBLE);
-            binding.btnUpdate3.setVisibility(View.INVISIBLE);
+            binding.btnUpdate1.setVisibility(View.GONE);
+            binding.btnUpdate2.setVisibility(View.GONE);
+            binding.btnUpdate3.setVisibility(View.GONE);
         }
 
 
@@ -315,6 +368,25 @@ public class AddMeasurementAdvanced extends Fragment {
         return binding.getRoot();
     }
 
+    public String validateInputs(String tsr, String tdr, int position){
+        String message = "";
+        float sr = Float.parseFloat(tsr);
+        float dr = Float.parseFloat(tdr);
+        if (sr<1 || dr<1 || sr > 250 || dr > 200){
+            message += "\nAsegurece de ingresar números validos.<br>";
+
+        }
+        if (dr >= sr) {
+            message += "\nLa medida de Presión Sistólica ["+position+"] debe ser mayor que la Diastólica. Por favor valide los datos ingresados.<br>";
+
+        }
+//        if (dr == sr) {
+//            message += "\nLa diferencia entre la Presión Sistólica y Diastólica ["+position+"] no puede ser 0. Por favor valide los datos ingresados.<br>";
+////            val = false;
+//        }
+        return message;
+    }
+
     public void update_data(int op){
         String text = "";
         switch (op){
@@ -455,7 +527,33 @@ public class AddMeasurementAdvanced extends Fragment {
                     for (Challenge challenge: measurementResponse.getCompletedChallenges()){
                         dialog.create(getActivity(), "Reto completado", "Has completado el reto: " + challenge.getName() + " y has ganado " + challenge.getReward() + " puntos.");
                     }
-                    ChangeFragment.change(getContext(), R.id.frame_layout, new MeasurementList());
+                    com.xempre.pressurelesshealth.utils.Callback callback = () -> {
+                        ChangeFragment.change(getContext(), R.id.frame_layout, new MeasurementList());
+                    };
+
+//                    CustomDialog dialog = new CustomDialog();
+                    switch (measurement.categorizeBloodPressure()){
+                        case "NORMAL":
+                            dialog.create(getActivity(), "PRESIÓN NORMAL", "Tus niveles de presión arterial son normales. ¡Sigue así con hábitos saludables!", callback);
+                            break;
+                        case "ELEVATED":
+                            dialog.create(getActivity(), "PRESIÓN ELEVADA", "Tu presión arterial está elevada, es importante tomar medidas para controlarla.", callback);
+                            break;
+                        case "HYPERTENSION_STAGE_1":
+                            dialog.create(getActivity(), "HIPERTENSIÓN - ETAPA 1", "Estás en la Etapa 1 de hipertensión. Considera realizar cambios en tu estilo de vida.", callback);
+                            break;
+                        case "HYPERTENSION_STAGE_2":
+                            dialog.create(getActivity(), "HIPERTENSIÓN - ETAPA 2", "Estás en la Etapa 2 de hipertensión. Te recomendamos buscar ayuda médica para controlarla.", callback);
+                            break;
+                        case "HYPERTENSIVE_CRISIS":
+                            dialog.create(getActivity(), "CRISIS DE HIPERTENSIÓN", "Tu presión arterial está en crisis. ¡Llama a tu médico de inmediato!", callback);
+                            ChangeFragment.change(getContext(), R.id.frame_layout, new ContactList());
+                            return;
+                        default:
+                            break;
+                    }
+
+
                     //replaceFragment(new MeasurementList());
                 } else {
                     Log.d("ADVANCE", response.toString() + res.first.floatValue() + res.second.floatValue());
@@ -470,6 +568,8 @@ public class AddMeasurementAdvanced extends Fragment {
             }
         });
     }
+
+
 
     private Pair<Number, Number> calculateMeasurement() {
         Log.d("TAG", "MEDIR");

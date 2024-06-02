@@ -127,7 +127,7 @@ public class Measurement {
             return "HYPERTENSION_STAGE_1";
         } else if (systolicPressure >= 120 && systolicPressure <= 129 && diastolicPressure < 80) {
             return "ELEVATED";
-        } else if (systolicPressure < 120 && diastolicPressure < 80) {
+        } else if (systolicPressure >= 90 && systolicPressure < 120 && diastolicPressure >= 60 && diastolicPressure < 80) {
             return "NORMAL";
         } else {
             return "Unknown category";
