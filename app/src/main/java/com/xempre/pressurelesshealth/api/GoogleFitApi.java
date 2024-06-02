@@ -62,6 +62,9 @@ public class GoogleFitApi {
         createClient(parent);
     }
 
+    public boolean isLoggedIn() {
+        return googleAccount != null;
+    }
     private void createClient (Activity activity) {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()

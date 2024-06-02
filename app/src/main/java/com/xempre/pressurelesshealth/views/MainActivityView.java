@@ -112,7 +112,7 @@ public class MainActivityView extends AppCompatActivity {
         // NotificationGenerator notificationGenerator = new NotificationGenerator(notificationManager);
         // notificationGenerator.scheduleNotification(this, test, 777, "Hora de su medicación", "Enalapril un pastillon", extras);
 
-
+        updatePermissions();
         checkNotificationPermissions();
 
         if (sharedPreferences.getBoolean(Constants.SETTINGS_GOOGLE_AUTH_SIGNED_IN, false)) {
@@ -284,10 +284,14 @@ public class MainActivityView extends AppCompatActivity {
                     editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION, true);
                     editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false);
                     editor.apply();
+                } else if (!alarmManager.canScheduleExactAlarms()) {
+                    editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION, false);
+                    editor.apply();
                 }
             }
         }
     }
+
     private void reloadFragment(){
         binding = ActivityMainViewBinding.inflate(getLayoutInflater());
         bottomNavigationView = binding.bottomNavigationMain;
@@ -330,8 +334,18 @@ public class MainActivityView extends AppCompatActivity {
 
         if (requestCode == Constants.GOOGLE_AUTH_REQUEST_CODE) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(Constants.SETTINGS_GOOGLE_AUTH_SIGNED_IN, googleFitApi.onActivityResult(data));
+            boolean activationResult = googleFitApi.onActivityResult(data);
+            editor.putBoolean(Constants.SETTINGS_GOOGLE_AUTH_SIGNED_IN, activationResult);
             editor.apply();
+
+            if (activationResult) {
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
+
+                if (currentFragment instanceof SettingsFragment) {
+                    getSupportFragmentManager().popBackStackImmediate();
+                    bottomNavigationView.setSelectedItemId(R.id.bb_config);
+                }
+            }
         }
     }
 
@@ -363,6 +377,36 @@ public class MainActivityView extends AppCompatActivity {
         }
 
         editor.apply(); // or editor.commit();
+    }
+
+    public void updatePermissions() {
+        try {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            if (notificationManager.areNotificationsEnabled() && !sharedPreferences.getBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, false)) {
+                editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, true);
+                editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, false);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (alarmManager.canScheduleExactAlarms() && !sharedPreferences.getBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false)) {
+                        editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION, true);
+                        editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, false);
+                    } else if (!alarmManager.canScheduleExactAlarms()) {
+                        editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION, false);
+                    }
+                }
+            } else {
+                editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION, false);
+            }
+            editor.apply();
+
+        } catch (Exception ex) {
+            Log.d("Apulso MainActivityView OnResume:", String.valueOf(ex.getMessage()));
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Override

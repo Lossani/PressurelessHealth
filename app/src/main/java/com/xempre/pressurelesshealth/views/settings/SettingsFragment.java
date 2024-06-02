@@ -54,14 +54,42 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     MainActivityView mainActivity;
     GoogleFitApi googleFitApi;
 
+    boolean paused = false;
+
+    String rootKey = null;
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        rootKey = rootKey;
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
     }
 
     @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        createView();
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onPause() {
+        paused = true;
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mainActivity.updatePermissions();
+
+        if (paused) {
+            setPreferenceScreen(null);
+            setPreferencesFromResource(R.xml.root_preferences, rootKey);
+            createView();
+        }
+    }
+
+    public void createView() {
         mainActivity = (MainActivityView)getActivity();
         googleFitApi = mainActivity.getGoogleFitApi();
 
@@ -73,11 +101,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     if (googleFitApi == null) {
                         mainActivity.setGoogleFitApi(new GoogleFitApi(mainActivity));
                     }
+                    else {
+                        if (googleFitApi.isLoggedIn())
+                            return true;
+                        else mainActivity.setGoogleFitApi(new GoogleFitApi(mainActivity));
+                    }
                 } else {
                     mainActivity.setGoogleFitApi(null);
+                    return true;
                 }
 
-                return true;
+                return false;
             }
         });
 
@@ -86,6 +120,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         switchNotificationsEnabled.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(Constants.SETTINGS_NOTIFICATION_PERMISSION_REJECTED, !((boolean) newValue));
+                editor.apply();
+
                 Utils.updateMedicationFrequencyNotifications(mainActivity, (boolean) newValue);
                 Utils.disableScheduled12HourMeasurementReminder(mainActivity);
                 return true;
@@ -112,14 +151,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                             Utils.requestAlarmPermission(mainActivity);
                         } else {
                             editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION, true);
+                            editor.apply();
+                            return true;
                         }
                     } else {
                         editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION, false);
                         editor.putBoolean(Constants.SETTINGS_ALARM_PERMISSION_REJECTED, true);
+                        editor.apply();
+                        return true;
                     }
 
                     editor.apply();
-                    return true;
+                    return false;
                 }
             });
         }
@@ -183,11 +226,5 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             }
         });
-
-        return super.onCreateView(inflater, container, savedInstanceState);
     }
-
-
-
-
 }
