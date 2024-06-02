@@ -2,6 +2,7 @@ package com.xempre.pressurelesshealth.views.auth;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -49,6 +51,7 @@ public class RestartPasswordFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         binding = FragmentRestartPasswordBinding.inflate(getLayoutInflater());
         //binding.llSend.setVisibility(View.INVISIBLE);
         binding.llNewPassword.setVisibility(View.INVISIBLE);
@@ -61,11 +64,10 @@ public class RestartPasswordFragment extends Fragment {
                  if (!binding.etSendCode.getText().toString().equals("")) {
                      Pattern pattern = Patterns.EMAIL_ADDRESS;
                      if (pattern.matcher(binding.etSendCode.getText().toString()).matches()) sendCode();
-                     else Toast.makeText(getContext(), "Correo no valido.", Toast.LENGTH_LONG).show();
+                     else Toast.makeText(getContext(), "Correo no válido.", Toast.LENGTH_LONG).show();
                  }
                  else {
-
-                     Toast.makeText(getContext(), "Debe ingresar un correo.", Toast.LENGTH_LONG).show();
+                     Toast.makeText(getContext(), "Debe ingresar un correo electrónico.", Toast.LENGTH_LONG).show();
                  }
              }
          }
@@ -99,7 +101,18 @@ public class RestartPasswordFragment extends Fragment {
 
     public void sendCode(){
 
-        binding.btnSendCode.setActivated(false);
+        binding.btnSendCode.setEnabled(false);
+        binding.btnCancelRestartPassword.setEnabled(false);
+        binding.etSendCode.setEnabled(false);
+        binding.restartPasswordProgressBar.setVisibility(View.VISIBLE);
+
+//        ProgressDialog nDialog;
+//        nDialog = new ProgressDialog(getContext());
+//        nDialog.setMessage("Loading..");
+//        nDialog.setTitle("Get Data");
+//        nDialog.setIndeterminate(false);
+//        nDialog.setCancelable(true);
+//        nDialog.show();
 
         UserService userService = ApiClient.createService(getContext(), UserService.class,0);
         RestartPassword temp = new RestartPassword();
@@ -110,7 +123,7 @@ public class RestartPasswordFragment extends Fragment {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-
+                binding.btnCancelRestartPassword.setEnabled(true);
 
                 if (response.isSuccessful()) {
                     Toast.makeText(getContext(), "Se envió el correo.", Toast.LENGTH_LONG).show();
@@ -132,7 +145,9 @@ public class RestartPasswordFragment extends Fragment {
                         Toast.makeText(getContext(), "Error processing error message", Toast.LENGTH_SHORT).show();
                     }
 
-                    binding.btnSendCode.setActivated(true);
+                    binding.btnSendCode.setEnabled(true);
+                    binding.etSendCode.setEnabled(true);
+                    binding.restartPasswordProgressBar.setVisibility(View.GONE);
                 }
 
             }
