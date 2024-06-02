@@ -113,6 +113,15 @@ public class RegisterFragment extends Fragment {
     }
 
     public void register(){
+        binding.registerProgressBar.setVisibility(View.VISIBLE);
+        binding.etRegisterName.setEnabled(false);
+        binding.etRegisterLastname.setEnabled(false);
+        binding.etRegisterUsername.setEnabled(false);
+        binding.etRegisterEmail.setEnabled(false);
+        binding.etRegisterPassword.setEnabled(false);
+        binding.etRegisterConfirmPassword.setEnabled(false);
+        binding.btnRegRegister.setEnabled(false);
+        binding.btnRegBack.setEnabled(false);
 
         UserService userService = ApiClient.createService(getContext(), UserService.class, 0);
         User temp = new User();
@@ -127,13 +136,10 @@ public class RegisterFragment extends Fragment {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
 
-
                 if (response.isSuccessful()) {
-
                     Toast.makeText(getContext(), "Registrado Correctamente", Toast.LENGTH_SHORT).show();
                     LoginFragment loginFragment = new LoginFragment();
                     ChangeFragment.change(getContext(), R.id.PrincipalContainerView, loginFragment);
-
                 } else {
                     try {
                         JSONObject errorObject = new JSONObject(response.errorBody().string());
@@ -147,6 +153,16 @@ public class RegisterFragment extends Fragment {
 
                         Toast.makeText(getContext(), "Error processing error message", Toast.LENGTH_SHORT).show();
                     }
+
+                    binding.registerProgressBar.setVisibility(View.INVISIBLE);
+                    binding.etRegisterName.setEnabled(true);
+                    binding.etRegisterLastname.setEnabled(true);
+                    binding.etRegisterUsername.setEnabled(true);
+                    binding.etRegisterEmail.setEnabled(true);
+                    binding.etRegisterPassword.setEnabled(true);
+                    binding.etRegisterConfirmPassword.setEnabled(true);
+                    binding.btnRegRegister.setEnabled(true);
+                    binding.btnRegBack.setEnabled(true);
                 }
 
             }

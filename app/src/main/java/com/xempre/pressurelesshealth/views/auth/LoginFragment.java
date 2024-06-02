@@ -3,6 +3,7 @@ package com.xempre.pressurelesshealth.views.auth;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -69,6 +70,13 @@ public class LoginFragment extends Fragment {
     }
 
     public void Login(){
+        binding.loginProgressBar.setVisibility(View.VISIBLE);
+        binding.btnLogin.setEnabled(false);
+        binding.btnRegister.setEnabled(false);
+        binding.tvRecoverPassword.setTextColor(Color.parseColor("#AEAEAE"));
+        binding.tvRecoverPassword.setEnabled(false);
+        binding.editTextText4.setEnabled(false);
+        binding.editTextTextPassword.setEnabled(false);
 
         UserService userService = ApiClient.createService(getContext(), UserService.class,0);
         User temp = new User();
@@ -79,8 +87,6 @@ public class LoginFragment extends Fragment {
         call.enqueue(new Callback<ResponseLogin>() {
             @Override
             public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
-
-
                 if (response.isSuccessful()) {
 
                     Log.d("a",response.message());
@@ -111,13 +117,21 @@ public class LoginFragment extends Fragment {
                     }
                 }
                 else {
-                    Toast.makeText(getContext(), "Datos incorrectos, verifique el Nombre de usuario y/o Contraseña.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Datos incorrectos, verifique usuario y/o contraseña.", Toast.LENGTH_LONG).show();
                     Gson gson = new Gson();
                     String json = gson.toJson(temp);
 //                    Toast.makeText(getContext(), temp.getUsername(), Toast.LENGTH_LONG).show();
 //                    Toast.makeText(getContext(), temp.getPassword(), Toast.LENGTH_LONG).show();
                     Log.d("a",json);
                     Log.d("a",response.message());
+
+                    binding.loginProgressBar.setVisibility(View.INVISIBLE);
+                    binding.btnLogin.setEnabled(true);
+                    binding.btnRegister.setEnabled(true);
+                    binding.tvRecoverPassword.setEnabled(true);
+                    binding.editTextText4.setEnabled(true);
+                    binding.editTextTextPassword.setEnabled(true);
+                    binding.tvRecoverPassword.setTextColor(Color.parseColor("#6750A3"));
                 }
 
             }
