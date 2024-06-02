@@ -9,8 +9,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.xempre.pressurelesshealth.R;
+import com.xempre.pressurelesshealth.utils.Callback;
+
+import javax.annotation.Nullable;
 
 public class CustomDialog {
+
     public static void create(Context activity, String title, String content){
         Dialog dialog = new Dialog(activity);
         dialog.setContentView(R.layout.ok_dialog);
@@ -29,6 +33,31 @@ public class CustomDialog {
         dialog.findViewById(R.id.btnOkDialog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+    public static void create(Context activity, String title, String content, @Nullable Callback callback){
+        Dialog dialog = new Dialog(activity);
+        dialog.setContentView(R.layout.ok_dialog);
+        dialog.setCancelable(false);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        TextView tvTitle;
+        tvTitle = dialog.findViewById(R.id.tvTitleOkDialog);
+        tvTitle.setText(title);
+
+        TextView tvContent;
+        tvContent = dialog.findViewById(R.id.tvContentOkDialog);
+        tvContent.setText(Html.fromHtml(content));
+
+
+        dialog.findViewById(R.id.btnOkDialog).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (callback!= null) callback.fnCallback();
                 dialog.dismiss();
             }
         });

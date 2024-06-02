@@ -6,12 +6,15 @@ import static com.google.android.gms.fitness.data.HealthFields.FIELD_BLOOD_PRESS
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.SupportActionModeWrapper;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -173,10 +176,47 @@ public class AddMeasurementBasic extends Fragment {
                         CustomDialog.create(getActivity(), "Alerta", "Asegurece de ingresar números validos.");
                         return;
                     }
+                    if (dr >= sr) {
+                        CustomDialog.create(getActivity(), "Alerta", "La medida de Presión Sistólica debe ser mayor que la Diastólica. Por favor valide los datos ingresados.");
+                        return;
+                    }
+//                    if (dr == sr) {
+//                        CustomDialog.create(getActivity(), "Alerta", "La diferencia entre la Presión Sistólica y Diastólica no puede ser 0. Por favor valide los datos ingresados.");
+//                        return;
+//                    }
+
                     String pattern = "yyy-MM-dd'T'HH:mm:ss'Z'";
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
                     String date = simpleDateFormat.format(new Date());
-                    saveButton(sr,dr,date);
+
+
+                    if (sr < 90 || dr < 60) {
+
+                        final boolean[] confirmSave = {false};
+                        String msjSystolic = sr<90?"Se ha detectado que la medida de presión Sistólica es demasiado baja ("+sr+").":"";
+                        String msjDiastolic = dr<60?"\nSe ha detectado que la medida de presión Diastólica es demasiado baja ("+dr+").":"";
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setMessage(
+                                        msjSystolic+msjDiastolic+ "\n¿Está seguro que desea almacenar está medida?")
+                                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // Ejecutar la función de eliminación aquí
+                                        saveButton(sr,dr,date);
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                        // Crear y mostrar el diálogo
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    } else {
+                        saveButton(sr,dr,date);
+                    }
+
                 } catch (Exception ignored){
                     Toast.makeText(getContext(), "Asegurece de ingresar números validos.", Toast.LENGTH_SHORT).show();
                 }
@@ -223,21 +263,24 @@ public class AddMeasurementBasic extends Fragment {
                     Utils.schedule12HourMeasurementReminder(getContext());
 
                     CustomDialog dialog = new CustomDialog();
+                    com.xempre.pressurelesshealth.utils.Callback callback = () -> {
+                        ChangeFragment.change(getContext(), R.id.frame_layout, new MeasurementList());
+                    };
                     switch (measurement.categorizeBloodPressure()){
                         case "NORMAL":
-                            dialog.create(getActivity(), "PRESIÓN NORMAL", "Tus niveles de presión arterial son normales. ¡Sigue así con hábitos saludables!");
+                            dialog.create(getActivity(), "PRESIÓN NORMAL", "Tus niveles de presión arterial son normales. ¡Sigue así con hábitos saludables!", callback);
                             break;
                         case "ELEVATED":
-                            dialog.create(getActivity(), "PRESIÓN ELEVADA", "Tu presión arterial está elevada, es importante tomar medidas para controlarla.");
+                            dialog.create(getActivity(), "PRESIÓN ELEVADA", "Tu presión arterial está elevada, es importante tomar medidas para controlarla.", callback);
                             break;
                         case "HYPERTENSION_STAGE_1":
-                            dialog.create(getActivity(), "HIPERTENSIÓN - ETAPA 1", "Estás en la Etapa 1 de hipertensión. Considera realizar cambios en tu estilo de vida.");
+                            dialog.create(getActivity(), "HIPERTENSIÓN - ETAPA 1", "Estás en la Etapa 1 de hipertensión. Considera realizar cambios en tu estilo de vida.", callback);
                             break;
                         case "HYPERTENSION_STAGE_2":
-                            dialog.create(getActivity(), "HIPERTENSIÓN - ETAPA 2", "Estás en la Etapa 2 de hipertensión. Te recomendamos buscar ayuda médica para controlarla.");
+                            dialog.create(getActivity(), "HIPERTENSIÓN - ETAPA 2", "Estás en la Etapa 2 de hipertensión. Te recomendamos buscar ayuda médica para controlarla.", callback);
                             break;
                         case "HYPERTENSIVE_CRISIS":
-                            dialog.create(getActivity(), "CRISIS DE HIPERTENSIÓN", "Tu presión arterial está en crisis. ¡Llama a tu médico de inmediato!");
+                            dialog.create(getActivity(), "CRISIS DE HIPERTENSIÓN", "Tu presión arterial está en crisis. ¡Llama a tu médico de inmediato!", callback);
                             ChangeFragment.change(getContext(), R.id.frame_layout, new ContactList());
                             return;
                         default:
@@ -246,11 +289,12 @@ public class AddMeasurementBasic extends Fragment {
 
                     Measurement measurementResponse = response.body();
 
+                    String challengeMessage = "";
                     for (Challenge challenge: measurementResponse.getCompletedChallenges()){
                         dialog.create(getActivity(), "Reto completado", "Has completado el reto: " + challenge.getName() + " y has ganado " + challenge.getReward() + " puntos.");
                     }
 
-                    ChangeFragment.change(getContext(), R.id.frame_layout, new MeasurementList());
+//                    ChangeFragment.change(getContext(), R.id.frame_layout, new MeasurementList());
                     //replaceFragment(new MeasurementList());
 //                    sys.setText("");
 //                    dis.setText("");
