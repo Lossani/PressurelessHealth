@@ -101,6 +101,7 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
                 holder.btnDelete.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.principal)));
                 break;
             default:
+                holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this.context, R.color.white));
                 holder.btnDelete.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.principal)));
                 break;
         }

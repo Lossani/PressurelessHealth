@@ -284,6 +284,7 @@ public class AddMeasurementBasic extends Fragment {
                             ChangeFragment.change(getContext(), R.id.frame_layout, new ContactList());
                             return;
                         default:
+                            ChangeFragment.change(getContext(), R.id.frame_layout, new MeasurementList());
                             break;
                     }
 
