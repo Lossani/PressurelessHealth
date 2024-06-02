@@ -108,27 +108,14 @@ public class MeasurementAdapter extends RecyclerView.Adapter<MeasurementAdapter.
 
         if (!measurement.getComments().trim().isEmpty() && measurement.getComments() != null) holder.btnInfo.setVisibility(View.VISIBLE);
         else holder.btnInfo.setVisibility(View.GONE);
-//        holder.cardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!measurement.getComments().equals("")){
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//                    builder.setTitle("Comentarios");
-//                    builder.setMessage(measurement.getComments())
-//                            .setPositiveButton("Volver", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//                                    // Ejecutar la función de eliminación aquí
-//                                    dialog.dismiss();
-//                                }
-//                            });
-//                    // Crear y mostrar el diálogo
-//                    AlertDialog dialog = builder.create();
-//                    dialog.show();
-//                } else {
-//                    Toast.makeText(context, "Esta medición no tiene comentarios.", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (measurement.getComments().equals("")){
+                    Toast.makeText(context, "Esta medición no tiene comentarios.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         holder.btnInfo.setOnClickListener(new View.OnClickListener() {
             @Override

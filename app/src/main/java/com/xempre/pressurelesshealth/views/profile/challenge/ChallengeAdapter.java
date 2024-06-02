@@ -87,9 +87,9 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
             }
 
             if (challenge.getLatestHistory().length > 0) {
-                ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
-                layoutParams.height = 0;
-                holder.button.setLayoutParams(layoutParams);
+                //ViewGroup.LayoutParams layoutParams = holder.button.getLayoutParams();
+                //layoutParams.height = 0;
+                holder.button.setVisibility(View.GONE);
                 try {
                     holder.checkBox.setChecked((int) (challenge.getLatestHistory()[0].getProgress()) >= 100);
                     holder.checkBox.setEnabled((int) (challenge.getLatestHistory()[0].getProgress()) >= 100);
@@ -97,12 +97,17 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
                 } catch (Exception ignore) {
                 }
 
-                if (challenge.getLatestHistory()[0].getProgress() >= 100 || challenge.getLatestHistory()[0].getIsSucceeded()) {
+                if ((challenge.getLatestHistory()[0].getProgress() >= 100 || challenge.getLatestHistory()[0].getIsSucceeded())) {
                     holder.imageView.setImageResource(R.drawable.star);
-                    ViewGroup.LayoutParams layoutParams1 = holder.button.getLayoutParams();
+                    if (!challenge.isRepeatable()){
                     holder.button.setText("Reiniciar");
-                    layoutParams1.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    holder.button.setLayoutParams(layoutParams1);
+                    holder.button.setVisibility(View.VISIBLE);}
+                }
+
+                if ((challenge.getLatestHistory()[0].getEndDate()!= null && !challenge.getLatestHistory()[0].getIsSucceeded())){
+                    holder.imageView.setImageResource(R.drawable.star_disabled);
+                    holder.button.setText("Reintentar");
+                    holder.button.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -121,7 +126,7 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
 
 //        holder.textViewReward.setText(String.valueOf(challenge.getTimeLimit()));
 //        validateComplete(challenge, holder);
-            getBitmapFromURL(holder, challenge.getImage());
+            //getBitmapFromURL(holder, challenge.getImage());
 
     }
 
