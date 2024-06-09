@@ -1,5 +1,6 @@
 package com.xempre.pressurelesshealth.interfaces;
 
+import com.xempre.pressurelesshealth.models.DebugLog;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.models.Reminder;
 import com.xempre.pressurelesshealth.models.ResponseLogin;
@@ -38,5 +39,8 @@ public interface UserService {
 
     @GET("core/reminders")
     public Call<List<Reminder>> getReminders();
+
+    @POST("core/debug_logs/")
+    public Call<DebugLog> createDebugLog(@Body DebugLog log);
 
 }
