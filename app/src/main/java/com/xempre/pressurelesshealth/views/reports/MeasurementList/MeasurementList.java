@@ -417,12 +417,10 @@ public class MeasurementList extends Fragment {
 //                        assert responseFromAPI != null;
                         clearRecyclerView();
                         if (responseFromAPI.isEmpty()) {
-                            if (getContext()!=null) {
-                                updateMessage(true);
+                            updateMessage(true);
                                 //Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
-                            }
                         } else {
-                            binding.tvMessageHistoryList.setVisibility(View.INVISIBLE);
+                            updateMessage(false);
                             for (Measurement element : responseFromAPI) {
                                 Log.d("PERRUNO", element.toString());
                                 i +=1;
@@ -473,6 +471,7 @@ public class MeasurementList extends Fragment {
         promSystolic.setText("0.00");
         int size = measurementList.size();
         measurementList.clear();
+        measurementAdapter.updateList(measurementList);
         measurementAdapter.notifyItemRangeRemoved(0,size);
     }
 
