@@ -313,6 +313,7 @@ public class MainActivityView extends AppCompatActivity {
             } else if (item.getItemId() == R.id.bb_profile && !(currentFragment instanceof UserProfile)) {
                 ChangeFragment.change(this,R.id.frame_layout, new UserProfile());
             } else if (item.getItemId() == R.id.bb_config && !(currentFragment instanceof SettingsFragment || currentFragment instanceof ContactList)) {
+                updatePermissions();
                 ChangeFragment.change(this,R.id.frame_layout, new SettingsFragment());
             } else if (item.getItemId() == R.id.bb_medication && !(currentFragment instanceof MedicationList)) {
                 ChangeFragment.change(this,R.id.frame_layout, new MedicationList());
@@ -406,6 +407,7 @@ public class MainActivityView extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        updatePermissions();
 
     }
 

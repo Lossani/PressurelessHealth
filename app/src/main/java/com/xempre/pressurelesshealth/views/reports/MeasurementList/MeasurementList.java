@@ -1,5 +1,8 @@
 package com.xempre.pressurelesshealth.views.reports.MeasurementList;
 
+import static com.xempre.pressurelesshealth.utils.Utils.createDebugLog;
+import static com.xempre.pressurelesshealth.utils.Utils.getStackTraceAsString;
+
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
@@ -39,6 +42,7 @@ import com.xempre.pressurelesshealth.databinding.ActivityListMeasurementBinding;
 import com.xempre.pressurelesshealth.interfaces.ContactService;
 import com.xempre.pressurelesshealth.interfaces.MeasurementService;
 import com.xempre.pressurelesshealth.models.Contact;
+import com.xempre.pressurelesshealth.models.DebugLog;
 import com.xempre.pressurelesshealth.models.Measurement;
 import com.xempre.pressurelesshealth.views.settings.contacts.ContactList;
 import com.xempre.pressurelesshealth.views.shared.ChangeDate;
@@ -627,9 +631,18 @@ public class MeasurementList extends Fragment {
             Toast.makeText(context, "Archivo guardado en Descargas ("+filename+").", Toast.LENGTH_LONG).show();
             binding.tvExportReport.setEnabled(true);
         } catch (IOException e) {
-
+            DebugLog log = new DebugLog();
+            log.text = "Message: " + e.getMessage() + " | StackTrace: " + getStackTraceAsString(e);
+            createDebugLog(context, log);
             e.printStackTrace();
-            CustomDialog.create(getActivity(), "Error", "No se ha podido exportar el reporte. Por favor eliminar el archivo " +fnt+" de su carpeta de descargas y volver a intentar." );
+            CustomDialog.create(getActivity(), "Error", "No se ha podido exportar el reporte: Error de permisos de escritura.");
+            Toast.makeText(context, "Error al guardar el archivo", Toast.LENGTH_SHORT).show();
+            binding.tvExportReport.setEnabled(true);
+        } catch (Exception generalEx) {
+            DebugLog log = new DebugLog();
+            log.text = "Message: " + generalEx.getMessage() + " | StackTrace: " + getStackTraceAsString(generalEx);
+            createDebugLog(context, log);
+            CustomDialog.create(getActivity(), "Error", "No se ha podido exportar el reporte: Error general.");
             Toast.makeText(context, "Error al guardar el archivo", Toast.LENGTH_SHORT).show();
             binding.tvExportReport.setEnabled(true);
         }

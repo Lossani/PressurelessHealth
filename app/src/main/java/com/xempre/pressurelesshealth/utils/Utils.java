@@ -14,15 +14,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
+import com.xempre.pressurelesshealth.R;
 import com.xempre.pressurelesshealth.api.ApiClient;
 import com.xempre.pressurelesshealth.interfaces.UserService;
+import com.xempre.pressurelesshealth.models.DebugLog;
 import com.xempre.pressurelesshealth.models.IntentExtra;
 import com.xempre.pressurelesshealth.models.MedicationFrequency;
 import com.xempre.pressurelesshealth.models.Reminder;
+import com.xempre.pressurelesshealth.models.User;
 import com.xempre.pressurelesshealth.utils.notifications.NotificationGenerator;
 import com.xempre.pressurelesshealth.views.MainActivityView;
 import com.xempre.pressurelesshealth.views.medication.frequency.AddMedicationFrequency;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Calendar;
 import java.util.List;
 
@@ -180,5 +185,36 @@ public final class Utils {
             dialog.show();
         }
 
+    }
+
+    public static void createDebugLog(Context context, DebugLog log) {
+        try {
+            UserService userService = ApiClient.createService(context, UserService.class,1);
+
+            Call<DebugLog> call = userService.createDebugLog(log);
+
+            call.enqueue(new Callback<DebugLog>() {
+
+                @Override
+                public void onResponse(Call<DebugLog> call, Response<DebugLog> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<DebugLog> call, Throwable t) {
+
+                }
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Log.d("Apulso", ex.getMessage());
+        }
+    }
+
+    public static String getStackTraceAsString(Throwable throwable) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        throwable.printStackTrace(printWriter);
+        return stringWriter.toString();
     }
 }

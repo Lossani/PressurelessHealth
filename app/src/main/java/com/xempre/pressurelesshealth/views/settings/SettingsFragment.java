@@ -60,6 +60,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        mainActivity = (MainActivityView)getActivity();
+        mainActivity.updatePermissions();
         rootKey = rootKey;
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
     }
@@ -90,7 +92,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     public void createView() {
-        mainActivity = (MainActivityView)getActivity();
         googleFitApi = mainActivity.getGoogleFitApi();
 
         Preference switchSyncGoogleFit = findPreference(Constants.SETTINGS_GOOGLE_AUTH_SIGNED_IN);
