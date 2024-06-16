@@ -97,8 +97,6 @@ public class ContactList extends Fragment {
                     } else {
                         binding.tvMessageAddList.setVisibility(View.INVISIBLE);
                         medicationList.clear();
-                        //                            Log.d("PERRUNO", element.getName());
-                        //                            Log.d("PERRUNO", element.getDescription());
                         //                            LeaderboardItem temp = new LeaderboardItem(element);
                         medicationList.addAll(responseFromAPI);
                         contactAdapter.notifyDataSetChanged();

@@ -179,11 +179,6 @@ public class ChallengeAdapter extends RecyclerView.Adapter<ChallengeAdapter.Nomb
 ////                        int totalChallenges = 0;
 ////                        float totalCompleted = 0;
 //                        for (ChallengeHistory element : responseFromAPI) {
-//                            Log.d("PERRUNO", element.toString());
-//                            ChallengeHistory challengeHistory = new ChallengeHistory(element);
-//                            Log.d("PERRUNO", element.getId()+"");
-//                            Log.d("PERRUNO", element.getProgress()+"");
-//                            Log.d("PERRUNO", element.getIsSucceeded()+"");
 //
 //                            //REMPLAZAR CON ID DE USUARIO
 //                            if (Objects.equals(challengeHistory.getChallenge().getId(), challenge.getId())) {

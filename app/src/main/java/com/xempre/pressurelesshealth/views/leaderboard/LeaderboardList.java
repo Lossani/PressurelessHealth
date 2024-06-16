@@ -92,8 +92,6 @@ public class LeaderboardList extends Fragment {
                         if (getContext()!=null) Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
                     } else {
                         for (LeaderboardItem element : responseFromAPI) {
-                            Log.d("PERRUNO", element.getUsername());
-                            Log.d("PERRUNO", element.getFirstName());
 //                            LeaderboardItem temp = new LeaderboardItem(element);
                             leaderboardItemList.add(element);
                         }

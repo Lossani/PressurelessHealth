@@ -123,7 +123,6 @@ public class GoalList extends Fragment {
                             if (getContext()!=null) Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
                         } else {
                             for (Goal element : responseFromAPI) {
-                                Log.d("PERRUNO", element.toString());
                                 Goal temp = new Goal(element);
                                 goalList.add(temp);
                             }
@@ -157,7 +156,6 @@ public class GoalList extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.d("PERRO", "PAUSA");
         if (binding.swiperefresh.isRefreshing()){
             binding.swiperefresh.setRefreshing(false);
         }
@@ -167,7 +165,6 @@ public class GoalList extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        Log.d("PERRO", "PAUSA");
         if (binding.swiperefresh.isRefreshing()){
             binding.swiperefresh.setRefreshing(false);
         }

@@ -92,8 +92,6 @@ public class MedicationFrequencyList extends Fragment {
                     } else {
                         binding.tvMessageAddList.setVisibility(View.INVISIBLE);
                         for (MedicationFrequency element : responseFromAPI) {
-                            Log.d("PERRUNOFREQ", element.getHour());
-                            Log.d("PERRUNOFREQ", element.getDose());
 //                            LeaderboardItem temp = new LeaderboardItem(element);
                             medicationFrequencyList.add(element);
                         }

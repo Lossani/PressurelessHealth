@@ -85,8 +85,6 @@ public class MedicationList extends Fragment {
                         medicationList.clear();
                         medicationList.addAll(responseFromAPI);
                         /*for (Medication element : responseFromAPI) {
-                            Log.d("PERRUNO", element.getName());
-                            Log.d("PERRUNO", element.getDescription());
 //                            LeaderboardItem temp = new LeaderboardItem(element);
                             medicationList.add(element);
                         }*/

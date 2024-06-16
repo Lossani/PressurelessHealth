@@ -284,7 +284,6 @@ public class MeasurementList extends Fragment {
 //        listaNombres.add("María");
 //        listaNombres.add("Luis");
 
-//        Toast.makeText(getContext(), "PERRITO", Toast.LENGTH_SHORT).show();
 
         //callAPI();
 
@@ -379,7 +378,6 @@ public class MeasurementList extends Fragment {
     }
 
     public void callAPI(String startDate, String endDate){
-        Log.d("PERRUNO", startDate+" "+endDate);
 
         MeasurementService measurementService = ApiClient.createService(getContext(), MeasurementService.class,1);
 
@@ -426,7 +424,6 @@ public class MeasurementList extends Fragment {
                         } else {
                             updateMessage(false);
                             for (Measurement element : responseFromAPI) {
-                                Log.d("PERRUNO", element.toString());
                                 i +=1;
                                 Measurement temp = new Measurement(element);
                                 measurementList.add(element);
@@ -591,11 +588,9 @@ public class MeasurementList extends Fragment {
             }
 
 
-            Log.d("PERRUNO", "PARTE4");
             // Obtener la ruta de la carpeta de descargas
             String downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
 
-            Log.d("PERRUNO", "PARTE5");
             // Guardar el archivo modificado en la carpeta de descargas
 
             LocalDateTime currentTime = LocalDateTime.now();

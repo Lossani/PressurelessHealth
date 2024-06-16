@@ -100,7 +100,6 @@ public class LoginFragment extends Fragment {
 
 
 
-                    Log.d("TESTPERRO",  sharedPreferences.getString("token", null) );
 
 
                     // Verificar si el token se ha guardado correctamente

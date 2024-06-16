@@ -129,10 +129,6 @@ public class AddMedicationFrequency extends Fragment {
                     medicationFrequency.setDose(binding.editTextText3.getText().toString());
                     medicationFrequency.setHour(binding.button4.getText().toString());
                     medicationFrequency.setReminderNotificationEnabled(binding.switchFrequencyNotification.isChecked());
-                    Log.d("PERRO", medicationFrequency.getMedicationId()+"");
-                    Log.d("PERRO", medicationFrequency.getDose());
-                    Log.d("PERRO", medicationFrequency.getHour());
-//                    Log.d("PERRO", medicationFrequency.getWeekday()+"");
                     
                     if (!isEditMode)
                         callAPI(medicationFrequency);

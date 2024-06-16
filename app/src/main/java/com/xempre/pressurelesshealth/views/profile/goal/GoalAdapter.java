@@ -90,10 +90,6 @@ public class GoalAdapter extends RecyclerView.Adapter<GoalAdapter.NombreViewHold
 //                        if (context!=null) Toast.makeText(context, "No se encontraron logros.", Toast.LENGTH_SHORT).show();
 //                    } else {
 //                        for (GoalHistory element : responseFromAPI) {
-//                            Log.d("PERRUNO", element.toString());
-//                            GoalHistory goalHistory = new GoalHistory(element);
-//                            Log.d("PERRUNO", element.getProgress()+"");
-//                            Log.d("PERRUNO", element.getIsSucceeded()+"");
 //
 //
 //                            //REMPLAZAR CON ID DE USUARIO

@@ -100,7 +100,6 @@ public class ChallengeList extends Fragment {
                         if (getContext()!=null) Toast.makeText(getContext(), "No se encontraron registros.", Toast.LENGTH_SHORT).show();
                     } else {
                         for (Challenge element : responseFromAPI) {
-                            Log.d("PERRUNO", element.toString());
                             Challenge temp = new Challenge(element);
                             challengeList.add(temp);
                         }
@@ -136,7 +135,6 @@ public class ChallengeList extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("PERRO", "PAUSA");
         if (binding.swiperefresh.isRefreshing()){
             binding.swiperefresh.setRefreshing(false);
         }
